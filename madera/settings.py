@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
-from os.path import dirname, join
+from os.path import dirname, join, normpath
 import os
 import sys
 
@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+    # custom apps
+    'profiles',
 ]
 
 MIDDLEWARE = [
@@ -68,7 +70,8 @@ ROOT_URLCONF = 'madera.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [
+            normpath(join(PROJECT_ROOT, 'madera', 'templates'))],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

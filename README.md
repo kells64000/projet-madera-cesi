@@ -44,6 +44,17 @@ Lorsque une connexion internet est de nouveau disponible les données de la base
 
 **Virtualenv**
 
+**Créer une application**
+
+Pour créer une nouvelle application, se rendre dans le dossier `apps` puis lancer commande de génération d'application.
+
+```bash
+cd projet-madera-cesi/apps
+django-admin startapp <name>
+```
+
 ### Front
 
 **NPM => VueJs**
+
+**Templates**
