@@ -1,5 +1,20 @@
 # Projet-madera-cesi
 
+## Prérequis
+- Création du virtual env
+
+Unix
+<pre>virtualenv -p python3 .</pre>
+Windows
+<pre>pip install virtualenv</pre>
+- installation des dépendances 
+
+<pre>pip install -r requirements.txt</pre>
+
+## Virtual Env
+Lancement du virtual env (windows) :
+<pre>Scripts\activate</pre>
+
 ## VCS => Git
 
 Pour le déroulement du projet nous utilisons [Git Flow](https://danielkummer.github.io/git-flow-cheatsheet/)
