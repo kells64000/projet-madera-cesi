@@ -10,10 +10,23 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
+from os.path import dirname, join
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SETTINGS_DIR = dirname(__file__)
+BASE_DIR = dirname(dirname(__file__))
+PROJECT_ROOT = join(dirname(__file__), '..')
+
+# add all the apps in the apps dir in the syspath
+# used for legacy reason
+sys.path.insert(0, join(PROJECT_ROOT, 'apps'))
+
+# Internationalization
+# https://docs.djangoproject.com/en/1.7/topics/i18n/
+
+LANGUAGE_CODE = 'fr'
 
 
 # Quick-start development settings - unsuitable for production
@@ -37,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
@@ -54,8 +68,7 @@ ROOT_URLCONF = 'madera.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,17 +89,17 @@ WSGI_APPLICATION = 'madera.wsgi.application'
 
 DATABASES = {
     'default': {
-            'NAME': 'madera',
-            'ENGINE': 'django.db.backends.postgresql',
-            'USER': 'root',
-            'PASSWORD': 'root',
-            'HOST': 'localhost',
-            'PORT': '',
-        },
-        'salesman': {
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-            'ENGINE': 'django.db.backends.sqlite3',
-        }
+        'NAME': 'madera',
+        'ENGINE': 'django.db.backends.postgresql',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': 'localhost',
+        'PORT': '',
+    },
+    'salesman': {
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.sqlite3',
+    }
 }
 
 
