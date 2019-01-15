@@ -31,4 +31,15 @@ Lorsque une connexion internet est de nouveau disponible les données de la base
 
 ### Front
 
-**NPM => VueJs**
+*NPM*
+
+Installer les packages de NPM
+
+<pre>
+npm i
+</pre>
+
+**Bulma**
+
+
+**VueJs**

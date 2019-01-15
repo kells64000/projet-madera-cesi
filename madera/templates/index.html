@@ -1,0 +1,54 @@
+{%  load staticfiles %}
+{% load render_bundle from webpack_loader %}
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0">
+    <link rel="icon" href="{% static "img/logo.png" %}" type="image/x-icon" />
+    <title>Madera - Home</title>
+</head>
+<body>
+
+    <div class="columns is-vcentered">
+      <div class="login column is-12 ">
+        <section class="section">
+          <div class="has-text-centered">
+              <img class="login-logo" src="{% static "img/logo.png" %}">
+          </div>
+
+          <div class="field">
+            <label class="label">Username</label>
+            <div class="control has-icons-right">
+              <input class="input" type="text">
+              <span class="icon is-small is-right">
+                <i class="fa fa-user"></i>
+              </span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Password</label>
+            <div class="control has-icons-right">
+              <input class="input" type="password">
+              <span class="icon is-small is-right">
+                <i class="fa fa-key"></i>
+              </span>
+            </div>
+          </div>
+          <div class="has-text-centered">
+            <a class="button is-vcentered is-primary is-outlined">Login</a>
+          </div>
+        </section>
+      </div>
+{#      <div id="particles-js" class="interactive-bg column is-8">#}
+      </div>
+    </div>
+
+
+{% render_bundle 'main' %}
+</body>
+</html>
+
+{#<div id="app">#}
+{#    <demo></demo>#}
+{#</div>#}
