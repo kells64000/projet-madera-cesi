@@ -304,3 +304,7 @@ node_modules
 .DS_Store
 docs/_book
 test/
+
+package-lock.json
+webpack-stats.json
+assets/bundles/*

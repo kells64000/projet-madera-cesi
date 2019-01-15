@@ -55,6 +55,15 @@ django-admin startapp <name>
 
 ### Front
 
-**NPM => VueJs**
+*NPM*
 
-**Templates**
+Installer les packages de NPM
+
+<pre>
+npm i
+</pre>
+
+**Bulma**
+
+
+**VueJs**
