@@ -1,0 +1,41 @@
+<template>
+    <div class="columns is-vcentered">
+        <div class="login column is-4">
+            <section class="section">
+                <div class="has-text-centered">
+                    <img class="login-logo" src="assets/img/logo.png">
+                </div>
+
+                <div class="field">
+                    <label class="label">Username</label>
+                    <div class="control has-icons-right">
+                        <input class="input" type="text">
+                        <span class="icon is-small is-right">
+                            <i class="fa fa-user"></i>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Password</label>
+                    <div class="control has-icons-right">
+                        <input class="input" type="password">
+                        <span class="icon is-small is-right">
+                            <i class="fa fa-key"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="has-text-centered">
+                    <a class="button is-vcentered is-primary is-outlined">Login</a>
+                </div>
+            </section>
+        </div>
+        <div id="particles-js" class="interactive-bg column is-8"></div>
+    </div>
+</template>
+
+<script>
+</script>
+
+<style>
+</style>

@@ -59,11 +59,56 @@ django-admin startapp <name>
 
 Installer les packages de NPM
 
-<pre>
+```bash
 npm i
-</pre>
+```
+
+Ne pas oublier de compiler les fichiers quand une modification est faite en saas ou en js via
+
+```bash
+npm run dev
+```
+
+Pour faire des modifications sur les fichiers *scss* || *vue* || *js* sans relancer tout le temps <code>npm run dev</code>
+
+```bash
+npm start
+```
+Cette commande est un alias de <code>npm run watch</code> et permet de compiler les assets dès qu'une modification est apportée
 
 **Bulma**
 
+Les fichiers *saas* ce trouvent dans <code>assets/saas</code>
+
+Créer un fichier pour chaque template avec la syntaxe suivante : <code>_page.scss</code>
+
+et l'importer dans le fichier app.scss 
+
+Exemple :
+
+```scss
+@import 'page';
+```
 
 **VueJs**
+
+Les composants vue sont dans <code>assets/js/components</code>
+
+La déclaration des components ce fait dans <code>assets/js/index.js</code>
+
+```js
+import Demo from Login.vue;
+
+const app = new Vue({
+    el: '#app',
+    components: {
+        Demo
+    }
+});
+```
+
+L'appel dans une template ce fait alors via la balise portant le nom du components 
+
+```html
+<demo></demo>
+```

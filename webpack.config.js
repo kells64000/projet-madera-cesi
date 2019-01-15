@@ -3,7 +3,8 @@ var webpack = require('webpack');
 var BundleTracker = require('webpack-bundle-tracker');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const devMode = process.env.NODE_ENV !== 'production'
+const devMode = process.env.NODE_ENV !== 'production';
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 
 module.exports = {
@@ -20,7 +21,10 @@ module.exports = {
         new MiniCssExtractPlugin({
           filename: 'app.css',
           chunkFilename: '[id].css'
-        })
+        }),
+        new CopyWebpackPlugin([
+            { from: 'node_modules/@fortawesome/fontawesome-free/webfonts', to: './webfonts'}
+        ])
     ],
 
     module: {

@@ -6,12 +6,6 @@
   "directories": {
     "lib": "lib"
   },
-  "keywords": [
-    "python",
-    "javascript",
-    "webpack",
-    "django"
-  ],
   "scripts": {
     "dev": "webpack --mode development",
     "prod": "webpack --mode production",
@@ -54,6 +48,7 @@
     "babel-loader": "^8.0.5",
     "babel-upgrade": "0.0.24",
     "bulma": "^0.7.2",
+    "copy-webpack-plugin": "^4.6.0",
     "css-loader": "^2.1.0",
     "mini-css-extract-plugin": "^0.5.0",
     "node-sass": "^4.11.0",
