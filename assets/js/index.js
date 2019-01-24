@@ -1,6 +1,8 @@
 require('../saas/app.scss');
 
-particlesJS.load('particles-js', 'assets/js/plugin/particles.json', function() {});
+// import "particles.js";
+
+// particlesJS.load('particles-js', 'assets/js/plugin/particles.json', function() {});
 
 import Vue from 'vue';
 

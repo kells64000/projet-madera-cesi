@@ -55,7 +55,7 @@ django-admin startapp <name>
 
 ### Front
 
-*NPM*
+**NPM**
 
 Installer les packages de NPM
 
@@ -89,6 +89,8 @@ Exemple :
 ```scss
 @import 'page';
 ```
+
+Le fichier <code>_variables.scss</code> permet d'écraser les valeurs des variables de Bulma
 
 **VueJs**
 
