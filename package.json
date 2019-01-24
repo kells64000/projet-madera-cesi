@@ -64,6 +64,6 @@
     "webpack-cli": "^3.2.1"
   },
   "dependencies": {
-    "particlesjs": "^2.2.3"
+    "vue-particles": "^1.0.9"
   }
 }
