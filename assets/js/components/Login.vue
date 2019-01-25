@@ -6,28 +6,32 @@
                     <img class="login-logo" src="assets/img/logo.png">
                 </div>
 
-                <div class="field">
-                    <label class="label">Username</label>
-                    <div class="control has-icons-right">
-                        <input class="input" type="text">
-                        <span class="icon is-small is-right">
-                            <i class="fa fa-user"></i>
-                        </span>
-                    </div>
-                </div>
+                <form class="login form">
 
-                <div class="field">
-                    <label class="label">Password</label>
-                    <div class="control has-icons-right">
-                        <input class="input" type="password">
-                        <span class="icon is-small is-right">
-                            <i class="fa fa-key"></i>
-                        </span>
+                    <div class="field">
+                        <label class="label">Username</label>
+                        <div class="control has-icons-right">
+                            <input v-model="username" class="input" id="id_username" type="text" autofocus>
+                            <span class="icon is-small is-right">
+                                <i class="fa fa-user"></i>
+                            </span>
+                        </div>
                     </div>
-                </div>
-                <div class="has-text-centered">
-                    <a class="button is-vcentered is-primary is-outlined">Login</a>
-                </div>
+
+                    <div class="field">
+                        <label class="label">Password</label>
+                        <div class="control has-icons-right">
+                            <input v-model="password" class="input" id="id_password" type="password">
+                            <span class="icon is-small is-right">
+                                <i class="fa fa-key"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="has-text-centered">
+                        <button @click.prevent="authenticate" class="button is-vcentered is-primary is-outlined" type="submit">Login</button>
+                    </div>
+
+                </form>
             </section>
         </div>
 
@@ -52,8 +56,62 @@
 </template>
 
 <script>
+    import axios from 'axios'
+
     export default {
-        name: 'Login'
+        name: 'Login',
+        data() {
+            return {
+                username: '',
+                password: ''
+            }
+        },
+        methods: {
+            authenticate() {
+                const payload = {
+                    username: this.username,
+                    password: this.password
+                }
+                axios.post(this.$store.state.endpoints.obtainJWT, payload)
+                    .then((response) => {
+                        this.$store.commit('updateToken', response.data.token)
+                        // get and set auth user
+                        const base = {
+                            baseURL: this.$store.state.endpoints.baseUrl,
+                            headers: {
+                                // Set your Authorization to 'JWT', not Bearer!!!
+                                Authorization: `JWT ${this.$store.state.jwt}`,
+                                'Content-Type': 'application/json'
+                            },
+                            xhrFields: {
+                                withCredentials: true
+                            }
+                        }
+                        this.$router.push({name: 'Dashboard'})
+                        // Even though the authentication returned a user object that can be
+                        // decoded, we fetch it again. This way we aren't super dependant on
+                        // JWT and can plug in something else.
+                        // const axiosInstance = axios.create(base)
+                        // axiosInstance({
+                        //     url: "/user/",
+                        //     method: "get",
+                        //     params: {}
+                        // })
+                        //     .then((response) => {
+                        //         this.$store.commit("setAuthUser",
+                        //             {authUser: response.data, isAuthenticated: true}
+                        //         )
+                        //         this.$router.push({name: 'Home'})
+                        //     })
+
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                        console.debug(error);
+                        console.dir(error);
+                    })
+            }
+        }
     }
 </script>
 

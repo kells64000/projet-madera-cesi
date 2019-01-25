@@ -17,8 +17,13 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url
 from django.views.generic import TemplateView
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^$', TemplateView.as_view(template_name='index.html'), name='index'),
+    url(r'^$', TemplateView.as_view(template_name='index.html'), name='Home'),
+    url(r'^dashboard/', TemplateView.as_view(template_name='dashboard.html'), name='Dashboard'),
+    url(r'^auth/obtain_token/', obtain_jwt_token),
+    url(r'^auth/refresh_token/', refresh_jwt_token),
+    url(r'^auth/verify_token/', verify_jwt_token),
 ]
