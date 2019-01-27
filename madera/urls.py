@@ -14,12 +14,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 from django.conf.urls import url
 from django.views.generic import TemplateView
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
-
-from users.views import update_profile
 
 urlpatterns = [
     # Url Dashboard Admin
@@ -33,5 +31,5 @@ urlpatterns = [
     url(r'^auth/obtain_token/', obtain_jwt_token),
     url(r'^auth/refresh_token/', refresh_jwt_token),
     url(r'^auth/verify_token/', verify_jwt_token),
-    path('profiles/', update_profile, name='update_user'),
+    path('', include('users.urls')),
 ]
