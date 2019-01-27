@@ -20,9 +20,14 @@ from django.views.generic import TemplateView
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 
 urlpatterns = [
+    # Url Dashboard Admin
     path('admin/', admin.site.urls),
+    # Url Template
     url(r'^$', TemplateView.as_view(template_name='index.html'), name='Home'),
     url(r'^dashboard', TemplateView.as_view(template_name='dashboard.html'), name='Dashboard'),
+    url(r'^quotes/create', TemplateView.as_view(template_name='create_quote.html'), name='CreateQuote'),
+    url(r'^quotes/view', TemplateView.as_view(template_name='view_quote.html'), name='ViewQuote'),
+    # Url API auth
     url(r'^auth/obtain_token/', obtain_jwt_token),
     url(r'^auth/refresh_token/', refresh_jwt_token),
     url(r'^auth/verify_token/', verify_jwt_token),

@@ -11,6 +11,8 @@ import store from './store/store.js';
 
 import Login from "./components/Login.vue";
 import Dashboard from "./components/Dashboard.vue";
+import CreateQuote from "./components/CreateQuote.vue";
+import ViewQuote from "./components/ViewQuote.vue";
 
 const app = new Vue({
     el: '#app',
@@ -18,6 +20,8 @@ const app = new Vue({
     store,
     components: {
         Login,
-        Dashboard
+        Dashboard,
+        CreateQuote,
+        ViewQuote
     }
 });
