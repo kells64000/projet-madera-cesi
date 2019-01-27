@@ -3,16 +3,18 @@
         <div class="columns is-vcentered vh-50">
             <div class="column is-12">
                 <section class="section">
+                    <div class="has-text-right">
+                        <button class="button is-light" @click.prevent="logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+                </section>
+                <section class="section">
                     <div class="has-text-centered">
                         <img class="login-logo" src="assets/img/logo.png">
                     </div>
                     <div class="has-text-centered">
                         Bonjour {{ prenom }} {{ nom }}
-                    </div>
-                    <div class="has-text-right">
-                        <button class="button is-rounded has-background-grey-lighter" @click.prevent="logout()">
-                            <i class="fas fa-sign-out-alt"></i>
-                        </button>
                     </div>
                 </section>
             </div>
@@ -26,7 +28,7 @@
                         </div>
                         <footer class="card-footer">
                             <p class="card-footer-item">
-                                Créer un devis
+                                Créer devis
                             </p>
                         </footer>
                     </div>
@@ -40,7 +42,7 @@
                         </div>
                         <footer class="card-footer">
                             <p class="card-footer-item">
-                                Consulter un devis
+                                Consulter devis
                             </p>
                         </footer>
                     </div>
@@ -64,10 +66,10 @@
                 this.$router.push({name: 'Home'})
             },
             create() {
-                this.$router.push({name: 'Home'})
+                this.$router.push({name: 'CreateQuote'})
             },
             consult() {
-                this.$router.push({name: 'Dashboard'})
+                this.$router.push({name: 'ViewQuote'})
             }
         }
     }

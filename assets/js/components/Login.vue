@@ -9,7 +9,7 @@
                 <form class="login form">
 
                     <div class="field">
-                        <label class="label">Username</label>
+                        <label class="label">Utilisateur</label>
                         <div class="control has-icons-right">
                             <input v-model="username" class="input" id="id_username" type="text" autofocus>
                             <span class="icon is-small is-right">
@@ -19,7 +19,7 @@
                     </div>
 
                     <div class="field">
-                        <label class="label">Password</label>
+                        <label class="label">Mot de passe</label>
                         <div class="control has-icons-right">
                             <input v-model="password" class="input" id="id_password" type="password">
                             <span class="icon is-small is-right">
@@ -28,7 +28,9 @@
                         </div>
                     </div>
                     <div class="has-text-centered">
-                        <button @click.prevent="authenticate" class="button is-vcentered is-primary is-outlined" type="submit">Login</button>
+                        <button @click.prevent="authenticate" class="button is-vcentered is-primary is-outlined" type="submit">
+                            Connexion
+                        </button>
                     </div>
 
                 </form>
@@ -36,21 +38,21 @@
         </div>
 
         <vue-particles class="interactive-bg column is-8"
-        color="#ffffff"
-        :particleOpacity="0.7"
-        :particlesNumber="200"
-        shapeType="circle"
-        :particleSize="5"
-        linesColor="#00acd6"
-        :linesWidth="1"
-        :lineLinked="true"
-        :lineOpacity="0.4"
-        :linesDistance="50"
-        :moveSpeed="5"
-        :hoverEffect="true"
-        hoverMode="repulse"
-        :clickEffect="true"
-        clickMode="grab">
+                       color="#ffffff"
+                       :particleOpacity="0.7"
+                       :particlesNumber="200"
+                       shapeType="circle"
+                       :particleSize="5"
+                       linesColor="#00acd6"
+                       :linesWidth="1"
+                       :lineLinked="true"
+                       :lineOpacity="0.4"
+                       :linesDistance="50"
+                       :moveSpeed="5"
+                       :hoverEffect="true"
+                       hoverMode="repulse"
+                       :clickEffect="true"
+                       clickMode="grab">
         </vue-particles>
     </div>
 </template>
