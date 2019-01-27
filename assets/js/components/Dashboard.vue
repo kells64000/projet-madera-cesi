@@ -1,26 +1,49 @@
 <template>
     <div class="container">
-        <div class="columns is-vcentered">
+        <div class="columns is-vcentered vh-50">
             <div class="column is-12">
                 <section class="section">
                     <div class="has-text-centered">
                         <img class="login-logo" src="assets/img/logo.png">
                     </div>
                     <div class="has-text-centered">
-                        Bonjour %Commercial%
+                        Bonjour {{ prenom }} {{ nom }}
+                    </div>
+                    <div class="has-text-right">
+                        <button class="button is-rounded has-background-grey-lighter" @click.prevent="logout()">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
                     </div>
                 </section>
             </div>
         </div>
         <div class="columns is-vcentered">
-            <div class="column is-6">
+            <div class="column is-3 is-offset-2">
                 <div class="has-text-centered">
-                    Créer un devis
+                    <div class="card card-dashboard" @click.prevent="create()">
+                        <div class="card-content has-background-grey-light">
+                            <i class="far fa-plus-square fa-5x"></i>
+                        </div>
+                        <footer class="card-footer">
+                            <p class="card-footer-item">
+                                Créer un devis
+                            </p>
+                        </footer>
+                    </div>
                 </div>
             </div>
-            <div class="column is-6">
+            <div class="column is-3 is-offset-2">
                 <div class="has-text-centered">
-                    Consulter un devis
+                    <div class="card card-dashboard" @click.prevent="consult()">
+                        <div class="card-content has-background-grey-light">
+                            <i class="fas fa-search fa-5x"></i>
+                        </div>
+                        <footer class="card-footer">
+                            <p class="card-footer-item">
+                                Consulter un devis
+                            </p>
+                        </footer>
+                    </div>
                 </div>
             </div>
         </div>
@@ -29,7 +52,24 @@
 
 <script>
     export default {
-        name: "Dashboard"
+        name: "Dashboard",
+        data() {
+            return {
+                prenom: 'Georges',
+                nom: 'Le Yeti'
+            }
+        },
+        methods: {
+            logout() {
+                this.$router.push({name: 'Home'})
+            },
+            create() {
+                this.$router.push({name: 'Home'})
+            },
+            consult() {
+                this.$router.push({name: 'Dashboard'})
+            }
+        }
     }
 </script>
 

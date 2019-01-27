@@ -17,5 +17,8 @@ $fa-font-path: "/assets/dist/webfonts";
 // Import Bulma variables
 @import 'variables';
 
-// Import Scss files
+// Import Scss Generic files
+@import 'main';
+// Import Scss Template files
 @import 'home';
+@import 'dashboard';
