@@ -308,3 +308,4 @@ test/
 package-lock.json
 webpack-stats.json
 assets/bundles/*
+stellar.yaml
