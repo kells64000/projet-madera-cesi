@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     # custom apps
-    'profiles',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -152,10 +152,10 @@ DATABASES = {
     'default': {
         'NAME': 'madera',
         'ENGINE': 'django.db.backends.postgresql',
-        'USER': 'root',
-        'PASSWORD': 'root',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
         'HOST': 'localhost',
-        'PORT': '',
+        'PORT': '5432',
     },
     'salesman': {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
@@ -212,3 +212,6 @@ WEBPACK_LOADER = {
         'STATS_FILE': os.path.join(BASE_DIR, 'webpack-stats.json'),
     }
 }
+
+AUTH_USER_MODEL = 'users.MaderaUser'
+AVATAR_URL = os.path.join(STATIC_URL, 'users-media/avatars/')[1:]
