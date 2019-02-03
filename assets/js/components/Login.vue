@@ -9,9 +9,9 @@
                 <form class="login form">
 
                     <div class="field">
-                        <label class="label">Utilisateur</label>
+                        <label class="label">Email</label>
                         <div class="control has-icons-right">
-                            <input v-model="username" class="input" id="id_username" type="text" autofocus>
+                            <input v-model="email" class="input" id="id_email" type="text" autofocus>
                             <span class="icon is-small is-right">
                                 <i class="fa fa-user"></i>
                             </span>
@@ -28,7 +28,7 @@
                         </div>
                     </div>
                     <div class="has-text-centered">
-                        <button @click.prevent="dashboard" class="button is-vcentered is-primary is-outlined" type="submit">
+                        <button @click.prevent="authenticate" class="button is-vcentered is-primary is-outlined" type="submit">
                             Connexion
                         </button>
                     </div>
@@ -64,17 +64,14 @@
         name: 'Login',
         data() {
             return {
-                username: '',
+                email: '',
                 password: ''
             }
         },
         methods: {
-            dashboard() {
-                this.$router.push({name: 'Dashboard'})
-            },
             authenticate() {
                 const payload = {
-                    username: this.username,
+                    email: this.email,
                     password: this.password
                 }
                 axios.post(this.$store.state.endpoints.obtainJWT, payload)
@@ -92,22 +89,21 @@
                                 withCredentials: true
                             }
                         }
-                        this.$router.push({name: 'Dashboard'})
                         // Even though the authentication returned a user object that can be
                         // decoded, we fetch it again. This way we aren't super dependant on
                         // JWT and can plug in something else.
-                        // const axiosInstance = axios.create(base)
-                        // axiosInstance({
-                        //     url: "/user/",
-                        //     method: "get",
-                        //     params: {}
-                        // })
-                        //     .then((response) => {
-                        //         this.$store.commit("setAuthUser",
-                        //             {authUser: response.data, isAuthenticated: true}
-                        //         )
-                        //         this.$router.push({name: 'Dashboard'})
-                        //     })
+                        const axiosInstance = axios.create(base)
+                        axiosInstance({
+                            url: "api/user/",
+                            method: "get",
+                            params: {}
+                        })
+                            .then((response) => {
+                                this.$store.commit("setAuthUser",
+                                    {authUser: response.data, isAuthenticated: true}
+                                )
+                                this.$router.push({name: 'Dashboard'})
+                            })
 
                     })
                     .catch((error) => {

@@ -6,7 +6,8 @@ from rest_framework.response import Response
 
 from .models import Quote
 from .renderers import QuoteJSONRenderer
-from .serializers import QuoteSerializer, QuoteListSerializer
+from .serializers import QuoteListSerializer
+
 
 class QuoteListApiView(ListAPIView):
     model = Quote
@@ -15,13 +16,14 @@ class QuoteListApiView(ListAPIView):
     renderer_classes = (QuoteJSONRenderer, )
     serializer_class = QuoteListSerializer
 
-class QuoteRetrieveApiView(RetrieveAPIView)
+
+class QuoteRetrieveApiView(RetrieveAPIView):
     permission_classes = (AllowAny, )
     renderer_classes = (QuoteJSONRenderer, )
-    serializer_class = QuoteSerializer
+    serializer_class = QuoteListSerializer
 
     def retrieve(self, request, quote, *args, **kwargs):
-      quote = Quote.objects.get(id = quote.id)
-      serializer = self.serializer_class(quote)
+        quote = Quote.objects.get(id=quote.id)
+        serializer = self.serializer_class(quote)
 
-      return Response(serializer.data, status = status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
