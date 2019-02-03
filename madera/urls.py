@@ -20,26 +20,25 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import TemplateView
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 from rest_framework import routers
-# from users.views import update_profile
 
 router = routers.DefaultRouter()
 
-
 app_name = "madera"
+
 urlpatterns = [
+
     # Url Dashboard Admin
     path('admin/', admin.site.urls),
     # Url Template
     url(r'^$', TemplateView.as_view(template_name='index.html'), name='Home'),
     url(r'^api/', include('quotes.urls', namespace='quotes')),
     url(r'^api/', include(router.urls)),
+    path('api/', include('users.api_urls')),
 
     # Url API auth
     url(r'^auth/obtain_token/', obtain_jwt_token),
     url(r'^auth/refresh_token/', refresh_jwt_token),
     url(r'^auth/verify_token/', verify_jwt_token),
-    path('', include('users.api_urls')),
-    # path('profiles/', update_profile, name='update_user'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

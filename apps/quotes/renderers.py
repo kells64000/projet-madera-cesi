@@ -11,7 +11,6 @@ class QuoteJSONRenderer(JSONRenderer):
         if errors is not None:
             return super(QuoteJSONRenderer, self).render(data)
 
-    return json.dumps({
-        'quotes': data
-    })
-
+        return json.dumps({
+            'quotes': data
+        })
