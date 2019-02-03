@@ -31,5 +31,5 @@ urlpatterns = [
     url(r'^auth/obtain_token/', obtain_jwt_token),
     url(r'^auth/refresh_token/', refresh_jwt_token),
     url(r'^auth/verify_token/', verify_jwt_token),
-    path('', include('users.urls')),
+    path('', include('users.api_urls')),
 ]
