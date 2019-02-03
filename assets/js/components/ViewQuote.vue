@@ -194,7 +194,7 @@
         },
         mounted: function() {
 
-            this.getQuotes();
+            // this.getQuotes();
         }
     }
 </script>
