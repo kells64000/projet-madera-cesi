@@ -28,7 +28,7 @@
                         </div>
                     </div>
                     <div class="has-text-centered">
-                        <button @click.prevent="authenticate" class="button is-vcentered is-primary is-outlined" type="submit">
+                        <button @click.prevent="dashboard" class="button is-vcentered is-primary is-outlined" type="submit">
                             Connexion
                         </button>
                     </div>
@@ -69,6 +69,9 @@
             }
         },
         methods: {
+            dashboard() {
+                this.$router.push({name: 'Dashboard'})
+            },
             authenticate() {
                 const payload = {
                     username: this.username,
@@ -103,7 +106,7 @@
                         //         this.$store.commit("setAuthUser",
                         //             {authUser: response.data, isAuthenticated: true}
                         //         )
-                        //         this.$router.push({name: 'Home'})
+                        //         this.$router.push({name: 'Dashboard'})
                         //     })
 
                     })

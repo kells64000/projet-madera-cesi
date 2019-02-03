@@ -1,0 +1,15 @@
+.field.is-grouped > .control:not(:last-child) {
+  margin-right: 0;
+}
+
+.button-search {
+  min-width: inherit;
+  margin: 0;
+}
+
+.fa-edit {
+  &:hover {
+      cursor: pointer;
+      color: $info;
+  }
+}

@@ -1,5 +1,4 @@
 {%  load staticfiles %}
-{% load render_bundle from webpack_loader %}
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -8,12 +7,12 @@
     <title>Madera - Accueil</title>
 </head>
 <body>
+{% load render_bundle from webpack_loader %}
 
     <div id="app">
-        <login></login>
+        <app> </app>
     </div>
 
 {% render_bundle 'main' %}
 </body>
 </html>
-
