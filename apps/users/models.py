@@ -12,9 +12,8 @@ from .managers import UserManager
 
 
 class MaderaUser(AbstractBaseUser, PermissionsMixin):
-    # user = models.OneToOneField(User, related_name="madera_user", primary_key=True,
-    #                             on_delete="cascade")
-    username = models.CharField(_('username'), max_length=50, blank=False, default='unknown')
+    username = models.CharField(_('username'), max_length=50, blank=False, default='unknown',
+                                unique=True)
     email = models.EmailField(_('email address'), unique=True)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
@@ -26,7 +25,7 @@ class MaderaUser(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
 
     class Meta:
