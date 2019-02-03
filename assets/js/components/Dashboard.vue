@@ -4,7 +4,7 @@
             <div class="column is-12">
                 <section class="section">
                     <div class="has-text-right">
-                        <button class="button is-light" @click.prevent="logout()">
+                        <button class="button has-background-grey-lighter" @click.prevent="logout()">
                             <i class="fas fa-sign-out-alt"></i>
                         </button>
                     </div>
@@ -13,7 +13,7 @@
                     <div class="has-text-centered">
                         <img class="login-logo" src="assets/img/logo.png">
                     </div>
-                    <div class="has-text-centered">
+                    <div class="has-text-centered subtitle">
                         Bonjour {{ prenom }} {{ nom }}
                     </div>
                 </section>

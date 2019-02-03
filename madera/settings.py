@@ -57,7 +57,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     # custom apps
-    'users',
+    # 'users',
+    'quotes',
 ]
 
 MIDDLEWARE = [
@@ -213,5 +214,5 @@ WEBPACK_LOADER = {
     }
 }
 
-AUTH_USER_MODEL = 'users.MaderaUser'
-AVATAR_URL = os.path.join(STATIC_URL, 'users-media/avatars/')[1:]
+# AUTH_USER_MODEL = 'users.MaderaUser'
+# AVATAR_URL = os.path.join(STATIC_URL, 'users-media/avatars/')[1:]

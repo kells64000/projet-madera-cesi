@@ -2,8 +2,13 @@
     <div class="columns">
         <div class="column is-12">
             <section class="section">
+                <div class="has-text-left">
+                    <a class="button has-background-grey-lighter" @click="returnDashboard">
+                        <i class="fas fa-home"></i>
+                    </a>
+                </div>
                 <div class="has-text-centered">
-                    <h1>Liste des devis</h1>
+                    <h1 class="title is-1">Liste des devis</h1>
                 </div>
             </section>
 
@@ -25,31 +30,43 @@
                     <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
                         <thead>
                         <tr>
-                            <th @click="sort('id')">N° Devis</th>
-                            <th @click="sort('name')">Nom Client</th>
-                            <th @click="sort('phone')">N° Téléphone</th>
-                            <th @click="sort('email')">Adresse Mail</th>
-                            <th @click="sort('price')">Prix (€)</th>
-                            <th @click="sort('state')">Etat Devis</th>
+                            <th class="has-text-centered" @click="sort('id')">N° Devis</th>
+                            <th class="has-text-centered" @click="sort('name')">Nom Client</th>
+                            <th class="has-text-centered" @click="sort('phone')">N° Téléphone</th>
+                            <th class="has-text-centered" @click="sort('email')">Adresse Mail</th>
+                            <th class="has-text-centered" @click="sort('price')">Prix (€)</th>
+                            <th class="has-text-centered" @click="sort('state')">Etat Devis</th>
+                            <th class="has-text-centered">Action</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr v-for="quote in sortedQuotes">
-                            <td>{{quote.id}}</td>
-                            <td>{{quote.name}}</td>
-                            <td>{{quote.phone}}</td>
-                            <td>{{quote.email}}</td>
-                            <td>{{quote.price}}</td>
-                            <td>{{quote.state}}</td>
+                            <td class="has-text-centered">{{quote.id}}</td>
+                            <td class="has-text-centered">{{quote.name}}</td>
+                            <td class="has-text-centered">{{quote.phone}}</td>
+                            <td class="has-text-centered">{{quote.email}}</td>
+                            <td class="has-text-centered">{{quote.price}}</td>
+                            <td class="has-text-centered">{{quote.state}}</td>
+                            <td class="has-text-centered">
+                                <i @click="editQuote" class="fas fa-edit"></i>
+                            </td>
                         </tr>
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="6">
-                                <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-                                    <a v-if="currentPage !== initialPage" @click="prevPage" class="pagination-previous">Précedent</a>
-                                    <a v-if="currentPage !== totalPage" @click="nextPage" class="pagination-next">Suivant</a>
+                            <td colspan="7">
+                                <nav class="pagination is-right" role="navigation" aria-label="pagination">
                                     <ul class="pagination-list">
+                                        <li>
+                                            <div class="select">
+                                                <select v-model="pageSize">
+                                                    <option :value="pageSize">{{pageSize}}</option>
+                                                    <option v-if="pageSize !== 2" :value="2">2</option>
+                                                    <option v-if="pageSize !== 5" :value="5">5</option>
+                                                    <option v-if="pageSize !== 10" :value="10">10</option>
+                                                </select>
+                                            </div>
+                                        </li>
                                         <li v-if="currentPage > initialPage+1"><a @click="firstPage" class="pagination-link">{{initialPage}}</a></li>
                                         <li v-if="currentPage > initialPage+1"><span class="pagination-ellipsis">&hellip;</span></li>
                                         <li v-if="currentPage > initialPage"><a @click="prevPage" class="pagination-link">{{currentPage-1}}</a></li>
@@ -57,12 +74,30 @@
                                         <li v-if="currentPage !== totalPage"><a @click="nextPage" class="pagination-link">{{currentPage+1}}</a></li>
                                         <li v-if="currentPage < totalPage-1"><span class="pagination-ellipsis">&hellip;</span></li>
                                         <li v-if="currentPage < totalPage-1"><a @click="lastPage" class="pagination-link">{{totalPage}}</a></li>
+                                        <li><a @click="prevPage" class="pagination-previous" :disabled="currentPage === initialPage"><</a></li>
+                                        <li><a @click="nextPage" class="pagination-next" :disabled="currentPage === totalPage">></a></li>
                                     </ul>
                                 </nav>
                             </td>
                         </tr>
                         </tfoot>
                     </table>
+                </div>
+                <div class="modal" :class="{'is-active': (showModal == true)}">
+                    <div class="modal-background"></div>
+                    <div class="modal-card">
+                        <header class="modal-card-head">
+                            <p class="modal-card-title has-text-centered">Edition du Devis n° quote.id</p>
+                            <button @click="hideModal" class="delete" aria-label="close"></button>
+                        </header>
+                        <section class="modal-card-body">
+
+                        </section>
+                        <footer class="modal-card-foot">
+                            <button class="button is-success">Save changes</button>
+                            <button class="button">Cancel</button>
+                        </footer>
+                    </div>
                 </div>
             </section>
         </div>
@@ -80,11 +115,14 @@
             return {
                 quotes: [],
                 errors: [],
+                loading: false,
                 currentSort: 'id',
                 currentSortDir: 'asc',
                 pageSize: 2,
                 currentPage: 1,
                 initialPage: 1,
+                showModal: false,
+                search: '',
             }
         },
         created() {
@@ -124,7 +162,17 @@
             },
             lastPage: function () {
                 if (Math.floor(this.quotes.length / this.pageSize) > 1) this.currentPage = Math.floor(this.quotes.length / this.pageSize)
+            },
+            editQuote: function () {
+                this.showModal = true
+            },
+            hideModal: function () {
+                this.showModal = false
+            },
+            returnDashboard() {
+                this.$router.push({name: 'Dashboard'})
             }
+
         },
         computed: {
             sortedQuotes: function () {
@@ -143,6 +191,10 @@
             totalPage: function () {
                 return Math.ceil(this.quotes.length / this.pageSize)
             }
+        },
+        mounted: function() {
+
+            this.getQuotes();
         }
     }
 </script>

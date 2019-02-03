@@ -6,3 +6,10 @@
   min-width: inherit;
   margin: 0;
 }
+
+.fa-edit {
+  &:hover {
+      cursor: pointer;
+      color: $info;
+  }
+}
