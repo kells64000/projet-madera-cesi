@@ -38,6 +38,15 @@ La base de donnée en local pour les commerciaux est : **mysqli**
 La base mysqli permet de stocker les devis sur le device si aucune connexion à la base principale n'est possible
 Lorsque une connexion internet est de nouveau disponible les données de la base mysqli sont intégrées à la base postgre
 
+## Donnée de l'application
+
+L'utilisateur pour la démo est :
+
+<pre>
+email : staff@madera.com
+password : madera
+</pre>
+
 ## Environnement de dév
 
 ### Back
