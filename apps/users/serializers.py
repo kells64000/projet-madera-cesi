@@ -8,7 +8,6 @@ class MaderaUserSerializer(serializers.Serializer):
     first_name = serializers.CharField(required=False, allow_blank=True, max_length=30)
     last_name = serializers.CharField(required=False, allow_blank=True, max_length=30)
     location = serializers.CharField(required=False, allow_blank=True, max_length=30)
-    location = serializers.CharField(required=False, allow_blank=True, max_length=30)
     date_joined = serializers.DateTimeField()
     is_active = serializers.BooleanField()
     is_staff = serializers.BooleanField(default=False)
@@ -29,6 +28,6 @@ class MaderaUserSerializer(serializers.Serializer):
         instance.location = validated_data.get('location', instance.location)
         instance.date_joined = validated_data.get('date_joined', instance.date_joined)
         instance.is_active = validated_data.get('is_active', instance.is_active)
-        instance.is_active = validated_data.get('is_active', instance.is_active)
+        instance.is_staff = validated_data.get('is_staff', instance.is_active)
         instance.save()
         return instance
