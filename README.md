@@ -29,8 +29,8 @@ La base de donnée de l'application est : **Postgresql**
 
 <pre>
 DB-name : madera
-user :    root
-passwd :  root
+user :    postgres
+passwd :  postgres
 </pre>
 
 La base de donnée en local pour les commerciaux est : **mysqli**
@@ -109,8 +109,3 @@ const app = new Vue({
 });
 ```
 
-L'appel dans une template ce fait alors via la balise portant le nom du components 
-
-```html
-<demo></demo>
-```
