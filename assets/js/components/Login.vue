@@ -11,9 +11,9 @@
                     <div class="field">
                         <label class="label">Email</label>
                         <div class="control has-icons-right">
-                            <input v-model="email" class="input" id="id_email" type="text" autofocus>
+                            <input v-model="email" @focus="is_focus = 'email'" class="input" :class="is_focus === 'email' ? 'is-primary' : ''" id="id_email" type="text" autofocus>
                             <span class="icon is-small is-right">
-                                <i class="fa fa-user"></i>
+                                <i class="fa fa-envelope"></i>
                             </span>
                         </div>
                     </div>
@@ -21,7 +21,7 @@
                     <div class="field">
                         <label class="label">Mot de passe</label>
                         <div class="control has-icons-right">
-                            <input v-model="password" class="input" id="id_password" type="password">
+                            <input v-model="password" @focus="is_focus = 'pwd'" class="input" :class="is_focus === 'pwd' ? 'is-primary' : ''" id="id_password" type="password">
                             <span class="icon is-small is-right">
                                 <i class="fa fa-key"></i>
                             </span>
@@ -65,7 +65,8 @@
         data() {
             return {
                 email: '',
-                password: ''
+                password: '',
+                is_focus: '',
             }
         },
         methods: {

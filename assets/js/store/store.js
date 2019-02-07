@@ -22,7 +22,11 @@ export default new Vuex.Store({
       baseUrl: 'http://127.0.0.1:8000/'
     }
   },
-
+  getters: {
+    getUser: state => {
+      return state.authUser;
+    }
+  },
   mutations: {
     setAuthUser(state, {
       authUser,

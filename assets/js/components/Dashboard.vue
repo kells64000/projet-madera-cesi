@@ -13,8 +13,8 @@
                     <div class="has-text-centered">
                         <img class="login-logo" src="assets/img/logo.png">
                     </div>
-                    <div class="has-text-centered subtitle">
-                        Bonjour {{ prenom }} {{ nom }}
+                    <div class="has-text-centered subtitle" v-for="user in userAuth">
+                        Bonjour {{user.first_name}} {{user.last_name}}
                     </div>
                 </section>
             </div>
@@ -55,10 +55,9 @@
 <script>
     export default {
         name: "Dashboard",
-        data() {
-            return {
-                prenom: 'Georges',
-                nom: 'Le Yeti'
+        computed : {
+            userAuth(){
+                return this.$store.getters.getUser;
             }
         },
         methods: {
@@ -71,6 +70,9 @@
             consult() {
                 this.$router.push({name: 'ViewQuote'})
             }
+        },
+        created: function () {
+            this.$store.commit('setAuthUser');
         }
     }
 </script>

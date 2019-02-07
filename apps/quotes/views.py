@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from rest_framework import status
 from rest_framework.generics import ListAPIView, RetrieveAPIView
-from rest_framework.permissions import AllowAny
+#from rest_framework_jwt.authentication import JSONWebTokenAuthentication
+#from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Quote
@@ -12,13 +13,15 @@ from .serializers import QuoteListSerializer
 class QuoteListApiView(ListAPIView):
     model = Quote
     queryset = Quote.objects.all()
-    permissions_classes = (AllowAny, )
+    # authentication_class = (JSONWebTokenAuthentication,)
+    # permission_classes = (IsAuthenticated,)
     renderer_classes = (QuoteJSONRenderer, )
     serializer_class = QuoteListSerializer
 
 
 class QuoteRetrieveApiView(RetrieveAPIView):
-    permission_classes = (AllowAny, )
+    # authentication_class = (JSONWebTokenAuthentication,)
+    # permission_classes = (IsAuthenticated,)
     renderer_classes = (QuoteJSONRenderer, )
     serializer_class = QuoteListSerializer
 

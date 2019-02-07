@@ -12,14 +12,14 @@ module.exports = {
     entry: './assets/js/index',
     output: {
         path: path.resolve('./assets/dist/'),
-        filename: 'app.js'
+        filename: 'js/app.js'
     },
 
     plugins: [
         new BundleTracker({filename: './webpack-stats.json'}),
         new VueLoaderPlugin(),
         new MiniCssExtractPlugin({
-          filename: 'app.css',
+          filename: 'css/app.css',
           chunkFilename: '[id].css'
         }),
         new CopyWebpackPlugin([

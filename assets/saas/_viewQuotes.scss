@@ -13,3 +13,17 @@
       color: $info;
   }
 }
+
+.fa-trash {
+  &:hover {
+      cursor: pointer;
+      color: $danger;
+  }
+}
+
+.table-quotes-head th:not(:last-child) {
+    &:hover {
+      cursor: pointer;
+      background-color: $grey-lighter;
+  }
+}

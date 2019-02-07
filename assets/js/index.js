@@ -5,6 +5,14 @@ import Vue from 'vue';
 import VueParticles from 'vue-particles';
 import VueDragResize from 'vue-drag-resize';
 
+import moment from 'moment'
+
+Vue.filter('formatDate', function(value) {
+  if (value) {
+    return moment(String(value)).format('DD/MM/YYYY HH:mm')
+  }
+});
+
 Vue.use(VueParticles);
 Vue.component('vue-drag-resize', VueDragResize);
 

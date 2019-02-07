@@ -16,3 +16,21 @@ class QuoteListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Quote
         fields = ('id', 'name', 'phone', 'email', 'price', 'state', 'created_at', 'updated_at')
+
+    def create(self, validated_data):
+        """
+        Create and return a new `Quote` instance, given the validated data.
+        """
+        return Quote.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        """
+        Update and return an existing `Snippet` instance, given the validated data.
+        """
+        instance.name = validated_data.get('name', instance.name)
+        instance.phone = validated_data.get('phone', instance.phone)
+        instance.email = validated_data.get('email', instance.email)
+        instance.price = validated_data.get('price', instance.price)
+        instance.state = validated_data.get('state', instance.state)
+        instance.save()
+        return instance
