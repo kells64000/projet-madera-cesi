@@ -15,7 +15,7 @@
             <form class="login form">
                 <div class="field is-grouped has-addons">
                     <span class="control is-expanded">
-                        <input v-model="search" class="input" type="text" placeholder="Chercher un devis" v-on:keyup.enter="">
+                        <input v-model="search" class="input" type="text" placeholder="Chercher un devis">
                     </span>
                     <p class="control">
                         <a class="button button-search is-link">
@@ -30,14 +30,14 @@
                     <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
                         <thead>
                         <tr class="table-quotes-head">
-                            <th class="has-text-centered" @click="sort('id')">N° Devis <span><i class="fas" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
-                            <th class="has-text-centered" @click="sort('name')">Nom Client <span><i class="fas" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
-                            <th class="has-text-centered" @click="sort('phone')">N° Téléphone <span><i class="fas" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
-                            <th class="has-text-centered" @click="sort('email')">Adresse Mail <span><i class="fas" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
-                            <th class="has-text-centered" @click="sort('price')">Prix <span><i class="fas" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
-                            <th class="has-text-centered" @click="sort('state')">Etat Devis <span><i class="fas" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
-                            <th class="has-text-centered" @click="sort('created_at')">Date création <span><i class="fas" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
-                            <th class="has-text-centered" @click="sort('updated_at')">Date modification <span><i class="fas" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
+                            <th class="has-text-centered" @click="sort('id')">N° Devis <span><i class="fas" v-if="currentSort === 'id'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
+                            <th class="has-text-centered" @click="sort('name')">Nom Client <span><i class="fas" v-if="currentSort === 'name'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
+                            <th class="has-text-centered" @click="sort('phone')">N° Téléphone <span><i class="fas" v-if="currentSort === 'phone'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
+                            <th class="has-text-centered" @click="sort('email')">Adresse Mail <span><i class="fas" v-if="currentSort === 'email'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
+                            <th class="has-text-centered" @click="sort('price')">Prix <span><i class="fas" v-if="currentSort === 'price'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
+                            <th class="has-text-centered" @click="sort('state')">Etat Devis <span><i class="fas" v-if="currentSort === 'state'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
+                            <th class="has-text-centered" @click="sort('created_at')">Date création <span><i class="fas" v-if="currentSort === 'created_at'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
+                            <th class="has-text-centered" @click="sort('updated_at')">Date modification <span><i class="fas" v-if="currentSort === 'updated_at'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
                             <th class="has-text-centered">Action</th>
                         </tr>
                         </thead>
@@ -194,7 +194,7 @@
                 loading: true,
                 currentSort: 'id',
                 currentSortDir: 'asc',
-                pageSize: 2,
+                pageSize: 3,
                 currentPage: 1,
                 initialPage: 1,
                 showModalEdit: false,
@@ -213,6 +213,9 @@
             }
         },
         methods: {
+            returnDashboard() {
+                this.$router.push({name: 'Dashboard'})
+            },
             sort: function (s) {
                 if (s === this.currentSort) {
                     this.currentSortDir = this.currentSortDir === 'asc' ? 'desc' : 'asc'
@@ -242,13 +245,16 @@
             setModalDeleteQuote(id) {
                 this.id = id;
             },
+            hideModalUpdate: function () {
+                this.showModalEdit = false
+            },
+            hideModalDelete: function () {
+                this.showModalDelete = false
+            },
             updateQuote(id, name, phone, email, price, state) {
-                console.log(id);
-                console.log(name);
-                console.log(phone);
-                console.log(email);
-                console.log(price);
-                console.log(state);
+                const quote = axios.put('http://127.0.0.1:8000/api/quotes/' + id);
+
+
             },
             deleteQuote(id) {
 
@@ -256,26 +262,14 @@
 
                 const quote = axios.delete('http://127.0.0.1:8000/api/quotes/' + id);
                 return axios.delete(quote);
-            },
-            hideModalUpdate: function () {
-                this.showModalEdit = false
-            },
-            hideModalDelete: function () {
-                this.showModalDelete = false
-            },
-            returnDashboard() {
-                this.$router.push({name: 'Dashboard'})
             }
         },
         computed: {
             filteredAndSortedQuotes() {
-                // Apply filter first
                 let self = this;
 
-
-
                 let result = this.quotes.filter(function (quote) {
-                    return  quote.id.toString() === self.search
+                    return  quote.id.toString().indexOf(self.search) >= 0
                         || quote.name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
                         || quote.phone.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
                         || quote.email.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
@@ -285,13 +279,16 @@
                         || quote.updated_at.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
                 });
 
-                // Sort the remaining values
                 return result.sort((a, b) => {
                     let modifier = 1;
                     if (this.currentSortDir === 'desc') modifier = -1;
                     if (a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
                     if (a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
                     return 0;
+                }).filter((row, index) => {
+                    let start = (this.currentPage - 1) * this.pageSize;
+                    let end = this.currentPage * this.pageSize;
+                    if (index >= start && index < end) return true;
                 });
             },
             totalPage: function () {
