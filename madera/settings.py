@@ -39,7 +39,9 @@ SECRET_KEY = '+px=!&tjxw(^$av_(5^^$%#z5)-p7y7qyv5yeupt_t&m&$z95j'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost'
+]
 
 
 # Application definition
