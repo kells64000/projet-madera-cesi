@@ -44,11 +44,9 @@ Pour l'importer dans le client postgresql, exécuter :
 
 `pg_restore -U postgres -j 2 -Fc -v -d madera madera.dump.bin`
 
->*Note*
->
 >Créer la base si elle n'existe pas encore
-`createdb -U postgres -E UTF-8 madera`
-Puis lancer `pg_restore` pour importer
+`createdb -U postgres -E UTF-8 madera`.
+>Puis lancer `pg_restore` pour importer
 
 ## Donnée de l'application
 
