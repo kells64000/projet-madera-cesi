@@ -23,12 +23,12 @@ class MaderaUser(AbstractBaseUser, PermissionsMixin):
     avatar = models.ImageField(upload_to=settings.AVATAR_URL, null=True, blank=True)
 
     # ForeignKeys
-    address = address = models.ForeignKey(Address,
-                                          blank=True,
-                                          default=None,
-                                          null=True,
-                                          on_delete=models.DO_NOTHING,
-                                          related_name=_('address'))
+    address = models.ForeignKey(Address,
+                                blank=True,
+                                default=None,
+                                null=True,
+                                on_delete=models.CASCADE,
+                                related_name=_('address'))
 
     objects = UserManager()
 
