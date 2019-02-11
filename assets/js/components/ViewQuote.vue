@@ -15,7 +15,7 @@
             <form class="login form">
                 <div class="field is-grouped has-addons">
                     <span class="control is-expanded">
-                        <input v-model="search" class="input" type="text" placeholder="Chercher un devis">
+                        <input v-model="search" class="input" type="text" placeholder="Chercher un devis" @keydown.enter.prevent="filteredAndSortedQuotes">
                     </span>
                     <p class="control">
                         <a class="button button-search is-link">
@@ -53,8 +53,8 @@
                             <td class="has-text-centered">{{quote.created_at | formatDate}}</td>
                             <td class="has-text-centered">{{quote.updated_at | formatDate}}</td>
                             <td class="has-text-centered">
-                                <i @click="showModalEdit = true, setModalUpdateQuote(quote.id, quote.name, quote.phone, quote.email, quote.price, quote.state)" class="fas fa-edit"></i>
-                                <i @click="showModalDelete = true, setModalDeleteQuote(quote.id)" class="fas fa-trash"></i>
+                                <i @click="setModalUpdateQuote(quote)" class="fas fa-edit"></i>
+                                <i @click="setModalDeleteQuote(quote)" class="fas fa-trash"></i>
                             </td>
                         </tr>
                         </tbody>
@@ -89,7 +89,8 @@
                         </tfoot>
                     </table>
                 </div>
-                <div class="modal" :class="{'is-active': (showModalEdit === true)}">
+
+                <div class="modal" :class="{'is-active': (showModalUpdate === true)}">
                     <div class="modal-background"></div>
                     <div class="modal-card">
                         <header class="modal-card-head has-background-link">
@@ -102,21 +103,21 @@
                                 <div class="field">
                                     <label class="label">Nom Client</label>
                                     <div class="control">
-                                        <input class="input" type="text" :value="this.name">
+                                        <input class="input" type="text" v-model="clientName" :placeholder="this.name">
                                     </div>
                                 </div>
 
                                 <div class="field">
                                     <label class="label">Téléphone</label>
                                     <div class="control">
-                                        <input class="input" type="text" :value="this.phone">
+                                        <input class="input" type="text" v-model="clientPhone" :placeholder="this.phone">
                                     </div>
                                 </div>
 
                                 <div class="field">
                                     <label class="label">Adresse Mail</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" type="email" :value="this.email">
+                                        <input class="input" type="email" v-model="clientEmail" :placeholder="this.email">
                                         <span class="icon is-small is-left">
                                           <i class="fas fa-envelope"></i>
                                         </span>
@@ -126,7 +127,7 @@
                                 <div class="field">
                                     <label class="label">Prix</label>
                                     <p class="control has-icons-right">
-                                        <input class="input" type="text" :value="this.price">
+                                        <input class="input" type="text" v-model="quotePrice" :placeholder="this.price">
                                         <span class="icon is-small is-right">
                                           <i class="fas fa-euro-sign"></i>
                                         </span>
@@ -137,7 +138,7 @@
                                     <label class="label">Etat Devis</label>
                                     <p class="control has-icons-left">
                                         <span class="select">
-                                          <select>
+                                          <select v-model="quoteState">
                                             <option selected>{{this.state}}</option>
                                             <option>brouillon</option>
                                             <option>archivé</option>
@@ -152,11 +153,12 @@
 
                         </section>
                         <footer class="modal-card-foot justify-content-end">
-                            <button @click="updateQuote()" class="button is-link">Enregistrer</button>
+                            <button @click="updateQuote" class="button is-link">Enregistrer</button>
                             <button @click="hideModalUpdate" class="button">Annuler</button>
                         </footer>
                     </div>
                 </div>
+
                 <div class="modal" :class="{'is-active': (showModalDelete === true)}">
                     <div class="modal-background"></div>
                     <div class="modal-card">
@@ -166,7 +168,7 @@
                         </header>
                         <section class="modal-card-body d-flex justify-content-center">
 
-                            <button @click="deleteQuote()" class="button mr-1 is-danger">Supprimer</button>
+                            <button @click="deleteQuote" class="button mr-1 is-danger">Supprimer</button>
                             <button @click="hideModalDelete" class="button">Annuler</button>
 
                         </section>
@@ -191,15 +193,21 @@
             return {
                 quotes: [],
                 errors: [],
+                search: '',
                 loading: true,
                 currentSort: 'id',
                 currentSortDir: 'asc',
                 pageSize: 3,
                 currentPage: 1,
                 initialPage: 1,
-                showModalEdit: false,
+                showModalUpdate: false,
                 showModalDelete: false,
-                search: '',
+                selectedQuote: null,
+                clientName: '',
+                clientPhone: '',
+                clientEmail: '',
+                quotePrice: '',
+                quoteState: '',
             }
         },
         async created() {
@@ -234,34 +242,87 @@
             lastPage: function () {
                 if (Math.floor(this.quotes.length / this.pageSize) > 1) this.currentPage = Math.floor(this.quotes.length / this.pageSize)
             },
-            setModalUpdateQuote(id, name, phone, email, price, state) {
-                this.id = id;
-                this.name = name;
-                this.phone = phone;
-                this.email = email;
-                this.price = price;
-                this.state = state;
+            setModalUpdateQuote(quote) {
+                this.showModalUpdate = true;
+                this.selectedQuote = quote;
+                this.id = quote.id;
+                this.name = quote.name;
+                this.phone = quote.phone;
+                this.email = quote.email;
+                this.price = quote.price;
+                this.state = quote.state;
             },
-            setModalDeleteQuote(id) {
-                this.id = id;
+            setModalDeleteQuote(quote) {
+                this.showModalDelete = true;
+                this.selectedQuote = quote;
+                this.id = quote.id;
             },
             hideModalUpdate: function () {
-                this.showModalEdit = false
+                this.showModalUpdate = false;
+                this.clientName = '';
+                this.clientPhone = '';
+                this.clientEmail = '';
+                this.quotePrice = '';
+                this.quoteState = '';
             },
             hideModalDelete: function () {
                 this.showModalDelete = false
             },
-            updateQuote(id, name, phone, email, price, state) {
-                const quote = axios.put('http://127.0.0.1:8000/api/quotes/' + id);
-
-
+            getQuotes() {
+                axios.get(`http://127.0.0.1:8000/api/quotes`)
+                .then(response => {
+                    this.quotes = response.data
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                })
             },
-            deleteQuote(id) {
+            updateQuote() {
+                let index = this.quotes.indexOf(this.selectedQuote);
 
-                id = 1;
+                let date = new Date();
+                let now = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDay() + ' ' + date.getHours() + ':' + date.getMinutes();
 
-                const quote = axios.delete('http://127.0.0.1:8000/api/quotes/' + id);
-                return axios.delete(quote);
+                let quoteUpdate = {
+                    'name': this.clientName,
+                    'phone': this.clientPhone,
+                    'email': this.clientEmail,
+                    'price': this.quotePrice,
+                    'state': this.quoteState,
+                    'created_at': this.selectedQuote.created_at,
+                    'updated_at': now
+                };
+
+                axios.put('http://127.0.0.1:8000/api/quotes/' + this.selectedQuote.id,
+                    quoteUpdate, {
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        }
+                    }).then((response) => {
+                        this.clientName = '';
+                        this.clientPhone = '';
+                        this.clientEmail = '';
+                        this.quotePrice = '';
+                        this.quoteState = '';
+                        this.selectedQuote = null;
+                        this.showModalUpdate = false;
+                        this.getQuotes();
+
+                    }).catch(e => {
+                        this.errors.push(e);
+                    });
+            },
+            deleteQuote() {
+                let index = this.quotes.indexOf(this.selectedQuote);
+
+                axios.delete('http://127.0.0.1:8000/api/quotes/' + this.selectedQuote.id)
+                    .then(response => {
+                        this.quotes.splice(index, 1);
+                        this.selectedQuote = null;
+                        this.showModalDelete = false;
+                    }).catch(e => {
+                        this.errors.push(e);
+                    });
             }
         },
         computed: {
