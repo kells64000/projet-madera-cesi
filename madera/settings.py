@@ -147,6 +147,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'madera.wsgi.application'
 
+#
+# Cors settings
+# ---------------------------------------------------------------------------- #
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_HEADERS = (
+    'x-requested-with',
+    'content-type',
+    'accept',
+    'origin',
+    'authorization',
+    'x-csrftoken',
+    'x-api-key',
+    'http-api-key',
+)
+
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
