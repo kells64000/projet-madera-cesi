@@ -1,13 +1,14 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.conf import settings
-from django.contrib.auth.models import PermissionsMixin
-from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import (AbstractBaseUser, PermissionsMixin)
+from django.utils import timezone
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
+from addresses.models import Address
 from .managers import UserManager
 
 
@@ -16,11 +17,18 @@ class MaderaUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
-    location = models.CharField(max_length=30, blank=True)
-    date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
+    date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
     is_active = models.BooleanField(_('active'), default=True)
     is_staff = models.BooleanField(_('is_staff'), default=False)
     avatar = models.ImageField(upload_to=settings.AVATAR_URL, null=True, blank=True)
+
+    # ForeignKeys
+    address = address = models.ForeignKey(Address,
+                                          blank=True,
+                                          default=None,
+                                          null=True,
+                                          on_delete=models.DO_NOTHING,
+                                          related_name=_('address'))
 
     objects = UserManager()
 
@@ -30,6 +38,11 @@ class MaderaUser(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
+
+    @cached_property
+    def user(self):
+        # Support for self as profile. Use of this is deprecated
+        return self
 
     def get_full_name(self):
         '''
