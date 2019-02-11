@@ -40,7 +40,8 @@ SECRET_KEY = '+px=!&tjxw(^$av_(5^^$%#z5)-p7y7qyv5yeupt_t&m&$z95j'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'localhost'
+    'localhost',
+    '127.0.0.1'
 ]
 
 
