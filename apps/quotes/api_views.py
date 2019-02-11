@@ -4,6 +4,7 @@ from rest_framework.parsers import JSONParser
 from .models import Quote
 from .serializers import QuoteListSerializer
 
+
 @csrf_exempt
 def quotes_list(request):
     """
