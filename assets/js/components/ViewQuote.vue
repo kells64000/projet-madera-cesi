@@ -15,7 +15,7 @@
             <form class="login form">
                 <div class="field is-grouped has-addons">
                     <span class="control is-expanded">
-                        <input class="input" type="text" placeholder="Chercher un devis">
+                        <input v-model="search" class="input" type="text" placeholder="Chercher un devis">
                     </span>
                     <p class="control">
                         <a class="button button-search is-link">
@@ -190,7 +190,7 @@
             return {
                 quotes: [],
                 errors: [],
-                loading: false,
+                loading: true,
                 currentSort: 'id',
                 currentSortDir: 'asc',
                 pageSize: 2,
@@ -207,6 +207,8 @@
                 this.quotes = response.data
             } catch (e) {
                 this.errors.push(e)
+            } finally {
+                this.loading = false
             }
         },
         methods: {
@@ -248,10 +250,11 @@
                 console.log(state);
             },
             deleteQuote(id) {
-                id = 2;
 
-                const url = axios.delete('http://127.0.0.1:8000/api/quotes/' + id);
-                return axios.delete(url);
+                id = 1;
+
+                const quote = axios.delete('http://127.0.0.1:8000/api/quotes/' + id);
+                return axios.delete(quote);
             },
             hideModalUpdate: function () {
                 this.showModalEdit = false
@@ -279,7 +282,7 @@
             },
             totalPage: function () {
                 return Math.ceil(this.quotes.length / this.pageSize)
-            }
+            },
         }
     }
 </script>

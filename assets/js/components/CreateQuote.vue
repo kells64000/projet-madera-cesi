@@ -1,49 +1,38 @@
 <template>
-        <div class="columns">
-            <div class="column is-2">
+<div>
+    <vue-draggable-resizable :parent="true" :grid=[20,20] :x="x" :y="y" :h="h" :w="w" @dragging="onDrag" @resizing="onResize">
+        <p>You cannot move me or resize me outside my parent.</p>
+    </vue-draggable-resizable>
 
-            </div>
-            <div class="column is-8">
-                <VueDragResize :isActive="true"
-                               :parentLimitation="true"
-                               :w="200" :h="200"
-                               v-on:resizing="resize" v-on:dragging="resize">
-                    <h3>Hello World!</h3>
-                    <p>{{ top }} х {{ left }} </p>
-                    <p>{{ width }} х {{ height }}</p>
-                </VueDragResize>
+</div>
+                <!--<vue-draggable-resizable :parent="true" :max-width="290" :max-height="290" :grid="[10,20]">-->
+                    <!--<p>Component costrained in parent with <b>maxWidth</b> and <b>maxHeight</b> equal to 290.</p>-->
+                <!--</vue-draggable-resizable>-->
 
-            </div>
-            <div class="column is-2">
-
-            </div>
-        </div>
 </template>
 
 <script>
-    import VueDragResize from 'vue-drag-resize';
 
     export default {
         name: "CreateQuote",
-        components: {
-            VueDragResize
-        },
-
-        data() {
+        data: function () {
             return {
                 width: 0,
                 height: 0,
-                top: 0,
-                left: 0
+                x: 0,
+                y: 0
             }
         },
-
         methods: {
-            resize(newRect) {
-                this.width = newRect.width;
-                this.height = newRect.height;
-                this.top = newRect.top;
-                this.left = newRect.left;
+            onResize: function (x, y, width, height) {
+                this.x = x
+                this.y = y
+                this.width = width
+                this.height = height
+            },
+            onDrag: function (x, y) {
+                this.x = x
+                this.y = y
             }
         }
     }
