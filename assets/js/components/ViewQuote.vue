@@ -15,7 +15,7 @@
             <form class="login form">
                 <div class="field is-grouped has-addons">
                     <span class="control is-expanded">
-                        <input v-model="search" class="input" type="text" placeholder="Chercher un devis">
+                        <input v-model="search" class="input" type="text" placeholder="Chercher un devis" v-on:keyup.enter="">
                     </span>
                     <p class="control">
                         <a class="button button-search is-link">
@@ -42,7 +42,8 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="quote in sortedQuotes">
+                        <tr v-for="quote in filteredAndSortedQuotes /*sortedQuotes*/" >
+
                             <td class="has-text-centered">{{quote.id}}</td>
                             <td class="has-text-centered">{{quote.name}}</td>
                             <td class="has-text-centered">{{quote.phone}}</td>
@@ -267,17 +268,30 @@
             }
         },
         computed: {
-            sortedQuotes: function () {
-                return this.quotes.sort((a, b) => {
+            filteredAndSortedQuotes() {
+                // Apply filter first
+                let self = this;
+
+
+
+                let result = this.quotes.filter(function (quote) {
+                    return  quote.id.toString() === self.search
+                        || quote.name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                        || quote.phone.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                        || quote.email.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                        || quote.price.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                        || quote.state.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                        || quote.created_at.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                        || quote.updated_at.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                });
+
+                // Sort the remaining values
+                return result.sort((a, b) => {
                     let modifier = 1;
                     if (this.currentSortDir === 'desc') modifier = -1;
                     if (a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
                     if (a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
                     return 0;
-                }).filter((row, index) => {
-                    let start = (this.currentPage - 1) * this.pageSize;
-                    let end = this.currentPage * this.pageSize;
-                    if (index >= start && index < end) return true;
                 });
             },
             totalPage: function () {
@@ -286,6 +300,8 @@
         }
     }
 </script>
+
+
 
 <style>
 
