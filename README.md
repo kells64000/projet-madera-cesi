@@ -40,6 +40,16 @@ Lorsque une connexion internet est de nouveau disponible les données de la base
 
 Le dossier **db** contient un dump récent de postgresql
 
+Pour l'importer dans le client postgresql, exécuter :
+
+`pg_restore -U postgres -j 2 -Fc -v -d madera madera.dump.bin`
+
+>*Note*
+>
+>Créer la base si elle n'existe pas encore
+`createdb -U postgres -E UTF-8 madera`
+Puis lancer `pg_restore` pour importer
+
 ## Donnée de l'application
 
 L'utilisateur pour la démo est :
@@ -109,7 +119,7 @@ Les composants vue sont dans <code>assets/js/components</code>
 
 La déclaration des components ce fait dans <code>assets/js/index.js</code>
 
-```js
+```javascript
 import Demo from Login.vue;
 
 const app = new Vue({
@@ -119,4 +129,3 @@ const app = new Vue({
     }
 });
 ```
-
