@@ -3,7 +3,6 @@ require('../saas/app.scss');
 import Vue from 'vue';
 
 import VueParticles from 'vue-particles';
-import VueDraggableResizable from 'vue-draggable-resizable'
 
 import moment from 'moment'
 
@@ -14,7 +13,7 @@ Vue.filter('formatDate', function(value) {
 });
 
 Vue.use(VueParticles);
-Vue.component('vue-draggable-resizable', VueDraggableResizable);
+
 
 import router from './router/router.js';
 import store from './store/store.js';
