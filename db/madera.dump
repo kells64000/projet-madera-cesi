@@ -170,6 +170,8 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 28	users	0007_auto_20190211_1113	2019-02-11 19:10:19.479535+01
 29	users	0008_auto_20190211_1241	2019-02-11 19:10:19.493706+01
 30	users	0009_auto_20190211_1449	2019-02-11 19:10:19.517314+01
+31	quotes	0004_quote_attachment	2019-02-17 15:01:27.834546+01
+32	quotes	0005_auto_20190217_1450	2019-02-17 15:50:50.514106+01
 \.
 
 
@@ -185,10 +187,12 @@ COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
 -- Data for Name: quotes_quote; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.quotes_quote (id, name, phone, email, price, state, created_at, updated_at) FROM stdin;
-1	client_1	0102030405	test@devis.fr	12345.67	brouillon	2019-02-05 22:48:21.320575+01	2019-02-05 22:48:21.320597+01
-2	client_2	0504030201	test@devis2.fr	76543.21	archivé	2019-02-05 22:49:15.012798+01	2019-02-05 22:49:15.012822+01
-154321678	client_3	0504030201	test@devis3.fr	41526.89	archivé	2019-02-11 19:16:17.030864+01	2019-02-11 19:16:17.030887+01
+COPY public.quotes_quote (id, name, phone, email, price, state, created_at, updated_at, attachment) FROM stdin;
+2	client_2	0504030201	test@devis2.fr	76543.21	archivé	2019-02-05 22:49:15.012798+01	2019-02-17 16:01:36.676819+01	null
+1	client_1	0102030405	test@devis.fr	12345.67	brouillon	2019-02-05 22:48:21.320575+01	2019-02-17 16:01:50.776609+01	client1-facture_exemple.pdf
+24512	client_4	0504030201	test@devis4.fr	41526.89	archivé	2019-02-17 16:02:44.312735+01	2019-02-17 16:02:44.312756+01	null
+24545412	client_5	0504030201	test@devis5.fr	41526.89	archivé	2019-02-17 16:03:03.517516+01	2019-02-17 16:03:03.517539+01	null
+14263	client_3	0504030201	test@devis3.fr	41526.89	archivé	2019-02-11 19:16:17.030864+01	2019-02-11 19:16:17.030887+01	null
 \.
 
 
@@ -270,7 +274,7 @@ SELECT pg_catalog.setval('public.django_content_type_id_seq', 11, true);
 -- Name: django_migrations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.django_migrations_id_seq', 30, true);
+SELECT pg_catalog.setval('public.django_migrations_id_seq', 32, true);
 
 
 --

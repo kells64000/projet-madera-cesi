@@ -35,6 +35,7 @@
                             <th class="has-text-centered" @click="sort('phone')">N° Téléphone <span><i class="fas" v-if="currentSort === 'phone'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
                             <th class="has-text-centered" @click="sort('email')">Adresse Mail <span><i class="fas" v-if="currentSort === 'email'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
                             <th class="has-text-centered" @click="sort('price')">Prix <span><i class="fas" v-if="currentSort === 'price'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
+                            <th class="has-text-centered">Devis</th>
                             <th class="has-text-centered" @click="sort('state')">Etat Devis <span><i class="fas" v-if="currentSort === 'state'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
                             <th class="has-text-centered" @click="sort('created_at')">Date création <span><i class="fas" v-if="currentSort === 'created_at'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
                             <th class="has-text-centered" @click="sort('updated_at')">Date modification <span><i class="fas" v-if="currentSort === 'updated_at'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
@@ -49,6 +50,13 @@
                             <td class="has-text-centered">{{quote.phone}}</td>
                             <td class="has-text-centered">{{quote.email}}</td>
                             <td class="has-text-centered">{{quote.price}}€</td>
+                            <td class="has-text-centered">
+                                <div v-if="quote.attachment !== 'null'">
+                                    <a :href="'/assets/pdf/' + quote.attachment" target="_blank">
+                                        <i class="fas fa-file-pdf"></i>
+                                    </a>
+                                </div>
+                            </td>
                             <td class="has-text-centered">{{quote.state}}</td>
                             <td class="has-text-centered">{{quote.created_at | formatDate}}</td>
                             <td class="has-text-centered">{{quote.updated_at | formatDate}}</td>
@@ -66,10 +74,9 @@
                                         <li>
                                             <div class="select">
                                                 <select v-model="pageSize">
-                                                    <option :value="pageSize">{{pageSize}}</option>
-                                                    <option v-if="pageSize !== 2" :value="2">2</option>
-                                                    <option v-if="pageSize !== 5" :value="5">5</option>
-                                                    <option v-if="pageSize !== 10" :value="10">10</option>
+                                                    <option :value="2">2</option>
+                                                    <option :value="5">5</option>
+                                                    <option :value="10">10</option>
                                                 </select>
                                             </div>
                                         </li>
@@ -197,7 +204,7 @@
                 loading: true,
                 currentSort: 'id',
                 currentSortDir: 'asc',
-                pageSize: 3,
+                pageSize: 5,
                 currentPage: 1,
                 initialPage: 1,
                 showModalUpdate: false,
@@ -304,9 +311,12 @@
                     'email': this.clientEmail,
                     'price': this.quotePrice,
                     'state': this.quoteState,
+                    'attachment': this.selectedQuote.attachment,
                     'created_at': this.selectedQuote.created_at,
                     'updated_at': now
                 };
+
+                console.log(quoteUpdate)
 
                 axios.put('http://127.0.0.1:8000/api/quotes/' + this.selectedQuote.id,
                     quoteUpdate, {
