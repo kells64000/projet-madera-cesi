@@ -10,9 +10,9 @@
 
                     <div class="field">
                         <label class="label">Email</label>
-                        <div class="control has-icons-right">
+                        <div class="control has-icons-left">
                             <input v-model="email" @focus="is_focus = 'email'" class="input" :class="is_focus === 'email' ? 'is-primary' : ''" id="id_email" type="text" autofocus>
-                            <span class="icon is-small is-right">
+                            <span class="icon is-small is-left">
                                 <i class="fa fa-envelope"></i>
                             </span>
                         </div>
@@ -20,9 +20,9 @@
 
                     <div class="field">
                         <label class="label">Mot de passe</label>
-                        <div class="control has-icons-right">
+                        <div class="control has-icons-left">
                             <input v-model="password" @focus="is_focus = 'pwd'" class="input" :class="is_focus === 'pwd' ? 'is-primary' : ''" id="id_password" type="password">
-                            <span class="icon is-small is-right">
+                            <span class="icon is-small is-left">
                                 <i class="fa fa-key"></i>
                             </span>
                         </div>

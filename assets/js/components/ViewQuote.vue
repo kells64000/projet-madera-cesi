@@ -278,10 +278,25 @@
                 })
             },
             updateQuote() {
-                let index = this.quotes.indexOf(this.selectedQuote);
 
                 let date = new Date();
-                let now = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDay() + ' ' + date.getHours() + ':' + date.getMinutes();
+                let now = date.getFullYear() + '-' + (date.getMonth() +1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + (date.getMinutes()<10?'0':'') + date.getMinutes();
+
+                if (this.clientName === '') {
+                    this.clientName = this.selectedQuote.name
+                }
+                if (this.clientPhone === '') {
+                    this.clientPhone = this.selectedQuote.phone
+                }
+                if (this.clientEmail === '') {
+                    this.clientEmail = this.selectedQuote.email
+                }
+                if (this.quotePrice === '') {
+                    this.quotePrice = this.selectedQuote.price
+                }
+                if (this.quoteState === '') {
+                    this.quoteState = this.selectedQuote.state
+                }
 
                 let quoteUpdate = {
                     'name': this.clientName,
@@ -321,6 +336,7 @@
                         this.selectedQuote = null;
                         this.showModalDelete = false;
                     }).catch(e => {
+                        console.log(e);
                         this.errors.push(e);
                     });
             }
@@ -359,8 +375,5 @@
     }
 </script>
 
-
-
 <style>
-
 </style>
