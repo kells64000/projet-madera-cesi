@@ -51,7 +51,7 @@
                             <td class="has-text-centered">{{quote.email}}</td>
                             <td class="has-text-centered">{{quote.price}}€</td>
                             <td class="has-text-centered">
-                                <div v-if="quote.attachment !== 'null'">
+                                <div v-if="quote.attachment !== null">
                                     <a :href="'/assets/pdf/' + quote.attachment" target="_blank">
                                         <i class="fas fa-file-pdf"></i>
                                     </a>
