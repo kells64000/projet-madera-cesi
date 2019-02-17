@@ -10,13 +10,14 @@ class QuoteListSerializer(serializers.ModelSerializer):
     email = serializers.EmailField()
     price = serializers.DecimalField(max_digits=10, decimal_places=2)
     state = serializers.CharField()
-    attachment = serializers.CharField()
+    attachment = serializers.CharField(allow_null=True, allow_blank=True)
     created_at = serializers.DateTimeField()
     updated_at = serializers.DateTimeField()
 
     class Meta:
         model = Quote
-        fields = ('id', 'name', 'phone', 'email', 'price', 'state', 'attachment', 'created_at', 'updated_at')
+        fields = ('id', 'name', 'phone', 'email', 'price', 'state',
+                  'attachment', 'created_at', 'updated_at')
 
     def create(self, validated_data):
         """
