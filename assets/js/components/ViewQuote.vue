@@ -74,8 +74,8 @@
                                         <li>
                                             <div class="select">
                                                 <select v-model="pageSize">
-                                                    <option value="2">2</option>
-                                                    <option value="5">5</option>
+                                                    <option :value="Math.ceil(totalQuotes / 3)">{{Math.ceil(totalQuotes / 3)}}</option>
+                                                    <option :value="Math.ceil(totalQuotes / 2)">{{Math.ceil(totalQuotes / 2)}}</option>
                                                     <option :value="totalQuotes">all</option>
                                                 </select>
                                             </div>
@@ -108,17 +108,33 @@
 
                             <form action="#">
                                 <div class="field">
-                                    <label class="label">Nom Client</label>
-                                    <div class="control">
-                                        <input class="input" type="text" v-model="clientName" :placeholder="this.name">
-                                    </div>
+                                    <label class="label">Client</label>
+                                    <p class="control has-icons-left">
+                                        <span class="select">
+
+                                          <select @focus="selectFocus = 'client'" @blur="selectFocus = ''" v-model="clientName">
+                                            <option value="">{{this.name}}</option>
+                                            <option v-if="this.name !== 'client_1'">client_1</option>
+                                            <option v-if="this.name !== 'client_2'">client_2</option>
+                                            <option v-if="this.name !== 'client_3'">client_3</option>
+                                            <option v-if="this.name !== 'client_4'">client_4</option>
+                                            <option v-if="this.name !== 'client_5'">client_5</option>
+                                          </select>
+                                        </span>
+                                        <span class="icon is-small is-left">
+                                          <i class="fas fa-user-tie" :class="{'icon-focus': (selectFocus === 'client')}"></i>
+                                        </span>
+                                    </p>
                                 </div>
 
                                 <div class="field">
                                     <label class="label">Téléphone</label>
-                                    <div class="control">
+                                    <p class="control has-icons-left">
                                         <input class="input" type="text" v-model="clientPhone" :placeholder="this.phone">
-                                    </div>
+                                        <span class="icon is-small is-left">
+                                          <i class="fas fa-mobile-alt"></i>
+                                        </span>
+                                    </p>
                                 </div>
 
                                 <div class="field">
@@ -131,29 +147,19 @@
                                     </p>
                                 </div>
 
-                                <!--<div class="field">-->
-                                    <!--<label class="label">Prix</label>-->
-                                    <!--<p class="control has-icons-right">-->
-                                        <!--<input class="input" type="text" v-model="quotePrice" :placeholder="this.price">-->
-                                        <!--<span class="icon is-small is-right">-->
-                                          <!--<i class="fas fa-euro-sign"></i>-->
-                                        <!--</span>-->
-                                    <!--</p>-->
-                                <!--</div>-->
-
                                 <div class="field">
                                     <label class="label">Etat Devis</label>
                                     <p class="control has-icons-left">
                                         <span class="select">
 
-                                          <select @focus="stateFocus = true" @blur="stateFocus = false" v-model="quoteState">
+                                          <select @focus="selectFocus = 'state'" @blur="selectFocus = ''" v-model="quoteState">
                                             <option value="">{{this.state}}</option>
                                             <option v-if="this.state !== 'brouillon'">brouillon</option>
                                             <option v-if="this.state !== 'archivé'">archivé</option>
                                           </select>
                                         </span>
                                         <span class="icon is-small is-left">
-                                          <i class="fas fa-file-alt" :class="{'state-focus': (stateFocus === true)}"></i>
+                                          <i class="fas fa-file-alt" :class="{'icon-focus': (selectFocus === 'state')}"></i>
                                         </span>
                                     </p>
                                 </div>
@@ -188,8 +194,6 @@
             </section>
         </div>
     </div>
-
-
 </template>
 
 <script>
@@ -205,7 +209,7 @@
                 loading: true,
                 currentSort: 'id',
                 currentSortDir: 'asc',
-                pageSize: 5,
+                pageSize: null,
                 currentPage: 1,
                 initialPage: 1,
                 showModalUpdate: false,
@@ -216,7 +220,7 @@
                 clientEmail: '',
                 quotePrice: '',
                 quoteState: '',
-                stateFocus: false,
+                selectFocus: '',
             }
         },
         async created() {
@@ -228,6 +232,8 @@
             } finally {
                 this.loading = false
             }
+
+            this.pageSize = Math.ceil(this.quotes.length / 2);
         },
         methods: {
             returnDashboard() {
