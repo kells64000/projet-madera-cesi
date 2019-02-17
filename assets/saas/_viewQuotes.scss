@@ -21,9 +21,22 @@
   }
 }
 
+.fa-file-pdf {
+  color: $red;
+
+  &:hover {
+    cursor: pointer;
+    color: $grey-light;
+  }
+}
+
 .table-quotes-head th:not(:last-child) {
     &:hover {
       cursor: pointer;
       background-color: $grey-lighter;
   }
+}
+
+.state-focus {
+  color: $focus-icons;
 }

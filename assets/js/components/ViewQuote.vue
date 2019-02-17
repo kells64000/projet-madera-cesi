@@ -43,7 +43,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="quote in filteredAndSortedQuotes /*sortedQuotes*/" >
+                        <tr v-for="quote in filteredAndSortedQuotes" >
 
                             <td class="has-text-centered">{{quote.id}}</td>
                             <td class="has-text-centered">{{quote.name}}</td>
@@ -68,15 +68,15 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="9">
+                            <td colspan="10">
                                 <nav class="pagination is-right" role="navigation" aria-label="pagination">
                                     <ul class="pagination-list">
                                         <li>
                                             <div class="select">
                                                 <select v-model="pageSize">
-                                                    <option :value="2">2</option>
-                                                    <option :value="5">5</option>
-                                                    <option :value="10">10</option>
+                                                    <option value="2">2</option>
+                                                    <option value="5">5</option>
+                                                    <option :value="totalQuotes">all</option>
                                                 </select>
                                             </div>
                                         </li>
@@ -131,28 +131,29 @@
                                     </p>
                                 </div>
 
-                                <div class="field">
-                                    <label class="label">Prix</label>
-                                    <p class="control has-icons-right">
-                                        <input class="input" type="text" v-model="quotePrice" :placeholder="this.price">
-                                        <span class="icon is-small is-right">
-                                          <i class="fas fa-euro-sign"></i>
-                                        </span>
-                                    </p>
-                                </div>
+                                <!--<div class="field">-->
+                                    <!--<label class="label">Prix</label>-->
+                                    <!--<p class="control has-icons-right">-->
+                                        <!--<input class="input" type="text" v-model="quotePrice" :placeholder="this.price">-->
+                                        <!--<span class="icon is-small is-right">-->
+                                          <!--<i class="fas fa-euro-sign"></i>-->
+                                        <!--</span>-->
+                                    <!--</p>-->
+                                <!--</div>-->
 
                                 <div class="field">
                                     <label class="label">Etat Devis</label>
                                     <p class="control has-icons-left">
                                         <span class="select">
-                                          <select v-model="quoteState">
-                                            <option selected>{{this.state}}</option>
-                                            <option>brouillon</option>
-                                            <option>archivé</option>
+
+                                          <select @focus="stateFocus = true" @blur="stateFocus = false" v-model="quoteState">
+                                            <option value="">{{this.state}}</option>
+                                            <option v-if="this.state !== 'brouillon'">brouillon</option>
+                                            <option v-if="this.state !== 'archivé'">archivé</option>
                                           </select>
                                         </span>
                                         <span class="icon is-small is-left">
-                                          <i class="fas fa-file-alt"></i>
+                                          <i class="fas fa-file-alt" :class="{'state-focus': (stateFocus === true)}"></i>
                                         </span>
                                     </p>
                                 </div>
@@ -215,6 +216,7 @@
                 clientEmail: '',
                 quotePrice: '',
                 quoteState: '',
+                stateFocus: false,
             }
         },
         async created() {
@@ -381,6 +383,9 @@
             totalPage: function () {
                 return Math.ceil(this.quotes.length / this.pageSize)
             },
+            totalQuotes: function () {
+                return this.quotes.length
+            }
         }
     }
 </script>
