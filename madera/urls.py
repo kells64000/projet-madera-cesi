@@ -42,6 +42,7 @@ urlpatterns = [
 
     # Url Template
     url(r'^$', TemplateView.as_view(template_name='index.html'), name='Home'),
+    path('api/', include('addresses.api_urls')),
     path('api/', include('users.api_urls')),
     path('api/', include('quotes.api_urls')),
 ]
