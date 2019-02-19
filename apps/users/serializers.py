@@ -1,16 +1,24 @@
 from rest_framework import serializers
+from addresses.serializers import AddressSerializer
 from .models import MaderaUser
 
 
-class MaderaUserSerializer(serializers.Serializer):
+class MaderaUserSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    email = serializers.CharField(required=False, allow_blank=True)
+    email = serializers.CharField(required=True)
     first_name = serializers.CharField(required=False, allow_blank=True, max_length=30)
     last_name = serializers.CharField(required=False, allow_blank=True, max_length=30)
-    location = serializers.CharField(required=False, allow_blank=True, max_length=30)
-    date_joined = serializers.DateTimeField()
-    is_active = serializers.BooleanField()
+    address = AddressSerializer(many=True, read_only=True)
+    date_joined = serializers.DateTimeField(required=False)
+    is_active = serializers.BooleanField(required=False)
     is_staff = serializers.BooleanField(default=False)
+
+    class Meta:
+        model = MaderaUser
+        fields = ('id', 'email', 'first_name', 'last_name', 'address', 'date_joined', 'is_active',
+                  'is_staff')
+        write_only_fields = ('password',)
+        read_only_fields = ('address',)
 
     def create(self, validated_data):
         """
@@ -25,7 +33,7 @@ class MaderaUserSerializer(serializers.Serializer):
         instance.email = validated_data.get('email', instance.email)
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
-        instance.location = validated_data.get('location', instance.location)
+        instance.address = validated_data.get('address', instance.address)
         instance.date_joined = validated_data.get('date_joined', instance.date_joined)
         instance.is_active = validated_data.get('is_active', instance.is_active)
         instance.is_staff = validated_data.get('is_staff', instance.is_active)
