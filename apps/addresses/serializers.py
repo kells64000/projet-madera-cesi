@@ -7,10 +7,11 @@ class AddressSerializer(serializers.ModelSerializer):
     street = serializers.CharField(required=True)
     zipcode = serializers.CharField(required=False, allow_blank=True, max_length=8)
     city = serializers.CharField(required=False, allow_blank=True, max_length=50)
-    country = serializers.CharField(required=False, allow_blank=True, max_length=3)
+    country = serializers.CharField(required=False, allow_blank=True, max_length=30)
 
     class Meta:
         model = Address
+        fields = ('street', 'zipcode', 'city', 'country')
         exclude = ('latitude', 'longitude')
 
     def create(self, validated_data):

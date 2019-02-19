@@ -8,14 +8,17 @@ class MaderaUserSerializer(serializers.ModelSerializer):
     email = serializers.CharField(required=True)
     first_name = serializers.CharField(required=False, allow_blank=True, max_length=30)
     last_name = serializers.CharField(required=False, allow_blank=True, max_length=30)
-    address = AddressSerializer()
+    address = AddressSerializer(many=True, read_only=True)
     date_joined = serializers.DateTimeField(required=False)
     is_active = serializers.BooleanField(required=False)
     is_staff = serializers.BooleanField(default=False)
 
     class Meta:
         model = MaderaUser
-        exclude = ('password', 'user_permissions', 'groups')
+        fields = ('id', 'email', 'first_name', 'last_name', 'address', 'date_joined', 'is_active',
+                  'is_staff')
+        write_only_fields = ('password',)
+        read_only_fields = ('address',)
 
     def create(self, validated_data):
         """
