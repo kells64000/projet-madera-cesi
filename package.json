@@ -69,6 +69,8 @@
     "vue-axios": "^2.1.4",
     "vue-particles": "^1.0.9",
     "vue-router": "^3.0.2",
+    "vue-stepper": "^1.4.2",
+    "vuelidate": "^0.7.4",
     "vuex": "^3.1.0"
   }
 }

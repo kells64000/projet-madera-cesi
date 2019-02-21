@@ -151,11 +151,15 @@
                                     <label class="label">Etat Devis</label>
                                     <p class="control has-icons-left">
                                         <span class="select">
-
                                           <select @focus="selectFocus = 'state'" @blur="selectFocus = ''" v-model="quoteState">
                                             <option value="">{{this.state}}</option>
-                                            <option v-if="this.state !== 'brouillon'">brouillon</option>
-                                            <option v-if="this.state !== 'archivé'">archivé</option>
+                                            <option v-if="this.state !== 'Brouillon'">Brouillon</option>
+                                            <option v-if="this.state !== 'En attente'">En attente</option>
+                                            <option v-if="this.state !== 'Accepté'">Accepté</option>
+                                            <option v-if="this.state !== 'Refusé'">Refusé</option>
+                                            <option v-if="this.state !== 'En Commande'">En Commande</option>
+                                            <option v-if="this.state !== 'Transfert en Facturation'">Transfert en Facturation</option>
+                                            <option v-if="this.state !== 'Archivé'">Archivé</option>
                                           </select>
                                         </span>
                                         <span class="icon is-small is-left">
