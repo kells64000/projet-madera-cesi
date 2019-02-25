@@ -7,7 +7,7 @@ from users.models import MaderaUser
 class Component(models.Model):
 
     name = models.CharField(_('name'), max_length=30, blank=False, null=False)
-    nature = models.CharField(_('nature'), max_length=10)
+    nature = models.CharField(_('nature'), max_length=20)
     length = models.DecimalField(_('length'), max_digits=3,
                                  decimal_places=2, blank=False, null=False)
     width = models.DecimalField(_('width'), max_digits=3,
