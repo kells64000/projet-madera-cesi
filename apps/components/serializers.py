@@ -6,16 +6,20 @@ from .models import Component
 class ComponentSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(max_length=30)
-    nature = serializers.CharField(max_length=20)
-    length = serializers.DecimalField(required=True, max_digits=10, decimal_places=2)
-    width = serializers.DecimalField(required=True, max_digits=10, decimal_places=2)
-    depth = serializers.DecimalField(allow_null=True, max_digits=10, decimal_places=2)
+    name = serializers.CharField(required=True, max_length=30)
+    nature = serializers.CharField(required=False, max_length=20)
+    length = serializers.DecimalField(required=True, max_digits=8, decimal_places=2)
+    width = serializers.DecimalField(required=True, max_digits=8, decimal_places=2)
+    depth = serializers.DecimalField(required=False, allow_null=True,
+                                     max_digits=8, decimal_places=2)
     unit = serializers.CharField(max_length=10)
+    surface = serializers.SerializerMethodField()
+    designer = serializers.SerializerMethodField()
 
     class Meta:
         model = Component
-        fields = ('id', 'name', 'nature', 'length', 'width', 'depth', 'unit')
+        fields = ('id', 'name', 'nature', 'length', 'width', 'depth', 'unit', 'surface',
+                  'designer')
 
     def create(self, validated_data):
         """
@@ -35,3 +39,9 @@ class ComponentSerializer(serializers.ModelSerializer):
         instance.unit = validated_data.get('unit', instance.unit)
         instance.save()
         return instance
+
+    def get_surface(self, obj):
+        return obj.surface
+
+    def get_designer(self, obj):
+        return obj.designed_by
