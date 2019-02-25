@@ -2,23 +2,23 @@
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
-from .models import MaderaUser
-from .serializers import MaderaUserSerializer
+from .models import Component
+from .serializers import ComponentSerializer
 
 
 @csrf_exempt
-def user_list(request):
+def components_list(request):
     """
-    List all users, or create a new user.
+    List all components, or create a new component.
     """
     if request.method == 'GET':
-        maderausers = MaderaUser.objects.all()
-        serializer = MaderaUserSerializer(maderausers, many=True)
+        components = Component.objects.all()
+        serializer = ComponentSerializer(components, many=True)
         return JsonResponse(serializer.data, safe=False)
 
     elif request.method == 'POST':
         data = JSONParser().parse(request)
-        serializer = MaderaUserSerializer(data=data)
+        serializer = ComponentSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data, status=201)
@@ -26,27 +26,27 @@ def user_list(request):
 
 
 @csrf_exempt
-def user_detail(request, pk):
+def components_detail(request, pk):
     """
-    Retrieve, update or delete a user.
+    Retrieve update or delete a component.
     """
     try:
-        maderauser = MaderaUser.objects.get(pk=pk)
-    except MaderaUser.DoesNotExist:
+        component = Component.objects.get(pk=pk)
+    except Component.DoesNotExist:
         return HttpResponse(status=404)
 
     if request.method == 'GET':
-        serializer = MaderaUserSerializer(maderauser)
+        serializer = ComponentSerializer(component)
         return JsonResponse(serializer.data)
 
     elif request.method == 'PUT':
         data = JSONParser().parse(request)
-        serializer = MaderaUserSerializer(maderauser, data=data)
+        serializer = ComponentSerializer(component, data=data)
         if serializer.is_valid():
             serializer.save()
             return JsonResponse(serializer.data)
         return JsonResponse(serializer.errors, status=400)
 
     elif request.method == 'DELETE':
-        maderauser.delete()
+        component.delete()
         return HttpResponse(status=204)
