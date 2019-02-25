@@ -37,6 +37,7 @@ urlpatterns = [
     path('api/', include('addresses.api_urls')),
     path('api/', include('users.api_urls')),
     path('api/', include('quotes.api_urls')),
+    path('api/', include('components.api_urls')),
 
     # Url API auth
     url(r'^auth/obtain_token/', obtain_jwt_token),
@@ -45,10 +46,6 @@ urlpatterns = [
 
     # Url Template
     url(r'^$', TemplateView.as_view(template_name='index.html'), name='Home'),
-    path('api/', include('addresses.api_urls')),
-    path('api/', include('users.api_urls')),
-    path('api/', include('quotes.api_urls')),
-    path('api/', include('components.api_urls')),
 
 ]
 
