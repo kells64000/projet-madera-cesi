@@ -34,6 +34,9 @@ urlpatterns = [
 
     # Url API
     url(r'^api/', include(router.urls)),
+    path('api/', include('addresses.api_urls')),
+    path('api/', include('users.api_urls')),
+    path('api/', include('quotes.api_urls')),
 
     # Url API auth
     url(r'^auth/obtain_token/', obtain_jwt_token),
@@ -46,6 +49,7 @@ urlpatterns = [
     path('api/', include('users.api_urls')),
     path('api/', include('quotes.api_urls')),
     path('api/', include('components.api_urls')),
+
 ]
 
 urlpatterns += staticfiles_urlpatterns()
