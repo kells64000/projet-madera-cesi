@@ -1,0 +1,26 @@
+.box.formated .heading {
+    font-size: 1rem;
+    text-transform: capitalize;
+    padding: .8rem 1.5rem;
+    background-color: #fafafa;
+}
+
+.box.formated .content {
+    padding: 1rem 2rem;
+}
+
+.tags{
+    overflow-y: auto;
+    max-height: 100px;
+}
+
+.tag {
+    &:hover {
+      cursor: pointer !important;
+      background-color: $beige-light !important;
+    }
+}
+
+.tag-selected {
+    background-color: $grey-darker !important;
+}

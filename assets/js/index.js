@@ -2,9 +2,11 @@ require('../saas/app.scss');
 
 import Vue from 'vue';
 
+import vSelect from 'vue-select';
+
 import VueParticles from 'vue-particles';
 
-import moment from 'moment'
+import moment from 'moment';
 
 Vue.filter('formatDate', function(value) {
   if (value) {
@@ -12,6 +14,7 @@ Vue.filter('formatDate', function(value) {
   }
 });
 
+Vue.component('v-select', vSelect);
 Vue.use(VueParticles);
 
 

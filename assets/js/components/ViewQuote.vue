@@ -109,22 +109,12 @@
                             <form action="#">
                                 <div class="field">
                                     <label class="label">Client</label>
-                                    <p class="control has-icons-left">
-                                        <span class="select">
 
-                                          <select @focus="selectFocus = 'client'" @blur="selectFocus = ''" v-model="clientName">
-                                            <option value="">{{this.name}}</option>
-                                            <option v-if="this.name !== 'client_1'">client_1</option>
-                                            <option v-if="this.name !== 'client_2'">client_2</option>
-                                            <option v-if="this.name !== 'client_3'">client_3</option>
-                                            <option v-if="this.name !== 'client_4'">client_4</option>
-                                            <option v-if="this.name !== 'client_5'">client_5</option>
-                                          </select>
-                                        </span>
-                                        <span class="icon is-small is-left">
-                                          <i class="fas fa-user-tie" :class="{'icon-focus': (selectFocus === 'client')}"></i>
-                                        </span>
-                                    </p>
+                                    <v-select v-model="clientName" :options="clients" label="fullName" @focus="clientName = ''">
+                                        <template slot="option" slot-scope="option">
+                                            {{option.firstName}}  {{option.lastName}}
+                                        </template>
+                                    </v-select>
                                 </div>
 
                                 <div class="field">
@@ -152,7 +142,7 @@
                                     <p class="control has-icons-left">
                                         <span class="select">
                                           <select @focus="selectFocus = 'state'" @blur="selectFocus = ''" v-model="quoteState">
-                                            <option value="">{{this.state}}</option>
+                                            <option value="" disabled>{{this.state}}</option>
                                             <option v-if="this.state !== 'Brouillon'">Brouillon</option>
                                             <option v-if="this.state !== 'En attente'">En attente</option>
                                             <option v-if="this.state !== 'Accepté'">Accepté</option>
@@ -208,6 +198,13 @@
         data() {
             return {
                 quotes: [],
+                clients: [
+                    {firstName: 'Client1', lastName: 'Test1', fullName: 'Client_1'},
+                    {firstName: 'Client2', lastName: 'Test2', fullName: 'Client_2'},
+                    {firstName: 'Client3', lastName: 'Test3', fullName: 'Client_3'},
+                    {firstName: 'Client4', lastName: 'Test4', fullName: 'Client_4'},
+                    {firstName: 'Client5', lastName: 'Test5', fullName: 'Client_5'},
+                ],
                 errors: [],
                 search: '',
                 loading: true,
@@ -318,7 +315,7 @@
                 }
 
                 let quoteUpdate = {
-                    'name': this.clientName,
+                    'name': this.clientName.fullName,
                     'phone': this.clientPhone,
                     'email': this.clientEmail,
                     'price': this.quotePrice,
@@ -327,8 +324,6 @@
                     'created_at': this.selectedQuote.created_at,
                     'updated_at': now
                 };
-
-                console.log(quoteUpdate)
 
                 axios.put('http://127.0.0.1:8000/api/quotes/' + this.selectedQuote.id,
                     quoteUpdate, {
@@ -358,7 +353,6 @@
                         this.selectedQuote = null;
                         this.showModalDelete = false;
                     }).catch(e => {
-                        console.log(e);
                         this.errors.push(e);
                     });
             }

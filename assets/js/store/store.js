@@ -20,11 +20,19 @@ export default new Vuex.Store({
       obtainJWT: 'http://127.0.0.1:8000/auth/obtain_token/',
       refreshJWT: 'http://127.0.0.1:8000/auth/refresh_token/',
       baseUrl: 'http://127.0.0.1:8000/'
-    }
+    },
+    quoteClient: {},
+    quoteModules: {}
   },
   getters: {
     getUser: state => {
       return state.authUser;
+    },
+    getQuoteClient: state => {
+      return state.quoteClient;
+    },
+    getQuoteModules: state => {
+      return state.quoteModules;
     }
   },
   mutations: {
@@ -32,7 +40,7 @@ export default new Vuex.Store({
       authUser,
       isAuthenticated
     }) {
-      Vue.set(state, 'authUser', authUser)
+      Vue.set(state, 'authUser', authUser);
       Vue.set(state, 'isAuthenticated', isAuthenticated)
     },
     updateToken(state, newToken) {
@@ -44,6 +52,12 @@ export default new Vuex.Store({
       // TODO: For security purposes, take localStorage out of the project.
       localStorage.removeItem('token');
       state.jwt = null;
+    },
+    setQuoteClient(state, client) {
+       Vue.set(state, 'quoteClient', client);
+    },
+    setQuoteModules(state, modules) {
+       Vue.set(state, 'quoteModules', modules);
     }
   }
 })

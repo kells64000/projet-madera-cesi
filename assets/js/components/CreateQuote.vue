@@ -16,7 +16,7 @@
                 <div class="container">
                     <div class="columns">
                         <div class="column is-8 is-offset-2">
-                            <horizontal-stepper :steps="demoSteps" @completed-step="completeStep"
+                            <horizontal-stepper :steps="quoteSteps" @completed-step="completeStep"
                                                 @active-step="isStepActive" @stepper-finished="alert"
                             >
                             </horizontal-stepper>
@@ -41,13 +41,12 @@
         },
         data: function () {
             return {
-                progress: 0,
-                demoSteps: [
+                quoteSteps: [
                     {
                         icon: 'person',
                         name: 'client',
                         title: 'Client',
-                        subtitle: 'Affectation au client',
+                        subtitle: 'Affectation du client',
                         component: Client,
                         completed: false
                     },
@@ -77,7 +76,7 @@
             },
             // Executed when @completed-step event is triggered
             completeStep(payload) {
-                this.demoSteps.forEach((step) => {
+                this.quoteSteps.forEach((step) => {
                     if (step.name === payload.name) {
                         step.completed = true;
                     }
@@ -85,7 +84,7 @@
             },
             // Executed when @active-step event is triggered
             isStepActive(payload) {
-                this.demoSteps.forEach((step) => {
+                this.quoteSteps.forEach((step) => {
                     if (step.name === payload.name) {
                         if(step.completed === true) {
                             step.completed = false;
@@ -95,21 +94,11 @@
             },
             // Executed when @stepper-finished event is triggered
             alert(payload) {
-                alert('génération du pdf =)')
+                alert('Création du devis en bdd et génération du PDF =)')
             }
         }
     }
 </script>
 
-<style scoped>
-    .box.formated .heading {
-        font-size: 1rem;
-        text-transform: capitalize;
-        padding: .8rem 1.5rem;
-        background-color: #fafafa;
-    }
-
-    .box.formated .content {
-        padding: 1rem 2rem;
-    }
+<style>
 </style>
