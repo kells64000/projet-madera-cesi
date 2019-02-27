@@ -31,7 +31,8 @@
                         <thead>
                         <tr class="table-quotes-head">
                             <th class="has-text-centered" @click="sort('id')">N° Devis <span><i class="fas" v-if="currentSort === 'id'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
-                            <th class="has-text-centered" @click="sort('name')">Nom Client <span><i class="fas" v-if="currentSort === 'name'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
+                            <th class="has-text-centered" @click="sort('salesman')">Commercial <span><i class="fas" v-if="currentSort === 'salesman'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
+                            <th class="has-text-centered" @click="sort('customer')">Client <span><i class="fas" v-if="currentSort === 'customer'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
                             <th class="has-text-centered" @click="sort('phone')">N° Téléphone <span><i class="fas" v-if="currentSort === 'phone'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
                             <th class="has-text-centered" @click="sort('email')">Adresse Mail <span><i class="fas" v-if="currentSort === 'email'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
                             <th class="has-text-centered" @click="sort('price')">Prix <span><i class="fas" v-if="currentSort === 'price'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
@@ -46,9 +47,10 @@
                         <tr v-for="quote in filteredAndSortedQuotes" >
 
                             <td class="has-text-centered">{{quote.id}}</td>
-                            <td class="has-text-centered">{{quote.name}}</td>
-                            <td class="has-text-centered">{{quote.phone}}</td>
-                            <td class="has-text-centered">{{quote.email}}</td>
+                            <td class="has-text-centered">{{quote.salesman.name}}</td>
+                            <td class="has-text-centered">{{quote.client.name}}</td>
+                            <td class="has-text-centered">{{quote.client.phone}}</td>
+                            <td class="has-text-centered">{{quote.client.email}}</td>
                             <td class="has-text-centered">{{quote.price}}€</td>
                             <td class="has-text-centered">
                                 <div v-if="quote.attachment !== null">
@@ -110,7 +112,7 @@
                                 <div class="field">
                                     <label class="label">Client</label>
 
-                                    <v-select v-model="clientName" :options="clients" label="fullName" @focus="clientName = ''">
+                                    <v-select v-model="clientId" :options="clients" label="fullName" @focus="clientId = ''">
                                         <template slot="option" slot-scope="option">
                                             {{option.firstName}}  {{option.lastName}}
                                         </template>
@@ -118,24 +120,34 @@
                                 </div>
 
                                 <div class="field">
-                                    <label class="label">Téléphone</label>
-                                    <p class="control has-icons-left">
-                                        <input class="input" type="text" v-model="clientPhone" :placeholder="this.phone">
-                                        <span class="icon is-small is-left">
-                                          <i class="fas fa-mobile-alt"></i>
-                                        </span>
-                                    </p>
+                                    <label class="label">Client</label>
+
+                                    <v-select v-model="salesmanId" :options="salesmans" label="fullName" @focus="salesmanId = ''">
+                                        <template slot="option" slot-scope="option">
+                                            {{option.firstName}}  {{option.lastName}}
+                                        </template>
+                                    </v-select>
                                 </div>
 
-                                <div class="field">
-                                    <label class="label">Adresse Mail</label>
-                                    <p class="control has-icons-left">
-                                        <input class="input" type="email" v-model="clientEmail" :placeholder="this.email">
-                                        <span class="icon is-small is-left">
-                                          <i class="fas fa-envelope"></i>
-                                        </span>
-                                    </p>
-                                </div>
+                                <!--<div class="field">-->
+                                    <!--<label class="label">Téléphone</label>-->
+                                    <!--<p class="control has-icons-left">-->
+                                        <!--<input class="input" type="text" v-model="clientPhone" :placeholder="this.phone">-->
+                                        <!--<span class="icon is-small is-left">-->
+                                          <!--<i class="fas fa-mobile-alt"></i>-->
+                                        <!--</span>-->
+                                    <!--</p>-->
+                                <!--</div>-->
+
+                                <!--<div class="field">-->
+                                    <!--<label class="label">Adresse Mail</label>-->
+                                    <!--<p class="control has-icons-left">-->
+                                        <!--<input class="input" type="email" v-model="clientEmail" :placeholder="this.email">-->
+                                        <!--<span class="icon is-small is-left">-->
+                                          <!--<i class="fas fa-envelope"></i>-->
+                                        <!--</span>-->
+                                    <!--</p>-->
+                                <!--</div>-->
 
                                 <div class="field">
                                     <label class="label">Etat Devis</label>
@@ -198,13 +210,8 @@
         data() {
             return {
                 quotes: [],
-                clients: [
-                    {firstName: 'Client1', lastName: 'Test1', fullName: 'Client_1'},
-                    {firstName: 'Client2', lastName: 'Test2', fullName: 'Client_2'},
-                    {firstName: 'Client3', lastName: 'Test3', fullName: 'Client_3'},
-                    {firstName: 'Client4', lastName: 'Test4', fullName: 'Client_4'},
-                    {firstName: 'Client5', lastName: 'Test5', fullName: 'Client_5'},
-                ],
+                clients: [],
+                salesmans: [],
                 errors: [],
                 search: '',
                 loading: true,
@@ -216,9 +223,8 @@
                 showModalUpdate: false,
                 showModalDelete: false,
                 selectedQuote: null,
-                clientName: '',
-                clientPhone: '',
-                clientEmail: '',
+                clientId: 0,
+                salesmanId: 0,
                 quotePrice: '',
                 quoteState: '',
                 selectFocus: '',
@@ -262,10 +268,8 @@
                 this.showModalUpdate = true;
                 this.selectedQuote = quote;
                 this.id = quote.id;
-                this.name = quote.name;
-                this.phone = quote.phone;
-                this.email = quote.email;
-                this.price = quote.price;
+                this.clientId = quote.name;
+                this.salesmanId = quote.name;
                 this.state = quote.state;
             },
             setModalDeleteQuote(quote) {
@@ -275,10 +279,8 @@
             },
             hideModalUpdate: function () {
                 this.showModalUpdate = false;
-                this.clientName = '';
-                this.clientPhone = '';
-                this.clientEmail = '';
-                this.quotePrice = '';
+                this.clientId = '';
+                this.salesmanId = '';
                 this.quoteState = '';
             },
             hideModalDelete: function () {
@@ -298,15 +300,18 @@
                 let date = new Date();
                 let now = date.getFullYear() + '-' + (date.getMonth() +1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + (date.getMinutes()<10?'0':'') + date.getMinutes();
 
-                if (this.clientName === '') {
-                    this.clientName = this.selectedQuote.name
+                if (this.clientId === '') {
+                    this.clientId = this.selectedQuote.clientId
                 }
-                if (this.clientPhone === '') {
-                    this.clientPhone = this.selectedQuote.phone
+                if (this.salesmanId === '') {
+                    this.salesmanId = this.selectedQuote.salesmanId
                 }
-                if (this.clientEmail === '') {
-                    this.clientEmail = this.selectedQuote.email
-                }
+                // if (this.clientPhone === '') {
+                //     this.clientPhone = this.selectedQuote.phone
+                // }
+                // if (this.clientEmail === '') {
+                //     this.clientEmail = this.selectedQuote.email
+                // }
                 if (this.quotePrice === '') {
                     this.quotePrice = this.selectedQuote.price
                 }
@@ -315,9 +320,8 @@
                 }
 
                 let quoteUpdate = {
-                    'name': this.clientName.fullName,
-                    'phone': this.clientPhone,
-                    'email': this.clientEmail,
+                    'customer_id': this.clientId,
+                    'salesman_id': this.clientPhone,
                     'price': this.quotePrice,
                     'state': this.quoteState,
                     'attachment': this.selectedQuote.attachment,
@@ -331,9 +335,8 @@
                             'Content-Type': 'application/x-www-form-urlencoded'
                         }
                     }).then((response) => {
-                        this.clientName = '';
-                        this.clientPhone = '';
-                        this.clientEmail = '';
+                        this.clientId = 0;
+                        this.salesmanId = 0;
                         this.quotePrice = '';
                         this.quoteState = '';
                         this.selectedQuote = null;
@@ -363,9 +366,9 @@
 
                 let result = this.quotes.filter(function (quote) {
                     return  quote.id.toString().indexOf(self.search) >= 0
-                        || quote.name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
-                        || quote.phone.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
-                        || quote.email.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                        // || quote.name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                        // || quote.phone.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                        // || quote.email.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
                         || quote.price.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
                         || quote.state.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
                         || quote.created_at.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
