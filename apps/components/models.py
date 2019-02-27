@@ -15,13 +15,14 @@ class Component(models.Model):
                                 decimal_places=2, blank=False, null=False)
     depth = models.DecimalField(_('depth'), max_digits=8, decimal_places=2, null=True)
     unit = models.CharField(_('unit'), max_length=10, blank=False, null=False)
+    price = models.DecimalField(_('price'), max_digits=10, decimal_places=2, null=True)
 
     # ForeignKeys
     designer = models.ForeignKey(MaderaUser,
                                  blank=True,
                                  default=None,
                                  null=True,
-                                 on_delete=models.CASCADE,
+                                 on_delete=models.DO_NOTHING,
                                  related_name=_('designer'))
 
     @property
