@@ -1,8 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from users.models import MaderaUser
-
-
+from users.models import SalesPerson, Client
 
 
 class Quote(models.Model):
@@ -13,15 +11,15 @@ class Quote(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     # ForeignKeys
-    customer = models.ForeignKey(MaderaUser,
-                                 blank=False,
-                                 default=None,
-                                 null=False,
-                                 on_delete=models.DO_NOTHING,
-                                 related_name=_('customer'))
-    salesman = models.ForeignKey(MaderaUser,
-                                 blank=False,
-                                 default=None,
-                                 null=False,
-                                 on_delete=models.DO_NOTHING,
-                                 related_name=_('salesman'))
+    client = models.ForeignKey(Client,
+                               blank=False,
+                               default=None,
+                               null=False,
+                               on_delete=models.DO_NOTHING,
+                               related_name=_('client'))
+    salesperson = models.ForeignKey(SalesPerson,
+                                    blank=False,
+                                    default=None,
+                                    null=False,
+                                    on_delete=models.DO_NOTHING,
+                                    related_name=_('salesperson'))
