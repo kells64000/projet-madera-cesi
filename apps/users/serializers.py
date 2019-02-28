@@ -1,9 +1,30 @@
 from rest_framework import serializers
 from addresses.serializers import AddressSerializer
-from .models import MaderaUser
+from .models import MaderaUser, SalesPerson, Client
 
 
-class MaderaUserSerializer(serializers.ModelSerializer):
+class DynamicFieldsModelSerializer(serializers.ModelSerializer):
+    """
+    A ModelSerializer that takes an additional `fields` argument that
+    controls which fields should be displayed.
+    """
+
+    def __init__(self, *args, **kwargs):
+        # Don't pass the 'fields' arg up to the superclass
+        fields = kwargs.pop('fields', None)
+
+        # Instantiate the superclass normally
+        super(DynamicFieldsModelSerializer, self).__init__(*args, **kwargs)
+
+        if fields is not None:
+            # Drop any fields that are not specified in the `fields` argument.
+            allowed = set(fields)
+            existing = set(self.fields)
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
+
+
+class MaderaUserSerializer(DynamicFieldsModelSerializer):
     id = serializers.IntegerField(read_only=True)
     email = serializers.CharField(required=True)
     first_name = serializers.CharField(required=False, allow_blank=True, max_length=30)
@@ -20,22 +41,20 @@ class MaderaUserSerializer(serializers.ModelSerializer):
         write_only_fields = ('password',)
         read_only_fields = ('address',)
 
-    def create(self, validated_data):
-        """
-        Create and return a new `MaderaUser` instance, given the validated data.
-        """
-        return MaderaUser.objects.create(**validated_data)
 
-    def update(self, instance, validated_data):
-        """
-        Update and return an existing `Snippet` instance, given the validated data.
-        """
-        instance.email = validated_data.get('email', instance.email)
-        instance.first_name = validated_data.get('first_name', instance.first_name)
-        instance.last_name = validated_data.get('last_name', instance.last_name)
-        instance.address = validated_data.get('address', instance.address)
-        instance.date_joined = validated_data.get('date_joined', instance.date_joined)
-        instance.is_active = validated_data.get('is_active', instance.is_active)
-        instance.is_staff = validated_data.get('is_staff', instance.is_active)
-        instance.save()
-        return instance
+class SalesPersonSerializer(MaderaUserSerializer):
+
+    workplace = serializers.CharField(required=True, allow_blank=False, max_length=50)
+
+    class Meta(MaderaUserSerializer.Meta):
+        model = SalesPerson
+        fields = MaderaUserSerializer.Meta.fields + ('workplace',)
+
+
+class ClientSerializer(MaderaUserSerializer):
+
+    is_pro = serializers.BooleanField()
+
+    class Meta(MaderaUserSerializer.Meta):
+        model = Client
+        fields = MaderaUserSerializer.Meta.fields + ('is_pro',)
