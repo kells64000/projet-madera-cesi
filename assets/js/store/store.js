@@ -26,7 +26,8 @@ export default new Vuex.Store({
   },
   getters: {
     getUser: state => {
-      return state.authUser;
+      if(state.isAuthenticated === true)
+        return state.authUser;
     },
     getQuoteClient: state => {
       return state.quoteClient;
