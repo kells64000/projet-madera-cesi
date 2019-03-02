@@ -48,7 +48,7 @@
 
             <div v-if="form.is_pro === 'Professionnel'" class="field">
                 <p class="control is-expanded has-icons-left">
-                    <input class="input" type="text" placeholder="Nom de l'entreprise" v-model="form.society">
+                    <input class="input" type="text" placeholder="Nom de l'entreprise" v-model="form.company">
                     <span class="icon is-small is-left">
                       <i class="fas fa-building"></i>
                     </span>
@@ -215,7 +215,7 @@
                     email: '',
                     phone: '',
                     is_pro: 'Particulier',
-                    society: '',
+                    company: '',
                 }
             }
         },
@@ -256,7 +256,7 @@
                     'email': this.form.email,
                     'phone': this.form.phone,
                     'is_pro': this.form.is_pro,
-                    'society': this.form.society,
+                    'company': this.form.company,
                     'updated_at': now
                 };
 
