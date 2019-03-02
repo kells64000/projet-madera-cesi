@@ -13,8 +13,8 @@
                     <div class="has-text-centered">
                         <img class="login-logo" src="assets/img/logo.png">
                     </div>
-                    <div class="has-text-centered subtitle" v-for="user in userAuth">
-                        Bonjour {{user.first_name}} {{user.last_name}}
+                    <div class="has-text-centered subtitle">
+                        Bonjour {{userAuth.first_name}} {{userAuth.last_name}}
                     </div>
                 </section>
             </div>
