@@ -3,7 +3,7 @@
 
         <div class="control mb-1 has-text-centered">
             <label class="radio">
-                <input type="radio" name="client" value="new" v-model="clientType" @focus="clientSelected = ''" checked>
+                <input type="radio" name="client" value="new" v-model="clientType" @focus="clientSelected = ''" @click="resetFormNewClient" checked>
                 Nouveau client
             </label>
 
@@ -111,7 +111,7 @@
         <div v-if="clientType === 'madera'">
 
             <div class="field has-text-centered">
-                <v-select v-model="clientSelected" :options="clients" label="first_name" @focus="this.clientSelected = ''">
+                <v-select v-model="clientSelected" :options="clients" label="full_name" @focus="this.clientSelected = ''">
                     <template slot="option" slot-scope="option">
                         {{option.first_name}} {{option.last_name}}
                     </template>
@@ -219,7 +219,7 @@
                     firstName: '',
                     lastName: '',
                     address: '',
-                    postalCode: '',
+                    zipCode: '',
                     city: '',
                     email: '',
                     phone: '',
@@ -280,7 +280,7 @@
                     'first_name': this.form.firstName,
                     'last_name': this.form.lastName,
                     'street': this.form.address,
-                    'zipCode': this.form.postalCode,
+                    'zipCode': this.form.zipCode,
                     'city': this.form.city,
                     'email': this.form.email,
                     'phone': this.form.phone,
@@ -295,14 +295,24 @@
                         }
                     }).then((response) => {
                         this.clientType = 'madera';
-                        this.clientSelected = response.data.first_name + response.data.last_name;
-                        //this.is_pro = response.data.is_pro;
+                        this.clientSelected = response.data;
                         this.getClients()
 
                     }).catch(e => {
                         this.errors.push(e);
                     });
             },
+            resetFormNewClient() {
+                this.form.is_pro = 'Particulier';
+                this.form.firstName = '';
+                this.form.lastName = '';
+                this.form.address = '';
+                this.form.zipCode = '';
+                this.form.city = '';
+                this.form.email = '';
+                this.form.phone = '';
+                this.form.company = '';
+            }
         },
         mounted() {
             if (this.clientSelected === '') {
