@@ -15,6 +15,16 @@
 
         <div v-if="clientType === 'new'">
 
+            <div class="control has-text-centered mb-1">
+                <div class="select">
+                    <select  v-model="form.is_pro">
+                        <option disabled>{{this.form.is_pro}}</option>
+                        <option v-if="this.form.is_pro !== 'Particulier'">Particulier</option>
+                        <option v-if="this.form.is_pro !== 'Professionnel'">Professionnel</option>
+                    </select>
+                </div>
+            </div>
+
             <div class="field is-horizontal">
                 <div class="field-body">
                     <div class="field">
@@ -34,6 +44,15 @@
                         </p>
                     </div>
                 </div>
+            </div>
+
+            <div v-if="form.is_pro === 'Professionnel'" class="field">
+                <p class="control is-expanded has-icons-left">
+                    <input class="input" type="text" placeholder="Nom de l'entreprise" v-model="form.society">
+                    <span class="icon is-small is-left">
+                      <i class="fas fa-building"></i>
+                    </span>
+                </p>
             </div>
 
             <div class="field">
@@ -176,21 +195,15 @@
 </template>
 
 <script>
+    import axios from 'axios'
     import {validationMixin} from 'vuelidate'
-    import {required, email} from 'vuelidate/lib/validators'
 
     export default {
         props: ['clickedNext', 'currentStep'],
         mixins: [validationMixin],
         data() {
             return {
-                clients: [
-                    {firstName: 'Client1', lastName: 'Test1', fullName: 'Client_1', address: '11 rue du bois', postalCode: 33000, city: 'Bordeaux', phone: '0102030405', email: 'client1@madera.com'},
-                    {firstName: 'Client2', lastName: 'Test2', fullName: 'Client_2', address: '12 rue du platane', postalCode: 64000, city: 'Pau', phone: '0504030201', email: 'client2@madera.com'},
-                    {firstName: 'Client3', lastName: 'Test3', fullName: 'Client_3', address: '13 rue du chêne', postalCode: 75000, city: 'Paris', phone: '0405060201', email: 'client3@madera.com'},
-                    {firstName: 'Client4', lastName: 'Test4', fullName: 'Client_4', address: '14 rue du pastaga', postalCode: 13013, city: 'Marseille', phone: '0301020304', email: 'client4@madera.com'},
-                    {firstName: 'Client5', lastName: 'Test5', fullName: 'Client_5', address: '15 rue du sentier', postalCode: 64510, city: 'Bordes', phone: '0908070605', email: 'client5@madera.com'},
-                ],
+                clients: [],
                 clientType: 'new',
                 clientSelected: '',
                 form: {
@@ -201,14 +214,8 @@
                     city: '',
                     email: '',
                     phone: '',
-                }
-            }
-        },
-        validations: {
-            form: {
-                email: {
-                    required,
-                    email
+                    is_pro: 'Particulier',
+                    society: '',
                 }
             }
         },
@@ -233,6 +240,38 @@
                     this.$emit('can-continue', {value: true});
                 }
             }
+        },
+        method: {
+            createClient() {
+
+                let date = new Date();
+                let now = date.getFullYear() + '-' + (date.getMonth() +1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + (date.getMinutes()<10?'0':'') + date.getMinutes();
+
+                let clientCreate = {
+                    'firstName': this.form.firstName,
+                    'lastName': this.form.lastName,
+                    'address': this.form.address,
+                    'postalCode': this.form.postalCode,
+                    'city': this.form.city,
+                    'email': this.form.email,
+                    'phone': this.form.phone,
+                    'is_pro': this.form.is_pro,
+                    'society': this.form.society,
+                    'updated_at': now
+                };
+
+                axios.post('http://127.0.0.1:8000/api/clients/',
+                    clientCreate, {
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        }
+                    }).then((response) => {
+                        console.log(response);
+
+                    }).catch(e => {
+                        this.errors.push(e);
+                    });
+            },
         },
         mounted() {
             if (this.clientSelected === '') {
