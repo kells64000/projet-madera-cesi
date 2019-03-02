@@ -30,6 +30,7 @@ class MaderaUserSerializer(DynamicFieldsModelSerializer):
     first_name = serializers.CharField(required=False, allow_blank=True, max_length=30)
     last_name = serializers.CharField(required=False, allow_blank=True, max_length=30)
     full_name = serializers.SerializerMethodField()
+    phone = serializers.CharField(required=False, allow_blank=True, max_length=12)
     address = AddressSerializer(many=True, read_only=True)
     date_joined = serializers.DateTimeField(required=False)
     is_active = serializers.BooleanField(required=False)
@@ -37,8 +38,8 @@ class MaderaUserSerializer(DynamicFieldsModelSerializer):
 
     class Meta:
         model = MaderaUser
-        fields = ('id', 'email', 'first_name', 'last_name', 'full_name', 'address', 'date_joined',
-                  'is_active', 'is_staff')
+        fields = ('id', 'email', 'first_name', 'last_name', 'full_name', 'phone', 'address',
+                  'date_joined', 'is_active', 'is_staff')
         write_only_fields = ('password',)
         read_only_fields = ('address',)
 
