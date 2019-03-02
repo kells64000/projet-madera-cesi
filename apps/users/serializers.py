@@ -59,7 +59,8 @@ class SalesPersonSerializer(MaderaUserSerializer):
 class ClientSerializer(MaderaUserSerializer):
 
     is_pro = serializers.BooleanField()
+    company = serializers.CharField(required=False, allow_blank=True, max_length=50)
 
     class Meta(MaderaUserSerializer.Meta):
         model = Client
-        fields = MaderaUserSerializer.Meta.fields + ('is_pro',)
+        fields = MaderaUserSerializer.Meta.fields + ('is_pro', 'company')
