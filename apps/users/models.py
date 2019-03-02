@@ -44,6 +44,7 @@ class MaderaUser(AbstractBaseUser, PermissionsMixin):
         # Support for self as profile. Use of this is deprecated
         return self
 
+    @property
     def get_full_name(self):
         '''
         Returns the first_name plus the last_name, with a space in between.
