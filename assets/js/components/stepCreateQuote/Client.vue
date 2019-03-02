@@ -68,7 +68,7 @@
                 <div class="field-body">
                     <div class="field">
                         <p class="control is-expanded has-icons-left">
-                            <input class="input" type="number" placeholder="Code Postal" v-model="form.postalCode">
+                            <input class="input" type="number" placeholder="Code Postal" v-model="form.zipCode">
                             <span class="icon is-small is-left">
                               <i class="fas fa-map-marker-alt"></i>
                             </span>
@@ -104,16 +104,16 @@
             </div>
 
             <div class="has-text-centered">
-                <button class="button is-link" type="submit">Créer nouveau client</button>
+                <button class="button is-link" type="button" @click="createClient">Créer nouveau client</button>
             </div>
         </div>
 
         <div v-if="clientType === 'madera'">
 
             <div class="field has-text-centered">
-                <v-select v-model="clientSelected" :options="clients" label="fullName" @focus="this.clientSelected = ''">
+                <v-select v-model="clientSelected" :options="clients" label="first_name" @focus="this.clientSelected = ''">
                     <template slot="option" slot-scope="option">
-                        {{option.firstName}} {{option.lastName}}
+                        {{option.first_name}} {{option.last_name}}
                     </template>
                 </v-select>
             </div>
@@ -125,7 +125,7 @@
                     <div class="field-body">
                         <div class="field">
                             <p class="control is-expanded has-icons-left">
-                                <input class="input" type="text" placeholder="Prénom" :value="clientSelected.firstName" readonly>
+                                <input class="input" type="text" placeholder="Prénom" :value="clientSelected.first_name" readonly>
                                 <span class="icon is-small is-left">
                                   <i class="fas fa-user"></i>
                                 </span>
@@ -133,13 +133,22 @@
                         </div>
                         <div class="field">
                             <p class="control is-expanded has-icons-left">
-                                <input class="input" type="text" placeholder="Nom" :value="clientSelected.lastName" readonly>
+                                <input class="input" type="text" placeholder="Nom" :value="clientSelected.last_name" readonly>
                                 <span class="icon is-small is-left">
                                   <i class="fas fa-user"></i>
                                 </span>
                             </p>
                         </div>
                     </div>
+                </div>
+
+                <div v-if="clientSelected.is_pro === true" class="field">
+                    <p class="control is-expanded has-icons-left">
+                        <input class="input" type="text" placeholder="Nom de l'entreprise" :value="clientSelected.company" readonly>
+                        <span class="icon is-small is-left">
+                      <i class="fas fa-building"></i>
+                    </span>
+                    </p>
                 </div>
 
                 <div class="field">
@@ -155,7 +164,7 @@
                     <div class="field-body">
                         <div class="field">
                             <p class="control is-expanded has-icons-left">
-                                <input class="input" type="number" placeholder="Code Postal" :value="clientSelected.postalCode" readonly>
+                                <input class="input" type="number" placeholder="Code Postal" :value="clientSelected.zipCode" readonly>
                                 <span class="icon is-small is-left">
                                   <i class="fas fa-map-marker-alt"></i>
                                 </span>
@@ -241,32 +250,54 @@
                 }
             }
         },
-        method: {
+        async created() {
+            try {
+                const response = await axios.get(`http://127.0.0.1:8000/api/clients`)
+                this.clients = response.data
+            } catch (e) {
+                this.errors.push(e)
+            }
+        },
+        methods: {
+            getClients() {
+                axios.get(`http://127.0.0.1:8000/api/clients`)
+                .then(response => {
+                    this.clients = response.data
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                })
+            },
             createClient() {
 
-                let date = new Date();
-                let now = date.getFullYear() + '-' + (date.getMonth() +1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + (date.getMinutes()<10?'0':'') + date.getMinutes();
+                if(this.form.is_pro === 'Professionnel') {
+                    this.form.is_pro = true
+                } else {
+                    this.form.is_pro = false
+                }
 
                 let clientCreate = {
-                    'firstName': this.form.firstName,
-                    'lastName': this.form.lastName,
-                    'address': this.form.address,
-                    'postalCode': this.form.postalCode,
+                    'first_name': this.form.firstName,
+                    'last_name': this.form.lastName,
+                    'street': this.form.address,
+                    'zipCode': this.form.postalCode,
                     'city': this.form.city,
                     'email': this.form.email,
                     'phone': this.form.phone,
                     'is_pro': this.form.is_pro,
-                    'company': this.form.company,
-                    'updated_at': now
+                    'company': this.form.company
                 };
 
                 axios.post('http://127.0.0.1:8000/api/clients/',
                     clientCreate, {
                         headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
+                            'Content-Type': 'application/json'
                         }
                     }).then((response) => {
-                        console.log(response);
+                        this.clientType = 'madera';
+                        this.clientSelected = response.data.first_name + response.data.last_name;
+                        //this.is_pro = response.data.is_pro;
+                        this.getClients()
 
                     }).catch(e => {
                         this.errors.push(e);

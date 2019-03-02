@@ -321,7 +321,7 @@
 
                 let quoteUpdate = {
                     'customer_id': this.clientId,
-                    'salesman_id': this.clientPhone,
+                    'salesman_id': this.salesmanId,
                     'price': this.quotePrice,
                     'state': this.quoteState,
                     'attachment': this.selectedQuote.attachment,
