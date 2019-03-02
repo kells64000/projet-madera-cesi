@@ -1,0 +1,38 @@
+.field.is-grouped > .control:not(:last-child) {
+  margin-right: 0;
+}
+
+.button-search {
+  min-width: inherit;
+  margin: 0;
+}
+
+.fa-edit {
+  &:hover {
+      cursor: pointer;
+      color: $info;
+  }
+}
+
+.fa-trash {
+  &:hover {
+      cursor: pointer;
+      color: $danger;
+  }
+}
+
+.fa-file-pdf {
+  color: $red;
+
+  &:hover {
+    cursor: pointer;
+    color: $grey-light;
+  }
+}
+
+.table-quotes-head th:not(:last-child) {
+    &:hover {
+      cursor: pointer;
+      background-color: $grey-lighter;
+  }
+}

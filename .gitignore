@@ -31,6 +31,7 @@ lib/
 lib64/
 parts/
 sdist/
+share/
 var/
 wheels/
 *.egg-info/
@@ -132,6 +133,7 @@ dmypy.json
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea
 
 # Generated files
 .idea/**/contentModel.xml
@@ -302,3 +304,7 @@ node_modules
 .DS_Store
 docs/_book
 test/
+
+package-lock.json
+webpack-stats.json
+assets/bundles/*

@@ -1,0 +1,26 @@
+@charset "utf-8";
+
+// Import a Google Font
+@import url('https://fonts.googleapis.com/css?family=Nunito:400,700');
+
+// Import Font Awesome Icons
+$fa-font-path: "/assets/dist/webfonts";
+@import "node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "node_modules/@fortawesome/fontawesome-free/scss/brands.scss";
+@import "node_modules/@fortawesome/fontawesome-free/scss/regular.scss";
+@import "node_modules/@fortawesome/fontawesome-free/scss/solid.scss";
+@import "node_modules/@fortawesome/fontawesome-free/scss/v4-shims.scss";
+
+// Import Bulma
+@import "node_modules/bulma/bulma.sass";
+
+// Import Bulma variables
+@import 'variables';
+
+// Import Scss Generic files
+@import 'main';
+// Import Scss Template files
+@import 'home';
+@import 'dashboard';
+@import 'viewQuotes';
+@import 'createQuotes';
