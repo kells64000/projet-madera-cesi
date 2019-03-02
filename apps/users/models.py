@@ -76,9 +76,16 @@ class SalesPerson(MaderaUser):
 
 class Client(MaderaUser):
     is_pro = models.BooleanField(_('is pro'), default=False)
+    company = models.CharField(_('company'), max_length=50, blank=True)
 
     def _is_pro(self):
         '''
         Returns bool about whether the client is pro or not
         '''
         return self.is_pro
+
+    def get_company(self):
+        '''
+        Returns client's company if any
+        '''
+        return self.company
