@@ -1,51 +1,55 @@
-from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.parsers import JSONParser
+# -*- coding: utf-8 -*-
+from django.http import Http404
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from .models import Address
 from .serializers import AddressSerializer
 
 
-@csrf_exempt
-def addresses_list(request):
-    """
-    List all addresses, or create a new one.
-    """
-    if request.method == 'GET':
-        quotes = Address.objects.all()
-        serializer = AddressSerializer(quotes, many=True)
-        return JsonResponse(serializer.data, safe=False)
+class ListAddress(APIView):
 
-    elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializer = AddressSerializer(data=data)
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, format=None):
+        addresses = Address.objects.all()
+        serializer = AddressSerializer(addresses, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = AddressSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@csrf_exempt
-def addresses_detail(request, pk):
-    """
-    Retrieve update or delete an address.
-    """
-    try:
-        quote = Address.objects.get(pk=pk)
-    except Address.DoesNotExist:
-        return HttpResponse(status=404)
+class DetailAddress(APIView):
 
-    if request.method == 'GET':
-        serializer = AddressSerializer(quote)
-        return JsonResponse(serializer.data)
+    permission_classes = (IsAuthenticated,)
 
-    elif request.method == 'PUT':
-        data = JSONParser().parse(request)
-        serializer = AddressSerializer(quote, data=data)
+    def get_object(self, pk):
+        try:
+            return Address.objects.get(pk=pk)
+        except Address.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        address = self.get_object(pk)
+        serializer = AddressSerializer(address)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        address = self.get_object(pk)
+        serializer = AddressSerializer(address, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(serializer.data)
-        return JsonResponse(serializer.errors, status=400)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == 'DELETE':
-        quote.delete()
-        return HttpResponse(status=204)
+    def delete(self, request, pk, format=None):
+        address = self.get_object(pk)
+        address.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
