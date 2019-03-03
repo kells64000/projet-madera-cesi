@@ -8,7 +8,7 @@ class Address(models.Model):
     street = models.TextField(_(u'Adresse'))
     zipcode = models.CharField(_(u'Code postal'), max_length=10)
     city = models.CharField(_(u'Ville'), max_length=50)
-    country = fields.CountryField(_(u'Pays'), max_length=2)
+    country = fields.CountryField(_(u'Pays'), max_length=2, default='FR')
 
     def verbose(self):
         return '%s (%s)' % (self.city.title(), self.zipcode[:2])
