@@ -27,7 +27,7 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
 
 class MaderaUserSerializer(DynamicFieldsModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    email = serializers.CharField(required=False)
+    email = serializers.CharField(required=True)
     first_name = serializers.CharField(required=False, allow_blank=True, max_length=30)
     last_name = serializers.CharField(required=False, allow_blank=True, max_length=30)
     full_name = serializers.SerializerMethodField()
@@ -54,6 +54,23 @@ class MaderaUserSerializer(DynamicFieldsModelSerializer):
         finally:
             user = MaderaUser.objects.create(address=address, **validated_data)
         return user
+
+    def update(self, instance, validated_data):
+        instance.email = validated_data.get('email', instance.email)
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.phone = validated_data.get('phone', instance.phone)
+
+        if instance.address:
+            for k, v in validated_data.get('address').items():
+                instance.address.__dict__[k] = v
+            instance.address.save(update_fields=validated_data.get('address').keys())
+        else:
+            address_data = validated_data.get('address')
+            instance.address = Address.objects.create(**address_data)
+            instance.address.save()
+        instance.save()
+        return instance
 
     def to_representation(self, obj):
         """Exclude password from returning dict"""
