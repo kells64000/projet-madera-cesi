@@ -5,7 +5,7 @@
                 Devis MADERA
             </div>
             <div class="card-header-title d-flex flex-column align-end">
-                    <div>{{quoteClient.fullName}}</div>
+                    <div>{{quoteClient.full_name}}</div>
                     <div>{{quoteClient.address['street']}}</div>
                     <div>{{quoteClient.address['zipcode']}} {{quoteClient.address['city']}}</div>
                     <div>{{quoteClient.email}}</div>
