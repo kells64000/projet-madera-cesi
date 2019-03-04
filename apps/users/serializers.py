@@ -119,5 +119,5 @@ class ClientSerializer(MaderaUserSerializer):
         except KeyError as e:
             print(e)
         finally:
-            client = SalesPerson.objects.create(address=address, **validated_data)
+            client = Client.objects.create(address=address, **validated_data)
         return client
