@@ -153,7 +153,7 @@
 
                 <div class="field">
                     <p class="control is-expanded has-icons-left">
-                        <input class="input" type="text" placeholder="Adresse" :value="clientSelected.address" readonly>
+                        <input class="input" type="text" placeholder="Adresse" :value="clientSelected.address.street" readonly>
                         <span class="icon is-small is-left">
                           <i class="fas fa-address-card"></i>
                         </span>
@@ -164,7 +164,7 @@
                     <div class="field-body">
                         <div class="field">
                             <p class="control is-expanded has-icons-left">
-                                <input class="input" type="number" placeholder="Code Postal" :value="clientSelected.zipCode" readonly>
+                                <input class="input" type="number" placeholder="Code Postal" :value="clientSelected.address.zipcode" readonly>
                                 <span class="icon is-small is-left">
                                   <i class="fas fa-map-marker-alt"></i>
                                 </span>
@@ -172,7 +172,7 @@
                         </div>
                         <div class="field">
                             <p class="control is-expanded has-icons-left">
-                                <input class="input" type="text" placeholder="Ville" :value="clientSelected.city" readonly>
+                                <input class="input" type="text" placeholder="Ville" :value="clientSelected.address.city" readonly>
                                 <span class="icon is-small is-left">
                                   <i class="fas fa-city"></i>
                                 </span>
