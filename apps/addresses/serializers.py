@@ -7,4 +7,3 @@ class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = ('__all__')
-        # depth = 1

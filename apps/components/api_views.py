@@ -14,8 +14,8 @@ class ListComponent(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, format=None):
-        addresses = Component.objects.all()
-        serializer = ComponentSerializer(addresses, many=True)
+        components = Component.objects.all()
+        serializer = ComponentSerializer(components, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
@@ -37,19 +37,21 @@ class DetailComponent(APIView):
             raise Http404
 
     def get(self, request, pk, format=None):
-        address = self.get_object(pk)
-        serializer = ComponentSerializer(address)
+        component = self.get_object(pk)
+        serializer = ComponentSerializer(component)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
-        address = self.get_object(pk)
-        serializer = ComponentSerializer(address, data=request.data)
+        component = self.get_object(pk)
+        serializer = ComponentSerializer(component, data=request.data)
+        for field in ['name', 'length', 'width', 'unit']:
+            serializer.fields[field].required = False
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None):
-        address = self.get_object(pk)
-        address.delete()
+        component = self.get_object(pk)
+        component.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

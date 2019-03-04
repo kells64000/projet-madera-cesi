@@ -44,6 +44,7 @@ class DetailUser(APIView):
     def put(self, request, pk, format=None):
         user = self.get_object(pk)
         serializer = MaderaUserSerializer(user, data=request.data)
+        serializer.fields['email'].required = False
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -90,6 +91,8 @@ class DetailSalesPerson(APIView):
     def put(self, request, pk, format=None):
         salesperson = self.get_object(pk)
         serializer = SalesPersonSerializer(salesperson, data=request.data)
+        for field in ['email', 'workplace']:
+            serializer.fields[field].required = False
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -134,6 +137,8 @@ class DetailClient(APIView):
     def put(self, request, pk, format=None):
         client = self.get_object(pk)
         serializer = ClientSerializer(client, data=request.data)
+        for field in ['email', 'is_pro']:
+            serializer.fields[field].required = False
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
