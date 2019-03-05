@@ -100,9 +100,18 @@
                             params: {}
                         })
                             .then((response) => {
+
+                                let userAuth = '';
+
+                                response.data.forEach(function(user) {
+
+                                    if(payload.email === user.email) {
+                                        userAuth = user
+                                    }
+                                });
+
                                 this.$store.commit("setAuthUser",
-                                    {authUser: response.data, isAuthenticated: true}
-                                )
+                                {authUser: userAuth, isAuthenticated: true})
                                 this.$router.push({name: 'Dashboard'})
                             })
 

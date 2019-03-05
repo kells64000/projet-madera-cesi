@@ -1,5 +1,8 @@
+asn1crypto==0.24.0
 backcall==0.1.0
+cffi==1.11.5
 Click==7.0
+cryptography==2.5
 decorator==4.3.2
 Django==2.1.5
 django-cors-headers==2.4.0
@@ -10,8 +13,11 @@ django-jsonfield==1.0.1
 django-postgresql==0.0.3
 django-reversion==3.0.3
 django-webpack-loader==0.6.0
+django-xhtml2pdf==0.0.4
 djangorestframework==3.9.1
 djangorestframework-jwt==1.11.0
+ecdsa==0.13
+future==0.17.1
 html5lib==1.0.1
 humanize==0.5.1
 ipdb==0.11
@@ -28,12 +34,16 @@ psutil==5.4.8
 psycopg2==2.7.6.1
 psycopg2-binary==2.7.7
 ptyprocess==0.6.0
+pyasn1==0.4.5
+pycparser==2.19
 Pygments==2.3.1
 PyJWT==1.7.1
 PyPDF2==1.26.0
+python-jose==3.0.1
 pytz==2018.9
 PyYAML==3.13
 reportlab==3.5.13
+rsa==4.0
 schema==0.6.8
 six==1.12.0
 SQLAlchemy==1.2.5

@@ -17,6 +17,7 @@ class MaderaUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
+    phone = models.CharField(_('phone'), max_length=12, blank=True, unique=True)
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
     is_active = models.BooleanField(_('active'), default=True)
     is_staff = models.BooleanField(_('is_staff'), default=False)
@@ -44,6 +45,7 @@ class MaderaUser(AbstractBaseUser, PermissionsMixin):
         # Support for self as profile. Use of this is deprecated
         return self
 
+    @property
     def get_full_name(self):
         '''
         Returns the first_name plus the last_name, with a space in between.
@@ -76,9 +78,16 @@ class SalesPerson(MaderaUser):
 
 class Client(MaderaUser):
     is_pro = models.BooleanField(_('is pro'), default=False)
+    company = models.CharField(_('company'), max_length=50, blank=True)
 
     def _is_pro(self):
         '''
         Returns bool about whether the client is pro or not
         '''
         return self.is_pro
+
+    def get_company(self):
+        '''
+        Returns client's company if any
+        '''
+        return self.company

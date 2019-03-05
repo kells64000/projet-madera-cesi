@@ -41,7 +41,7 @@ class Module(Component):
     @property
     def designed_by(self):
         if self.designer:
-            return self.designer.get_full_name()
+            return self.designer.get_full_name
         return None
 
 

@@ -40,6 +40,10 @@ Lorsque une connexion internet est de nouveau disponible les données de la base
 
 Le dossier **db** contient un dump récent de postgresql
 
+Pour faire un dump de la base postgresql, exécuter :
+
+`pg_dump -Fc -v -U postgres -d madera > madera.dump.bin`
+
 Pour l'importer dans le client postgresql, exécuter :
 
 `pg_restore -U postgres -j 2 -Fc -v -d madera madera.dump.bin`

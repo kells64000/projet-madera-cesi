@@ -3,7 +3,7 @@
         <div class="columns is-vcentered vh-50">
             <div class="column is-12">
                 <section class="section">
-                    <div class="has-text-right">
+                    <div class="has-text-left">
                         <button class="button has-background-grey-lighter" @click.prevent="logout()">
                             <i class="fas fa-sign-out-alt"></i>
                         </button>
@@ -13,8 +13,8 @@
                     <div class="has-text-centered">
                         <img class="login-logo" src="assets/img/logo.png">
                     </div>
-                    <div class="has-text-centered subtitle" v-for="user in userAuth">
-                        Bonjour {{user.first_name}} {{user.last_name}}
+                    <div class="has-text-centered subtitle">
+                        {{userAuth.first_name}} {{userAuth.last_name}}
                     </div>
                 </section>
             </div>

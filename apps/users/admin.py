@@ -30,7 +30,7 @@ class MaderaUserAdmin(UserAdmin):
          ),
     )
     raw_id_fields = ('address',)
-    list_filter = ('is_active',)
+    list_filter = ('is_active', 'is_staff')
     search_fields = ['^id', 'last_name', 'first_name', '^email']
     ordering = ('-id',)
 

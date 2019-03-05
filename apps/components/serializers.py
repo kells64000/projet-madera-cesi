@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
+
+from addresses.models import Address
+from users.models import MaderaUser
+from users.serializers import MaderaUserSerializer
 from .models import Component
 
 
@@ -13,35 +17,50 @@ class ComponentSerializer(serializers.ModelSerializer):
     depth = serializers.DecimalField(required=False, allow_null=True,
                                      max_digits=8, decimal_places=2)
     unit = serializers.CharField(max_length=10)
-    surface = serializers.SerializerMethodField()
-    designer = serializers.SerializerMethodField()
+    surface = serializers.SerializerMethodField(required=False)
+    designer = MaderaUserSerializer(required=False)
+    designed_by = serializers.SerializerMethodField()
 
     class Meta:
         model = Component
         fields = ('id', 'name', 'nature', 'length', 'width', 'depth', 'unit', 'surface',
-                  'designer')
+                  'designer', 'designed_by')
 
     def create(self, validated_data):
-        """
-        Create and return a new `Component` instance, given the validated data.
-        """
-        return Component.objects.create(**validated_data)
+        designer = None
+        try:
+            designer_data = validated_data.pop('designer')
+            address_data = designer_data.pop('address') if designer_data['address'] else dict()
+            if address_data:
+                address = Address.objects.create(**address_data)
+                address.save()
+                designer = MaderaUser.objects.create(address=address, **designer_data)
+        except KeyError as e:
+            print(e)
+        component = Component.objects.create(designer=designer, **validated_data)
+        return component
 
     def update(self, instance, validated_data):
-        """
-        Update and return an existing `Snippet` instance, given the validated data.
-        """
         instance.name = validated_data.get('name', instance.name)
         instance.nature = validated_data.get('nature', instance.nature)
         instance.length = validated_data.get('length', instance.length)
         instance.width = validated_data.get('width', instance.width)
         instance.depth = validated_data.get('depth', instance.depth)
-        instance.unit = validated_data.get('unit', instance.unit)
+
+        if instance.designer:
+            for k, v in validated_data.get('designer').items():
+                instance.designer.__dict__[k] = v
+            instance.designer.save(update_fields=validated_data.get('designer').keys())
+        else:
+            designer_data = validated_data.get('designer')
+            instance.designer = MaderaUser.objects.create(**designer_data)
+            instance.designer.save()
         instance.save()
+
         return instance
 
     def get_surface(self, obj):
         return obj.surface
 
-    def get_designer(self, obj):
+    def get_designed_by(self, obj):
         return obj.designed_by

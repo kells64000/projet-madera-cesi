@@ -1,27 +1,14 @@
-from django.contrib.gis.geos import Point
 from django_countries import fields
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 
 class Address(models.Model):
-    # Editable fields
+
     street = models.TextField(_(u'Adresse'))
     zipcode = models.CharField(_(u'Code postal'), max_length=10)
     city = models.CharField(_(u'Ville'), max_length=50)
-    country = fields.CountryField(_(u'Pays'), max_length=2)
-
-    # Calculated fields
-    latitude = models.FloatField(
-        _(u'Latitude'), blank=True, null=True)
-    longitude = models.FloatField(
-        _(u'Longitude'), blank=True, null=True)
-
-    def get_location(self):
-        if self.latitude and self.longitude:
-            # Remember, longitude FIRST!
-            return Point(self.longitude, self.latitude)
-        return None
+    country = fields.CountryField(_(u'Pays'), max_length=2, default='FR')
 
     def verbose(self):
         return '%s (%s)' % (self.city.title(), self.zipcode[:2])
