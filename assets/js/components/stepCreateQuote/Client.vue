@@ -290,8 +290,6 @@
                     'company': this.form.company
                 };
 
-                console.log(clientCreate);
-
                 axios.post('http://127.0.0.1:8000/api/clients/',
                     clientCreate, {
                         headers: {
