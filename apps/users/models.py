@@ -28,8 +28,7 @@ class MaderaUser(AbstractBaseUser, PermissionsMixin):
                                 blank=True,
                                 default=None,
                                 null=True,
-                                on_delete=models.CASCADE,
-                                related_name=_('address'))
+                                on_delete=models.CASCADE)
 
     objects = UserManager()
 
@@ -91,3 +90,27 @@ class Client(MaderaUser):
         Returns client's company if any
         '''
         return self.company
+
+
+class Provider(models.Model):
+
+    id = models.AutoField(primary_key=True, unique=True)
+    email = models.EmailField(_('email address'), unique=True)
+    first_name = models.CharField(_('first name'), max_length=30, blank=True)
+    last_name = models.CharField(_('last name'), max_length=30, blank=True)
+    phone = models.CharField(_('phone'), max_length=12, blank=True, unique=True)
+
+    # ForeignKeys
+    address = models.ForeignKey(Address,
+                                blank=True,
+                                default=None,
+                                null=True,
+                                on_delete=models.CASCADE)
+
+    @property
+    def get_full_name(self):
+        '''
+        Returns the first_name plus the last_name, with a space in between.
+        '''
+        full_name = '%s %s' % (self.first_name, self.last_name)
+        return full_name

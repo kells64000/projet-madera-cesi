@@ -26,7 +26,7 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
 
 
 class MaderaUserSerializer(DynamicFieldsModelSerializer):
-    id = serializers.IntegerField(read_only=True)
+    id = serializers.UUIDField(format='hex_verbose', read_only=True)
     email = serializers.CharField(required=True)
     first_name = serializers.CharField(required=False, allow_blank=True, max_length=30)
     last_name = serializers.CharField(required=False, allow_blank=True, max_length=30)
