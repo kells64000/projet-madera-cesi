@@ -1,10 +1,46 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
 from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 
-from .models import MaderaUser
+from .models import MaderaUser, Client, SalesPerson
 
 
+class UserTypefilter(admin.SimpleListFilter):
+    # Human-readable title which will be displayed in the
+    # right admin sidebar just above the filter options.
+    title = _('user type')
+
+    # Parameter for the filter that will be used in the URL query.
+    parameter_name = 'type'
+
+    def lookups(self, request, model_admin):
+        """
+        Returns a list of tuples. The first element in each
+        tuple is the coded value for the option that will
+        appear in the URL query. The second element is the
+        human-readable name for the option that will appear
+        in the right sidebar.
+        """
+        return (
+            ('client', _('client')),
+            ('salesperson', _('vendeur')),
+        )
+
+    def queryset(self, request, queryset):
+        """
+        Returns the filtered queryset based on the value
+        provided in the query string and retrievable via
+        `self.value()`.
+        """
+        if self.value() == 'client':
+            return Client.objects.all()
+        if self.value() == 'salesperson':
+            return SalesPerson.objects.all()
+
+
+@admin.register(MaderaUser)
 class MaderaUserAdmin(UserAdmin):
     list_per_page = 20
     list_display = ('id_display', 'user_display', 'email_user_display', 'date_joined_display',
@@ -12,7 +48,7 @@ class MaderaUserAdmin(UserAdmin):
     fieldsets = (
         ('Personal info',
             {'fields':
-                ('email', 'password', 'first_name', 'last_name', 'address')
+                ('username', 'email', 'password', 'first_name', 'last_name', 'address')
              }
          ),
         ('Professionnel',
@@ -29,8 +65,9 @@ class MaderaUserAdmin(UserAdmin):
              }
          ),
     )
+
     raw_id_fields = ('address',)
-    list_filter = ('is_active', 'is_staff')
+    list_filter = ('is_active', 'is_staff', UserTypefilter)
     search_fields = ['^id', 'last_name', 'first_name', '^email']
     ordering = ('-id',)
 
@@ -79,6 +116,3 @@ class MaderaUserAdmin(UserAdmin):
         except AttributeError:
             return ''
     last_con_display.short_description = "Derniere connexion"
-
-
-admin.site.register(MaderaUser, MaderaUserAdmin)
