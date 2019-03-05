@@ -17,6 +17,14 @@ class Component(models.Model):
     unit = models.CharField(_('unit'), max_length=10, blank=False, null=False)
     price = models.DecimalField(_('price'), max_digits=10, decimal_places=2, null=True)
 
+    # ForeignKeys
+    designer = models.ForeignKey(MaderaUser,
+                                 blank=True,
+                                 default=None,
+                                 null=True,
+                                 on_delete=models.DO_NOTHING,
+                                 related_name=_('designer'))
+
     @property
     def surface(self):
         return (self.length * self.width * (self.depth if self.depth else 1)
@@ -27,24 +35,8 @@ class Component(models.Model):
                                                                    l=self.length,
                                                                    w=self.width)
 
-
-class Module(Component):
-
-    components = models.ManyToManyField(Component, related_name='material')
-    designer = models.ForeignKey(MaderaUser,
-                                 blank=True,
-                                 default=None,
-                                 null=True,
-                                 on_delete=models.DO_NOTHING,
-                                 related_name=_('designer'))
-
     @property
     def designed_by(self):
         if self.designer:
             return self.designer.get_full_name
         return None
-
-
-class Gamme(Component):
-
-    components = models.ManyToManyField(Component, related_name='finishing')
