@@ -1,0 +1,143 @@
+{% load static from staticfiles %}
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Devis Madera</title>
+    <style>
+    /* Page */
+
+    @page {
+        size: a4 portrait;
+        @frame header_frame { /*Static Frame*/
+            -pdf-frame-content: header_content;
+            left: 50pt; width: 512pt; top: 50pt; height: 200pt;
+        }
+        @frame content_frame { /*Content Frame*/
+            left: 50pt; width: 512pt; top: 250pt; height: 632pt;
+        }
+        @frame footer_frame { /*Another static Frame*/
+            -pdf-frame-content: footer_content;
+            left: 50pt; width: 512pt; top: 772pt; height: 20pt;
+        }
+    }
+
+    /* Helper */
+
+    .bg-darkgrey {
+        background-color: #7f8c8d;
+    }
+
+    /* Font */
+
+    h1 {
+        font-size: 3em;
+    }
+
+    /* HTML */
+
+    .table {
+        width: 100%;
+        max-width: 100%;
+        background-color: #fff;
+    }
+
+    .table th,
+    .table td {
+        padding: 5px;
+        text-align: center;
+        border: 2px solid #7f8c8d;
+    }
+
+    /* Métier */
+
+    .client {
+        text-decoration: underline;
+        font-weight: bold;
+        margin-bottom: 10px;
+
+    }
+
+    .list-group {
+        display: block;
+        width: 100%;
+        list-style: none;
+        line-height: 5px;
+        font-size: 1.3em;
+    }
+    </style>
+</head>
+<body>
+    <div id='header_content'>
+
+        <div class="list-group">
+            <img src="{% static "img/quote/logo.jpg" %}">
+            <h1>Devis MADERA</h1>
+            <p>N°123456789</p>
+            <div>Date : 28/02/2019</div>
+        </div>
+
+
+        <div align="right" class="list-group">
+            <div class="client">Client :</div>
+
+            <div>Mr Jean Bon</div>
+            <div>Herta</div>
+            <div>12 avenue du pont</div>
+            <div>33000 Bordeaux</div>
+            <div>05.56.47.84.25</div>
+            <div>jean-bon@herta.fr</div>
+        </div>
+    </div>
+
+    <div id="footer_content">
+        <div style="text-align: right">
+            page <pdf:pagenumber> sur <pdf:pagecount>
+        </div>
+    </div>
+
+    <table class="table">
+            <thead>
+            <tr>
+                <th>Modules</th>
+                <th>Composants</th>
+                <th>Quantité</th>
+                <th>Prix HT</th>
+                <th>TVA</th>
+                <th>Prix TTC</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Module-test</td>
+                    <td>Composant-test</td>
+                    <td>1</td>
+                    <td>15.00€</td>
+                    <td>20%</td>
+                    <td>18.00€</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="4" class="bg-darkgrey"></td>
+                    <th>Total TTC</th>
+                    <td>18.00€</td>
+                </tr>
+            </tfoot>
+    </table>
+
+
+</body>
+</html>
+
+
+<!--<table>
+    <tr>
+        <th>ID</th><th>Title</th>
+    </tr>
+{#    {% for book in books %}#}
+        <tr>
+{#            <td>{{ book.id }}</td><td>{{ book.title }}</td>#}
+        </tr>
+{#    {% endfor %}#}
+</table>-->
+
