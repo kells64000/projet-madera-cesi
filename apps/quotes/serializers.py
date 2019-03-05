@@ -22,6 +22,25 @@ class QuoteSerializer(serializers.ModelSerializer):
         fields = ('id', 'price', 'state', 'attachment', 'client', 'salesperson',
                   'created_at', 'updated_at')
 
+    def create(self, validated_data, client=None, salesperson=None):
+        for user in ('client', 'salesperson'):
+            try:
+                user_data = validated_data.pop(user)
+            except KeyError as e:
+                print(e)
+            finally:
+                if user == 'client':
+                    client = Client.objects.get(user_data)
+                    client = Client.objects.create(**user_data)
+                    client.save()
+                else:
+                    user = SalesPerson.objects.create(**user_data)
+                    salesperson.save()
+                quote = Quote.objects.create(client=client,
+                                             salesperson=salesperson,
+                                             **validated_data)
+        return quote
+
     def update(self, instance, validated_data):
         instance.email = validated_data.get('email', instance.email)
         instance.first_name = validated_data.get('first_name', instance.first_name)

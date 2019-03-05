@@ -38,9 +38,6 @@ class ListQuote(APIView):
 
     def post(self, request, format=None):
         serializer = QuoteSerializer(data=request.data)
-        for key, value in request.data.items():
-            for k, v in {key: value}:
-                serializer.fields[v].required = False
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
