@@ -17,7 +17,7 @@ class MaderaUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
-    phone = models.CharField(_('phone'), max_length=12, blank=True, unique=True)
+    phone = models.CharField(_('phone'), max_length=12, null=True)
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
     is_active = models.BooleanField(_('active'), default=True)
     is_staff = models.BooleanField(_('is_staff'), default=False)
@@ -38,6 +38,10 @@ class MaderaUser(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
+
+    @property
+    def username(self):
+        return getattr(self, self.USERNAME_FIELD)
 
     @cached_property
     def user(self):
