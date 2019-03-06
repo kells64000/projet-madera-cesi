@@ -23,7 +23,7 @@ export default new Vuex.Store({
     },
     quoteClient: {},
     quoteProject: '',
-    quoteModules: {}
+    quoteModules: {},
   },
   getters: {
     getUser: state => {
