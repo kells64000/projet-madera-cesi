@@ -11,7 +11,7 @@
                         <div class="field">
                             <div class="control">
                                 <div>
-                                    <label for="selectGamme">Gammes :</label>
+                                    <label for="selectGamme">Gamme :</label>
                                 </div>
 
                                 <div id="selectGamme" class="select">
@@ -34,42 +34,33 @@
 
                 </div>
 
-                <div class="columns align-center">
 
-                    <div class="column-is-6 h-200 d-flex align-center">
-
-                        <div class="field">
-                            <div class="control">
-                                <div>
-                                    <label for="selectForme">Formes :</label>
-                                </div>
-
-                                <div id="selectForme" class="select">
-                                    <select v-model="formeSelected">
-                                        <option :value="forme.name" v-for="forme in formes">{{forme.name}}</option>
-                                    </select>
-                                </div>
-                            </div>
+                <div class="field">
+                    <div class="control">
+                        <div>
+                            <label for="selectForme">Forme :</label>
                         </div>
 
+                        <div id="selectForme" class="select">
+                            <select v-model="formeSelected">
+                                <option :value="forme.name" v-for="forme in formes">{{forme.name}}</option>
+                            </select>
+                        </div>
                     </div>
-
-                    <div class="column-is-6 h-200">
-
-                        <figure class="image is-256x256 mt-2" v-show="formeSelected === forme.name"
-                                v-for="forme in formes">
-                            <img :src="forme.img">
-                        </figure>
-
-                    </div>
-
                 </div>
+
+                <figure class="mt-2" v-show="formeSelected === forme.name"
+                        v-for="forme in formes">
+                    <img :src="forme.img">
+                </figure>
+
+
 
                 <div class="field">
                     <div>
                         <label for="selectModuleWallExternal">Murs Extérieur :</label>
                     </div>
-                    <v-select id="selectModuleWallExternal" v-model="modulesExternalWallSelected" multiple :options="modules" label="name">
+                    <v-select id="selectModuleWallExternal" v-model="modulesExternalWallSelected" multiple :options="modules" label="name" disable>
                         <template slot="option" slot-scope="option">
                             {{option.name}}
                         </template>
@@ -233,7 +224,7 @@
         data() {
             return {
                 gammes: [
-                    {name: 'Execellence', finitionExterieure: 'Crépi', isolation: 'Laine de verre', couverture: 'Ardoise', img: 'https://picsum.photos/128/128?341'},
+                    {name: 'Excellence', finitionExterieure: 'Crépi', isolation: 'Laine de verre', couverture: 'Ardoise', img: 'https://picsum.photos/128/128?341'},
                     {name: 'Luxe', finitionExterieure: 'Crépi', isolation: 'Laine de roche', couverture: 'Zinc', img: 'https://picsum.photos/128/128?147'},
                     {name: 'Naturelle', finitionExterieure: 'Bois', isolation: 'Ouate de cellulose', couverture: 'Brande', img: 'https://picsum.photos/128/128?417'},
                 ],
