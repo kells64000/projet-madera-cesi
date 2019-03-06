@@ -56,7 +56,7 @@
 
                     <div class="column-is-6 h-200">
 
-                        <figure class="image is-128x128 mt-2" v-show="formeSelected === forme.name"
+                        <figure class="image is-256x256 mt-2" v-show="formeSelected === forme.name"
                                 v-for="forme in formes">
                             <img :src="forme.img">
                         </figure>
@@ -238,9 +238,10 @@
                     {name: 'Naturelle', finitionExterieure: 'Bois', isolation: 'Ouate de cellulose', couverture: 'Brande', img: 'https://picsum.photos/128/128?417'},
                 ],
                 formes: [
-                    {name: 'Carré', img: 'https://picsum.photos/128/128?487'},
-                    {name: 'Rectangle', img: 'https://picsum.photos/128/128?817'},
-                    {name: 'U', img: 'https://picsum.photos/128/128?951'},
+                    {name: 'Carré', img: '/assets/img/house/forms/Maison_carree.jpg'},
+                    {name: 'Rectangle', img: '/assets/img/house/forms/Maison_Rectangle.jpg'},
+                    {name: 'U', img: '/assets/img/house/forms/Maison_U.jpg'},
+                    {name: 'L', img: '/assets/img/house/forms/Maison_L.jpg'},
                 ],
                 modules: [
                     {name: 'Mur-nord', hauteur: '1.8', longueur: '2.6', unite_usage: 'm²', price: 1500},
