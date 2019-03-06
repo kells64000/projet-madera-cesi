@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import uuid
-
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from users.models import SalesPerson, Client
@@ -8,7 +6,7 @@ from users.models import SalesPerson, Client
 
 class Quote(models.Model):
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.AutoField(primary_key=True, editable=False)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     state = models.TextField()
     attachment = models.TextField(null=True, blank=True, default=None)
