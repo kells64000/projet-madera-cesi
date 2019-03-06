@@ -71,7 +71,7 @@
                     {
                         icon: 'shopping_cart',
                         name: 'récapitulatif',
-                        title: 'Récapitulitif',
+                        title: 'Récapitulatif',
                         subtitle: 'Liste des modules',
                         component: Recapitulatif,
                         completed: false
