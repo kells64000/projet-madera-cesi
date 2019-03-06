@@ -66,6 +66,7 @@ class MaderaUser(AbstractBaseUser, PermissionsMixin):
 
 
 class SalesPerson(MaderaUser):
+
     workplace = models.CharField(_('workplace'), max_length=20, blank=True)
 
     def get_worplace(self):
@@ -76,6 +77,7 @@ class SalesPerson(MaderaUser):
 
 
 class Client(MaderaUser):
+
     is_pro = models.BooleanField(_('is pro'), default=False)
     company = models.CharField(_('company'), max_length=50, blank=True)
 
@@ -94,7 +96,6 @@ class Client(MaderaUser):
 
 class Provider(models.Model):
 
-    id = models.AutoField(primary_key=True, unique=True)
     email = models.EmailField(_('email address'), unique=True)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
