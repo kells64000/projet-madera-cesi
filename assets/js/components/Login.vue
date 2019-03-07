@@ -33,6 +33,7 @@
                         </button>
                     </div>
 
+                    <FlashMessage :position="bottom"></FlashMessage>
                 </form>
             </section>
         </div>
@@ -55,7 +56,6 @@
                        clickMode="grab">
         </vue-particles>
 
-        <FlashMessage></FlashMessage>
     </div>
 </template>
 
@@ -64,6 +64,9 @@
 
     export default {
         name: 'Login',
+        props: [
+            'position'
+        ],
         data() {
             return {
                 email: '',
