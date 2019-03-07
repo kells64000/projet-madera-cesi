@@ -2,34 +2,26 @@ from rest_framework import serializers
 from .models import Address
 
 
-class DynamicFieldsModelSerializer(serializers.ModelSerializer):
-    """
-    A ModelSerializer that takes an additional `fields` argument that
-    controls which fields should be displayed.
-    """
+class AddressSerializer(serializers.ModelSerializer):
 
-    def __init__(self, *args, **kwargs):
-        # Don't pass the 'fields' arg up to the superclass
-        fields = kwargs.pop('fields', None)
-
-        # Instantiate the superclass normally
-        super(DynamicFieldsModelSerializer, self).__init__(*args, **kwargs)
-
-        if fields is not None:
-            # Drop any fields that are not specified in the `fields` argument.
-            allowed = set(fields)
-            existing = set(self.fields)
-            for field_name in existing - allowed:
-                self.fields.pop(field_name)
-
-
-class AddressSerializer(DynamicFieldsModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    street = serializers.CharField(required=True)
-    zipcode = serializers.CharField(required=False, allow_blank=True, max_length=8)
-    city = serializers.CharField(required=False, allow_blank=True, max_length=50)
-    country = serializers.CharField(required=False, allow_blank=True, max_length=30)
+    street = serializers.CharField(required=False, allow_blank=True, max_length=80)
+    zipcode = serializers.CharField(required=False, allow_blank=True, max_length=30)
+    city = serializers.CharField(required=False, allow_blank=True, max_length=30)
+    country = serializers.CharField(required=False, allow_blank=True, max_length=12)
 
     class Meta:
         model = Address
-        fields = ('id', 'street', 'zipcode', 'city', 'country')
+        fields = ('__all__')
+
+    def create(self, validated_data, address=None):
+        address = Address.objects.create(**validated_data)
+        return address
+
+    def update(self, instance, validated_data):
+        instance.street = validated_data.get('street', instance.street)
+        instance.zipcode = validated_data.get('zipcode', instance.zipcode)
+        instance.city = validated_data.get('city', instance.city)
+        instance.country = validated_data.get('country', instance.country)
+        instance.save()
+        return instance

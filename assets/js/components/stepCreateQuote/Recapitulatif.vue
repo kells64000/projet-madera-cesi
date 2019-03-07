@@ -1,13 +1,14 @@
 <template>
     <div class="card" style="margin: 3rem">
         <header class="card-header">
-            <div class="card-header-title">
-                Devis MADERA
+            <div class="card-header-title d-flex flex-column align-start">
+                <div>Devis MADERA</div>
+                <div>Projet : {{quoteProject}}</div>
             </div>
             <div class="card-header-title d-flex flex-column align-end">
-                    <div>{{quoteClient.fullName}}</div>
-                    <div>{{quoteClient.address}}</div>
-                    <div>{{quoteClient.postalCode}} {{quoteClient.city}}</div>
+                    <div>{{quoteClient.full_name}}</div>
+                    <div>{{quoteClient.address['street']}}</div>
+                    <div>{{quoteClient.address['zipcode']}} {{quoteClient.address['city']}}</div>
                     <div>{{quoteClient.email}}</div>
                     <div>{{quoteClient.phone}}</div>
             </div>
@@ -35,6 +36,9 @@
         computed: {
             quoteClient() {
                 return this.$store.getters.getQuoteClient;
+            },
+            quoteProject() {
+                return this.$store.getters.getQuoteProject;
             },
             quoteModules() {
                 return this.$store.getters.getQuoteModules;

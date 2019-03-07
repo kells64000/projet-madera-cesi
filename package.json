@@ -10,7 +10,8 @@
     "dev": "webpack --mode development",
     "prod": "webpack --mode production",
     "watch": "webpack --mode development --watch",
-    "start": "npm run watch"
+    "start": "npm run watch",
+    "heroku-postbuild": "npm run dev"
   },
   "repository": {
     "type": "git",

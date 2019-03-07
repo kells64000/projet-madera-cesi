@@ -22,7 +22,8 @@ export default new Vuex.Store({
       baseUrl: 'http://127.0.0.1:8000/'
     },
     quoteClient: {},
-    quoteModules: {}
+    quoteProject: '',
+    quoteModules: {},
   },
   getters: {
     getUser: state => {
@@ -31,6 +32,9 @@ export default new Vuex.Store({
     },
     getQuoteClient: state => {
       return state.quoteClient;
+    },
+    getQuoteProject: state => {
+      return state.quoteProject;
     },
     getQuoteModules: state => {
       return state.quoteModules;
@@ -56,6 +60,9 @@ export default new Vuex.Store({
     },
     setQuoteClient(state, client) {
        Vue.set(state, 'quoteClient', client);
+    },
+    setQuoteProject(state, project) {
+       Vue.set(state, 'quoteProject', project);
     },
     setQuoteModules(state, modules) {
        Vue.set(state, 'quoteModules', modules);

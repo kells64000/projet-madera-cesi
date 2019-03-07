@@ -6,6 +6,10 @@
   height: 100vh;
 }
 
+.h-200 {
+  height: 200px;
+}
+
 .button {
   min-width: 0 !important;
 }
@@ -34,6 +38,14 @@
   justify-content: space-between;
 }
 
+.align-start {
+  align-items: flex-start;
+}
+
+.align-center {
+  align-items: center;
+}
+
 .align-end {
   align-items: flex-end;
 }
@@ -44,6 +56,10 @@
 
 .mb-1 {
   margin-bottom: 1em;
+}
+
+.mt-2 {
+  margin-top: 2em;
 }
 
 .pr-1-5 {

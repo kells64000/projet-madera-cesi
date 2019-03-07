@@ -30,6 +30,7 @@
 
 <script>
      import HorizontalStepper from 'vue-stepper';
+     import Projet from './stepCreateQuote/Projet.vue';
      import Client from './stepCreateQuote/Client.vue';
      import Creation from './stepCreateQuote/Creation.vue';
      import Recapitulatif from './stepCreateQuote/Recapitulatif.vue';
@@ -42,6 +43,14 @@
         data: function () {
             return {
                 quoteSteps: [
+                    {
+                        icon: 'assignment',
+                        name: 'Projet',
+                        title: 'Projet',
+                        subtitle: 'Nom du projet',
+                        component: Projet,
+                        completed: false
+                    },
                     {
                         icon: 'person',
                         name: 'client',
@@ -62,7 +71,7 @@
                     {
                         icon: 'shopping_cart',
                         name: 'récapitulatif',
-                        title: 'Récapitulitif',
+                        title: 'Récapitulatif',
                         subtitle: 'Liste des modules',
                         component: Recapitulatif,
                         completed: false
