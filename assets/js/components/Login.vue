@@ -33,8 +33,8 @@
                         </button>
                     </div>
                     <section>
-                        <b-notification auto-close type="is-danger" :active.sync="isActive" icon-pack="fas fa-exclamation-triangle" has-icon :duration=1500>
-                            Login ou mot de passe incorrect !
+                        <b-notification auto-close type="is-danger" :active.sync="isActive" icon-pack="fas fa-exclamation-triangle" has-icon>
+                            Email ou mot de passe incorrect !
                         </b-notification>
                     </section>
                 </form>
