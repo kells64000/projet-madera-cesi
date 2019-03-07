@@ -14,6 +14,7 @@ from os.path import dirname, join
 import os
 import sys
 import datetime
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 SETTINGS_DIR = dirname(__file__)
@@ -76,6 +77,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.common.BrokenLinkEmailsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 REST_FRAMEWORK = {
@@ -230,6 +232,8 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'assets'),
 )
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 WEBPACK_LOADER = {
     'DEFAULT': {
         'BUNDLE_DIR_NAME': 'dist/',
@@ -239,3 +243,6 @@ WEBPACK_LOADER = {
 
 AUTH_USER_MODEL = 'users.MaderaUser'
 AVATAR_URL = os.path.join(STATIC_URL, 'users-media/avatars/')[1:]
+
+# Activate Django-Heroku.
+django_heroku.settings(locals())
