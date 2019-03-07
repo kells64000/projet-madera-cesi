@@ -17,6 +17,9 @@ Vue.filter('formatDate', function(value) {
 Vue.component('v-select', vSelect);
 Vue.use(VueParticles);
 
+import FlashMessage from '@smartweb/vue-flash-message';
+Vue.use(FlashMessage);
+
 
 import router from './router/router.js';
 import store from './store/store.js';
