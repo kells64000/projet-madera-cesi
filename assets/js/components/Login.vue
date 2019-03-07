@@ -32,8 +32,11 @@
                             Connexion
                         </button>
                     </div>
-
-                    <FlashMessage :position="bottom"></FlashMessage>
+                    <section>
+                        <b-notification auto-close type="is-danger" :active.sync="isActive" icon-pack="fas fa-exclamation-triangle" has-icon>
+                            Email ou mot de passe incorrect !
+                        </b-notification>
+                    </section>
                 </form>
             </section>
         </div>
@@ -72,6 +75,7 @@
                 email: '',
                 password: '',
                 is_focus: '',
+                isActive: false,
             }
         },
         methods: {
@@ -122,13 +126,9 @@
 
                     })
                     .catch((error) => {
-                        error.message = 'Ces identifiants n\'existent pas'
-                        this.flashMessage.error({title: 'Erreur de formulaire' || 'Error', message: error.message});
-                        console.log(error);
-                        console.debug(error);
-                        console.dir(error);
+                        this.isActive = true;
                     })
-            }
+            },
         }
     }
 </script>
