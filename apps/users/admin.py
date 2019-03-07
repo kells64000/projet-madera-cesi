@@ -91,21 +91,17 @@ class UserChangeForm(forms.ModelForm):
 @admin.register(MaderaUser)
 class MaderaUserAdmin(UserAdmin):
     list_per_page = 20
-    list_display = ('id_display', 'user_display', 'email_user_display', 'date_joined_display',
-                    'address')
+    list_display = ('id_display', 'user_display', 'email_user_display', 'date_joined_display')
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         ('Personal info',
             {'fields':
-                ('first_name', 'last_name', 'address')
+                ('first_name', 'last_name')
              }
-         ),
-        ('Professionnel',
-            {'fields': ()}
          ),
         ('Permissions',
             {'fields':
-                ('is_active', 'is_staff', 'is_superuser', 'groups', )
+                ('is_active', 'is_staff', 'is_superuser')
              }
          ),
         ('Dates importantes',
@@ -124,8 +120,9 @@ class MaderaUserAdmin(UserAdmin):
 
     raw_id_fields = ('address',)
     list_filter = ('is_active', 'is_staff', UserTypefilter)
-    search_fields = ['^id', 'last_name', 'first_name', '^email']
+    search_fields = ['^id', 'last_name', 'first_name', '^email', 'address__city']
     ordering = ('-id',)
+    model = MaderaUser
 
     def id_display(self, obj):
         if obj.user.is_active:
@@ -172,5 +169,62 @@ class MaderaUserAdmin(UserAdmin):
         except AttributeError:
             return ''
     last_con_display.short_description = "Derniere connexion"
+
+
+@admin.register(Client)
+class ClientAdmin(MaderaUserAdmin):
+    list_per_page = 20
+    list_display = ('is_pro',)
+    fieldsets = (
+        (None, {'fields': ('email', 'password')}),
+        ('Personal info',
+            {'fields':
+                ('first_name', 'last_name')
+             }
+         ),
+        ('Professionnel',
+            {'fields': ('is_pro',)}
+         ),
+        ('Permissions',
+            {'fields':
+                ('is_active', 'is_staff', 'is_superuser',)
+             }
+         ),
+        ('Dates importantes',
+            {'fields':
+                ('date_joined',)
+             }
+         ),
+    )
+    model = Client
+
+
+@admin.register(SalesPerson)
+class SalesPersonAdmin(MaderaUserAdmin):
+    list_per_page = 20
+    list_display = ('workplace',)
+    fieldsets = (
+        (None, {'fields': ('email', 'password')}),
+        ('Personal info',
+            {'fields':
+                ('first_name', 'last_name')
+             }
+         ),
+        ('Professionnel',
+            {'fields': ('workplace',)}
+         ),
+        ('Permissions',
+            {'fields':
+                ('is_active', 'is_staff', 'is_superuser',)
+             }
+         ),
+        ('Dates importantes',
+            {'fields':
+                ('date_joined',)
+             }
+         ),
+    )
+    model = SalesPerson
+
 
 admin.site.unregister(Group)
