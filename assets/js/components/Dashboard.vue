@@ -49,7 +49,6 @@
                 </div>
             </div>
         </div>
-        <FlashMessage></FlashMessage>
     </div>
 </template>
 
@@ -58,14 +57,7 @@
         name: "Dashboard",
         computed : {
             userAuth(){
-                this.flashMessage.success({
-                    title: 'Bienvenue sur votre espace Madera',
-                    message: 'Bonne construction !',
-                    time: 5000,
-                    flashMessageStyle: {
-                        backgroundColor: 'linear-gradient(#e66465, #9198e5)'
-                    }
-                });
+                this.success();
                 return this.$store.getters.getUser;
             }
         },
@@ -78,7 +70,14 @@
             },
             consult() {
                 this.$router.push({name: 'ViewQuote'})
-            }
+            },
+            success() {
+                this.$toast.open({
+                    message: 'Bienvenue sur votre espace Madera',
+                    type: 'is-success',
+                    position: 'is-bottom'
+                })
+            },
         },
         created: function () {
             this.$store.commit('setAuthUser');
@@ -87,4 +86,5 @@
 </script>
 
 <style>
+
 </style>
