@@ -7,11 +7,13 @@
     "lib": "lib"
   },
   "scripts": {
-    "dev": "webpack --mode development",
-    "prod": "webpack --mode production",
-    "watch": "webpack --mode development --watch",
-    "start": "npm run watch",
-    "postinstall": "npm run dev"
+    // "dev": "webpack --mode development",
+    // "prod": "webpack --mode production",
+    // "watch": "webpack --mode development --watch",
+    // "start": "npm run watch",
+    "dev": "node build/dev-server.js",
+    "build": "node build/build.js",
+    "start": "node server.js",
   },
   "repository": {
     "type": "git",
