@@ -10,8 +10,7 @@
     "dev": "webpack --mode development",
     "prod": "webpack --mode production",
     "watch": "webpack --mode development --watch",
-    "start": "npm run watch",
-    "postinstall": "npm run dev"
+    "start": "npm run watch"
   },
   "repository": {
     "type": "git",
