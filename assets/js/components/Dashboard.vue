@@ -49,6 +49,7 @@
                 </div>
             </div>
         </div>
+        <FlashMessage></FlashMessage>
     </div>
 </template>
 
@@ -57,6 +58,14 @@
         name: "Dashboard",
         computed : {
             userAuth(){
+                this.flashMessage.success({
+                    title: 'Bienvenue sur votre espace Madera',
+                    message: 'Bonne construction !',
+                    time: 5000,
+                    flashMessageStyle: {
+                        backgroundColor: 'linear-gradient(#e66465, #9198e5)'
+                    }
+                });
                 return this.$store.getters.getUser;
             }
         },

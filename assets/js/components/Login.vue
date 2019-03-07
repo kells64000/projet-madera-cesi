@@ -33,6 +33,7 @@
                         </button>
                     </div>
 
+                    <FlashMessage :position="bottom"></FlashMessage>
                 </form>
             </section>
         </div>
@@ -54,6 +55,7 @@
                        :clickEffect="true"
                        clickMode="grab">
         </vue-particles>
+
     </div>
 </template>
 
@@ -62,6 +64,9 @@
 
     export default {
         name: 'Login',
+        props: [
+            'position'
+        ],
         data() {
             return {
                 email: '',
@@ -117,6 +122,8 @@
 
                     })
                     .catch((error) => {
+                        error.message = 'Ces identifiants n\'existent pas'
+                        this.flashMessage.error({title: 'Erreur de formulaire' || 'Error', message: error.message});
                         console.log(error);
                         console.debug(error);
                         console.dir(error);

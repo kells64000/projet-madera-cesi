@@ -11,7 +11,7 @@
     "prod": "webpack --mode production",
     "watch": "webpack --mode development --watch",
     "start": "npm run watch",
-    "heroku-postbuild": "webpack -p --config ./webpack.config.js --progress"
+    "heroku-postbuild": "npm run prod"
   },
   "repository": {
     "type": "git",
@@ -65,6 +65,7 @@
     "webpack-cli": "^3.2.1"
   },
   "dependencies": {
+    "@smartweb/vue-flash-message": "^0.4.1",
     "jwt-decode": "^2.2.0",
     "moment": "^2.24.0",
     "select2": "^4.0.6-rc.1",
