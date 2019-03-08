@@ -78,7 +78,27 @@
 
                 <div class="field">
                     <div>
-                        <label for="selectModuleWallInternal">Murs Intérieur :</label>
+                        <label for="selectModuleWallAngle">Murs Angle :</label>
+                    </div>
+                    <v-select id="selectModuleWallAngle" v-model="modulesAngleWallSelected" multiple :options="modules" label="name">
+                        <template slot="option" slot-scope="option">
+                            {{option.name}}
+                        </template>
+                    </v-select>
+                </div>
+
+                <div class="box" v-if="modulesAngleWallSelected !== ''">
+                    <div class="tags">
+                        <span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"
+                              @click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesAngleWallSelected">
+                          {{module.name}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div>
+                        <label for="selectModuleWallInternal">Cloisons intérieures :</label>
                     </div>
                     <v-select id="selectModuleWallInternal" v-model="modulesInternalWallSelected" multiple :options="modules" label="name">
                         <template slot="option" slot-scope="option">
@@ -98,23 +118,84 @@
 
                 <div class="field">
                     <div>
-                        <label for="selectModuleWallAngle">Murs Angle :</label>
+                        <label for="selectModuleFloorSlab">Plancher sur dalle :</label>
                     </div>
-                    <v-select id="selectModuleWallAngle" v-model="modulesAngleWallSelected" multiple :options="modules" label="name">
+                    <v-select id="selectModuleFloorSlab" v-model="modulesInternalWallSelected" multiple :options="modules" label="name">
                         <template slot="option" slot-scope="option">
                             {{option.name}}
                         </template>
                     </v-select>
                 </div>
 
-                <div class="box" v-if="modulesAngleWallSelected !== ''">
+                <div class="box" v-if="modulesInternalWallSelected !== ''">
                     <div class="tags">
                         <span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"
-                              @click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesAngleWallSelected">
+                              @click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesInternalWallSelected">
                           {{module.name}}
                         </span>
                     </div>
                 </div>
+
+                <div class="field">
+                    <div>
+                        <label for="selectModuleFloorCarrier">Plancher porteur :</label>
+                    </div>
+                    <v-select id="selectModuleFloorCarrier" v-model="modulesInternalWallSelected" multiple :options="modules" label="name">
+                        <template slot="option" slot-scope="option">
+                            {{option.name}}
+                        </template>
+                    </v-select>
+                </div>
+
+                <div class="box" v-if="modulesInternalWallSelected !== ''">
+                    <div class="tags">
+                        <span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"
+                              @click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesInternalWallSelected">
+                          {{module.name}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div>
+                        <label for="selectModuleStructuralFarms">Fermes de charpente :</label>
+                    </div>
+                    <v-select id="selectModuleStructuralFarms" v-model="modulesInternalWallSelected" multiple :options="modules" label="name">
+                        <template slot="option" slot-scope="option">
+                            {{option.name}}
+                        </template>
+                    </v-select>
+                </div>
+
+                <div class="box" v-if="modulesInternalWallSelected !== ''">
+                    <div class="tags">
+                        <span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"
+                              @click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesInternalWallSelected">
+                          {{module.name}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div>
+                        <label for="selectModuleRoofCover">Couverture :</label>
+                    </div>
+                    <v-select id="selectModuleRoofCover" v-model="modulesInternalWallSelected" multiple :options="modules" label="name">
+                        <template slot="option" slot-scope="option">
+                            {{option.name}}
+                        </template>
+                    </v-select>
+                </div>
+
+                <div class="box" v-if="modulesInternalWallSelected !== ''">
+                    <div class="tags">
+                        <span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"
+                              @click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesInternalWallSelected">
+                          {{module.name}}
+                        </span>
+                    </div>
+                </div>
+
 
             </div>
 
@@ -224,9 +305,9 @@
         data() {
             return {
                 gammes: [
-                    {name: 'Excellence', finitionExterieure: 'Crépi', isolation: 'Laine de verre', couverture: 'Ardoise', img: 'https://picsum.photos/128/128?341'},
-                    {name: 'Luxe', finitionExterieure: 'Crépi', isolation: 'Laine de roche', couverture: 'Zinc', img: 'https://picsum.photos/128/128?147'},
-                    {name: 'Naturelle', finitionExterieure: 'Bois', isolation: 'Ouate de cellulose', couverture: 'Brande', img: 'https://picsum.photos/128/128?417'},
+                    {name: 'Excellence', finitionExterieure: 'Crépi', isolation: 'Laine de verre', couverture: 'Ardoise', img: '/static/img/house/gammes/excellence.jpeg'},
+                    {name: 'Luxe', finitionExterieure: 'Crépi', isolation: 'Laine de roche', couverture: 'Zinc', img: '/static/img/house/gammes/luxe.jpeg'},
+                    {name: 'Naturelle', finitionExterieure: 'Bois', isolation: 'Ouate de cellulose', couverture: 'Brande', img: '/static/img/house/gammes/naturelle.jpeg'},
                 ],
                 formes: [
                     {name: 'Carré', img: '/static/img/house/forms/Maison_carree.jpg'},
