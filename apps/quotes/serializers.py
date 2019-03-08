@@ -30,15 +30,17 @@ class QuoteSerializer(serializers.ModelSerializer):
                 print(e)
             finally:
                 if user == 'client':
-                    client = Client.objects.get(user_data)
-                    client = Client.objects.create(**user_data)
-                    client.save()
-                else:
-                    user = SalesPerson.objects.create(**user_data)
-                    salesperson.save()
-                quote = Quote.objects.create(client=client,
-                                             salesperson=salesperson,
-                                             **validated_data)
+                    client = ClientSerializer(data=user_data)
+                    if client.is_valid():
+                        import ipdb; ipdb.set_trace()
+                        client.save()
+                if user == 'salesperson':
+                    salesperson = SalesPersonSerializer(data=user_data)
+                    if salesperson.is_valid():
+                        salesperson = salesperson
+        quote = Quote.objects.create(client=client,
+                                     salesperson=salesperson,
+                                     **validated_data)
         return quote
 
     def update(self, instance, validated_data):
