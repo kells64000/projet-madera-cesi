@@ -3,7 +3,7 @@
         <div class="login column is-4">
             <section class="section">
                 <div class="has-text-centered">
-                    <img class="login-logo" src="staticfiles/img/logo.png">
+                    <img class="login-logo" src="static/img/logo.png">
                 </div>
 
                 <form class="login form">
