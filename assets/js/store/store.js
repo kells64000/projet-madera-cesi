@@ -20,6 +20,10 @@ export default new Vuex.Store({
       obtainJWT: 'http://127.0.0.1:8000/auth/obtain_token/',
       refreshJWT: 'http://127.0.0.1:8000/auth/refresh_token/',
       baseUrl: 'http://127.0.0.1:8000/'
+      // Prod env for API
+      // obtainJWT: 'https://madera-dev.herokuapp.com/auth/obtain_token/',
+      // refreshJWT: 'https://madera-dev.herokuapp.com/auth/refresh_token/',
+      // baseUrl: 'https://madera-dev.herokuapp.com/'
     },
     quoteClient: {},
     quoteProject: '',
