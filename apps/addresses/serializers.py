@@ -13,6 +13,9 @@ class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = ('__all__')
+        extra_kwargs = {
+            'name': {'validators': []},
+        }
 
     def create(self, validated_data, address=None):
         address = Address.objects.create(**validated_data)
