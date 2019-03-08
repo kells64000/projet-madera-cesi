@@ -3,7 +3,7 @@ const webpack = require('webpack');
 const BundleTracker = require('webpack-bundle-tracker');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const devMode = process.env.NODE_ENV !== 'production';
+const devMode = process.env.NODE_ENV === 'production';
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 
@@ -14,7 +14,6 @@ module.exports = {
         path: path.resolve('./staticfiles/dist/'),
         filename: 'js/app.js'
     },
-
     plugins: [
         new BundleTracker({filename: './webpack-stats.json'}),
         new VueLoaderPlugin(),
@@ -43,6 +42,7 @@ module.exports = {
                 use: [
                  devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
                  "css-loader",
+                 // 'postcss-loader',
                  "sass-loader"
                 ]
             }

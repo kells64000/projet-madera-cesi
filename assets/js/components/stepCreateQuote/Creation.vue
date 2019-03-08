@@ -229,10 +229,10 @@
                     {name: 'Naturelle', finitionExterieure: 'Bois', isolation: 'Ouate de cellulose', couverture: 'Brande', img: 'https://picsum.photos/128/128?417'},
                 ],
                 formes: [
-                    {name: 'Carré', img: '/assets/img/house/forms/Maison_carree.jpg'},
-                    {name: 'Rectangle', img: '/assets/img/house/forms/Maison_Rectangle.jpg'},
-                    {name: 'U', img: '/assets/img/house/forms/Maison_U.jpg'},
-                    {name: 'L', img: '/assets/img/house/forms/Maison_L.jpg'},
+                    {name: 'Carré', img: '/static/img/house/forms/Maison_carree.jpg'},
+                    {name: 'Rectangle', img: '/static/img/house/forms/Maison_Rectangle.jpg'},
+                    {name: 'U', img: '/static/img/house/forms/Maison_U.jpg'},
+                    {name: 'L', img: '/static/img/house/forms/Maison_L.jpg'},
                 ],
                 modules: [
                     {name: 'Mur-nord', hauteur: '1.8', longueur: '2.6', unite_usage: 'm²', price: 1500},
