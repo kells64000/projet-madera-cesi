@@ -66,6 +66,7 @@
     "webpack-cli": "^3.2.1"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.6.3",
     "buefy": "^0.7.3",
     "jwt-decode": "^2.2.0",
     "moment": "^2.24.0",
@@ -76,6 +77,7 @@
     "vue-select": "^2.5.1",
     "vue-stepper": "^1.4.2",
     "vuelidate": "^0.7.4",
-    "vuex": "^3.1.0"
+    "vuex": "^3.1.0",
+    "webpack": "^4.28.4"
   }
 }
