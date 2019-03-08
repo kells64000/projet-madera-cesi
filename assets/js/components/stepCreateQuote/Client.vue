@@ -96,15 +96,16 @@
 
             <div class="field">
                 <p class="control is-expanded has-icons-left">
-                    <input class="input" type="email" placeholder="Email" v-model="form.email">
+                    <input :class="['input', ($v.form.email.$error) ? 'is-danger' : '']" type="email" placeholder="Email" v-model="form.email">
                     <span class="icon is-small is-left">
                       <i class="fas fa-envelope"></i>
                     </span>
                 </p>
+                <p v-if="$v.form.email.$error" class="help is-danger">Cet email n'est pas valide</p>
             </div>
 
             <div class="has-text-centered">
-                <button class="button is-link" type="button" @click="createClient">Créer nouveau client</button>
+                <button class="button is-link" type="button" @click="createClient" :disabled="!canCreateClient ? true : false">Créer nouveau client</button>
             </div>
         </div>
 
@@ -206,6 +207,7 @@
 <script>
     import axios from 'axios'
     import {validationMixin} from 'vuelidate'
+    import {required, email} from 'vuelidate/lib/validators'
 
     export default {
         props: ['clickedNext', 'currentStep'],
@@ -225,10 +227,29 @@
                     phone: '',
                     is_pro: 'Particulier',
                     company: '',
-                }
+                },
+                canCreateClient: false
+            }
+        },
+        validations: {
+            form: {
+                email: {
+                    required,
+                    email
+                },
             }
         },
         watch: {
+            $v: {
+                handler: function (val) {
+                    if(!val.$invalid) {
+                        this.canCreateClient = true
+                    } else {
+                        this.canCreateClient = false
+                    }
+                },
+                deep: true
+            },
             clientSelected: {
                 handler: function () {
                     if (this.clientSelected !== '') {
@@ -248,7 +269,8 @@
                 if (this.clientSelected !== '') {
                     this.$emit('can-continue', {value: true});
                 }
-            }
+            },
+
         },
         async created() {
             try {
