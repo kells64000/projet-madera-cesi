@@ -57,7 +57,6 @@
         name: "Dashboard",
         computed : {
             userAuth(){
-                this.success();
                 return this.$store.getters.getUser;
             }
         },
@@ -70,13 +69,6 @@
             },
             consult() {
                 this.$router.push({name: 'ViewQuote'})
-            },
-            success() {
-                this.$toast.open({
-                    message: 'Bienvenue sur votre espace Madera',
-                    type: 'is-success',
-                    position: 'is-bottom'
-                })
             },
         },
         created: function () {

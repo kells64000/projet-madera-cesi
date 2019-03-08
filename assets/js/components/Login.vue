@@ -121,13 +121,22 @@
 
                                 this.$store.commit("setAuthUser",
                                 {authUser: userAuth, isAuthenticated: true})
+                                this.success();
                                 this.$router.push({name: 'Dashboard'})
+
                             })
 
                     })
                     .catch((error) => {
                         this.isActive = true;
                     })
+            },
+            success() {
+                this.$toast.open({
+                    message: 'Bienvenue sur votre espace Madera',
+                    type: 'is-success',
+                    position: 'is-bottom'
+                })
             },
         }
     }
