@@ -65,7 +65,7 @@ class ModuleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Module
         fields = ('id', 'name', 'nature', 'length', 'width', 'depth', 'unit', 'surface',
-                  'designer', 'designed_by')
+                  'component', 'designer', 'designed_by')
 
     def create(self, validated_data):
         designer = component = None
