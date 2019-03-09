@@ -4,6 +4,8 @@
             <div class="card-header-title d-flex flex-column align-start">
                 <div>Devis MADERA</div>
                 <div>Projet : {{quoteProject}}</div>
+                <div>Ref : {{quoteProjectRef}}</div>
+                <div>Date : {{quoteDate | formatDate}}</div>
             </div>
             <div class="card-header-title d-flex flex-column align-end">
                     <div>{{quoteClient.full_name}}</div>
@@ -34,17 +36,22 @@
     export default {
         props: ['clickedNext', 'currentStep'],
         computed: {
-            quoteClient() {
-                return this.$store.getters.getQuoteClient;
+            quoteDate() {
+                return this.$store.getters.getQuoteDate;
             },
             quoteProject() {
                 return this.$store.getters.getQuoteProject;
+            },
+            quoteProjectRef() {
+                return this.$store.getters.getQuoteProjectRef;
+            },
+            quoteClient() {
+                return this.$store.getters.getQuoteClient;
             },
             quoteModules() {
                 return this.$store.getters.getQuoteModules;
             },
         },
-
         methods: {
           totalPrice() {
               let price = 0;
@@ -54,7 +61,7 @@
                   price += module.price;
               });
               return price;
-          }
+          },
         },
         watch: {
             totalPrice: {

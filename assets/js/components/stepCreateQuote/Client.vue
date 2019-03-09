@@ -254,6 +254,7 @@
                 handler: function () {
                     if (this.clientSelected !== '') {
                         this.$store.commit("setQuoteClient", this.clientSelected);
+                        this.$store.commit("setQuoteProjectRef", this.createRefProject(this.quoteProject, this.clientSelected.last_name));
                         this.$emit('can-continue', {value: true});
                     } else {
                         this.$emit('can-continue', {value: false});
@@ -279,6 +280,11 @@
             } catch (e) {
                 this.errors.push(e)
             }
+        },
+        computed: {
+            quoteProject() {
+                return this.$store.getters.getQuoteProject;
+            },
         },
         methods: {
             getClients() {
@@ -337,7 +343,17 @@
                 this.form.email = '';
                 this.form.phone = '';
                 this.form.company = '';
-            }
+            },
+            createRefProject(project, customer) {
+              let prj = project.toString().substr(0, 3);
+              let client = customer.toString().substr(0, 3);
+              let num = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
+
+              prj = prj.toUpperCase();
+              client = client.toUpperCase();
+
+              return prj + client + num
+          }
         },
         mounted() {
             if (this.clientSelected === '') {
