@@ -27,6 +27,7 @@ export default new Vuex.Store({
     },
     quoteClient: {},
     quoteProject: '',
+    quoteProjectRef: '',
     quoteModules: {},
   },
   getters: {
@@ -39,6 +40,9 @@ export default new Vuex.Store({
     },
     getQuoteProject: state => {
       return state.quoteProject;
+    },
+    getQuoteProjectRef: state => {
+      return state.quoteProjectRef;
     },
     getQuoteModules: state => {
       return state.quoteModules;
@@ -67,6 +71,9 @@ export default new Vuex.Store({
     },
     setQuoteProject(state, project) {
        Vue.set(state, 'quoteProject', project);
+    },
+    setQuoteProjectRef(state, projectRef) {
+       Vue.set(state, 'quoteProjectRef', projectRef);
     },
     setQuoteModules(state, modules) {
        Vue.set(state, 'quoteModules', modules);

@@ -4,6 +4,7 @@
             <div class="card-header-title d-flex flex-column align-start">
                 <div>Devis MADERA</div>
                 <div>Projet : {{quoteProject}}</div>
+                <div>Ref : {{quoteProjectRef}}</div>
             </div>
             <div class="card-header-title d-flex flex-column align-end">
                     <div>{{quoteClient.full_name}}</div>
@@ -40,11 +41,13 @@
             quoteProject() {
                 return this.$store.getters.getQuoteProject;
             },
+            quoteProjectRef() {
+                return this.$store.getters.getQuoteProjectRef;
+            },
             quoteModules() {
                 return this.$store.getters.getQuoteModules;
             },
         },
-
         methods: {
           totalPrice() {
               let price = 0;
@@ -54,7 +57,7 @@
                   price += module.price;
               });
               return price;
-          }
+          },
         },
         watch: {
             totalPrice: {
