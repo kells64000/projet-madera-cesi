@@ -93,7 +93,7 @@ class MaderaUserAdmin(UserAdmin):
     list_per_page = 20
     list_display = ('id_display', 'user_display', 'email_user_display', 'date_joined_display')
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
+        (None, {'fields': ('email',)}),
         ('Personal info',
             {'fields':
                 ('first_name', 'last_name')
@@ -172,22 +172,22 @@ class MaderaUserAdmin(UserAdmin):
 
 
 @admin.register(Client)
-class ClientAdmin(MaderaUserAdmin):
+class ClientAdmin(admin.ModelAdmin):
     list_per_page = 20
-    list_display = ('is_pro',)
+    list_display = ('full_name', 'email', 'phone', 'is_pro',)
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
+        (None, {'fields': ('email',)}),
         ('Personal info',
             {'fields':
                 ('first_name', 'last_name')
              }
          ),
         ('Professionnel',
-            {'fields': ('is_pro',)}
+            {'fields': ('phone', 'is_pro',)}
          ),
         ('Permissions',
             {'fields':
-                ('is_active', 'is_staff', 'is_superuser',)
+                ('is_active',)
              }
          ),
         ('Dates importantes',
@@ -198,24 +198,27 @@ class ClientAdmin(MaderaUserAdmin):
     )
     model = Client
 
+    def full_name(self, obj):
+        return obj.get_full_name
+
 
 @admin.register(SalesPerson)
 class SalesPersonAdmin(MaderaUserAdmin):
     list_per_page = 20
-    list_display = ('workplace',)
+    list_display = ('full_name', 'email', 'phone', 'workplace',)
     fieldsets = (
-        (None, {'fields': ('email', 'password')}),
+        (None, {'fields': ('email',)}),
         ('Personal info',
             {'fields':
                 ('first_name', 'last_name')
              }
          ),
         ('Professionnel',
-            {'fields': ('workplace',)}
+            {'fields': ('phone', 'workplace',)}
          ),
         ('Permissions',
             {'fields':
-                ('is_active', 'is_staff', 'is_superuser',)
+                ('is_active', 'is_staff',)
              }
          ),
         ('Dates importantes',
@@ -225,6 +228,9 @@ class SalesPersonAdmin(MaderaUserAdmin):
          ),
     )
     model = SalesPerson
+
+    def full_name(self, obj):
+        return obj.get_full_name
 
 
 admin.site.unregister(Group)
