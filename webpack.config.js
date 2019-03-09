@@ -9,15 +9,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     context: __dirname,
-    // DEV
-    entry: './assets/js/index',
-    // PROD
-    // entry: './staticfiles/js/index',
+    entry: devMode ? './assets/js/index' : './staticfiles/js/index',
     output: {
-        // DEV
-        path: path.resolve('./assets/dist/'),
-        // PROD
-        // path: path.resolve('./staticfiles/dist/'),
+        path: devMode ? path.resolve('./assets/dist/') : path.resolve('./staticfiles/dist/'),
         filename: 'js/app.js'
     },
     plugins: [
