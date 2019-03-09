@@ -25,9 +25,10 @@ export default new Vuex.Store({
       // refreshJWT: 'https://madera-dev.herokuapp.com/auth/refresh_token/',
       // baseUrl: 'https://madera-dev.herokuapp.com/'
     },
-    quoteClient: {},
+    quoteDate: '',
     quoteProject: '',
     quoteProjectRef: '',
+    quoteClient: {},
     quoteModules: {},
   },
   getters: {
@@ -35,14 +36,17 @@ export default new Vuex.Store({
       if(state.isAuthenticated === true)
         return state.authUser;
     },
-    getQuoteClient: state => {
-      return state.quoteClient;
+    getQuoteDate: state => {
+      return state.quoteDate;
     },
     getQuoteProject: state => {
       return state.quoteProject;
     },
     getQuoteProjectRef: state => {
       return state.quoteProjectRef;
+    },
+    getQuoteClient: state => {
+      return state.quoteClient;
     },
     getQuoteModules: state => {
       return state.quoteModules;
@@ -66,14 +70,17 @@ export default new Vuex.Store({
       localStorage.removeItem('token');
       state.jwt = null;
     },
-    setQuoteClient(state, client) {
-       Vue.set(state, 'quoteClient', client);
+    setQuoteDate(state, date) {
+       Vue.set(state, 'quoteDate', date);
     },
     setQuoteProject(state, project) {
        Vue.set(state, 'quoteProject', project);
     },
     setQuoteProjectRef(state, projectRef) {
        Vue.set(state, 'quoteProjectRef', projectRef);
+    },
+    setQuoteClient(state, client) {
+       Vue.set(state, 'quoteClient', client);
     },
     setQuoteModules(state, modules) {
        Vue.set(state, 'quoteModules', modules);
