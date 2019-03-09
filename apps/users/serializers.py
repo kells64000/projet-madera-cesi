@@ -1,4 +1,5 @@
-from rest_framework import serializers
+from rest_exceptions import CustomValidation
+from rest_framework import serializers, status
 from addresses.models import Address
 from addresses.serializers import AddressSerializer
 from .models import MaderaUser, SalesPerson, Client, Provider
@@ -43,6 +44,13 @@ class MaderaUserSerializer(DynamicFieldsModelSerializer):
         fields = ('id', 'email', 'first_name', 'last_name', 'full_name', 'phone',
                   'address', 'date_joined', 'is_active', 'is_staff')
         write_only_fields = ('password',)
+
+    def validate_email(self, value):
+        if MaderaUser.objects.filter(email=value).exists():
+            raise CustomValidation("Duplication d'email",
+                'email',
+                status_code=status.HTTP_409_CONFLICT)
+        return value
 
     def create(self, validated_data, address=None):
         try:
