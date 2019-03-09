@@ -27,6 +27,10 @@ import Dashboard from "./components/Dashboard.vue";
 import CreateQuote from "./components/CreateQuote.vue";
 import ViewQuote from "./components/ViewQuote.vue";
 
+// Vue.config.devtools = false;
+// Vue.config.debug = false;
+// Vue.config.silent = true;
+
 new Vue({
     el: '#app',
     render: h => h(App),

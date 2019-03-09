@@ -96,15 +96,16 @@
 
             <div class="field">
                 <p class="control is-expanded has-icons-left">
-                    <input class="input" type="email" placeholder="Email" v-model="form.email">
+                    <input :class="['input', ($v.form.email.$error) ? 'is-danger' : '']" type="email" placeholder="Email" v-model="form.email">
                     <span class="icon is-small is-left">
                       <i class="fas fa-envelope"></i>
                     </span>
                 </p>
+                <p v-if="$v.form.email.$error" class="help is-danger">Cet email n'est pas valide</p>
             </div>
 
             <div class="has-text-centered">
-                <button class="button is-link" type="button" @click="createClient">Créer nouveau client</button>
+                <button class="button is-link" type="button" @click="createClient" :disabled="!canCreateClient ? true : false">Créer nouveau client</button>
             </div>
         </div>
 
@@ -206,6 +207,7 @@
 <script>
     import axios from 'axios'
     import {validationMixin} from 'vuelidate'
+    import {required, email} from 'vuelidate/lib/validators'
 
     export default {
         props: ['clickedNext', 'currentStep'],
@@ -225,14 +227,34 @@
                     phone: '',
                     is_pro: 'Particulier',
                     company: '',
-                }
+                },
+                canCreateClient: false
+            }
+        },
+        validations: {
+            form: {
+                email: {
+                    required,
+                    email
+                },
             }
         },
         watch: {
+            $v: {
+                handler: function (val) {
+                    if(!val.$invalid) {
+                        this.canCreateClient = true
+                    } else {
+                        this.canCreateClient = false
+                    }
+                },
+                deep: true
+            },
             clientSelected: {
                 handler: function () {
                     if (this.clientSelected !== '') {
                         this.$store.commit("setQuoteClient", this.clientSelected);
+                        this.$store.commit("setQuoteProjectRef", this.createRefProject(this.quoteProject, this.clientSelected.last_name));
                         this.$emit('can-continue', {value: true});
                     } else {
                         this.$emit('can-continue', {value: false});
@@ -248,7 +270,8 @@
                 if (this.clientSelected !== '') {
                     this.$emit('can-continue', {value: true});
                 }
-            }
+            },
+
         },
         async created() {
             try {
@@ -257,6 +280,11 @@
             } catch (e) {
                 this.errors.push(e)
             }
+        },
+        computed: {
+            quoteProject() {
+                return this.$store.getters.getQuoteProject;
+            },
         },
         methods: {
             getClients() {
@@ -315,7 +343,17 @@
                 this.form.email = '';
                 this.form.phone = '';
                 this.form.company = '';
-            }
+            },
+            createRefProject(project, customer) {
+              let prj = project.toString().substr(0, 3);
+              let client = customer.toString().substr(0, 3);
+              let num = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
+
+              prj = prj.toUpperCase();
+              client = client.toUpperCase();
+
+              return prj + client + num
+          }
         },
         mounted() {
             if (this.clientSelected === '') {

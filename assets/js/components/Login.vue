@@ -3,7 +3,7 @@
         <div class="login column is-4">
             <section class="section">
                 <div class="has-text-centered">
-                    <img class="login-logo" src="assets/img/logo.png">
+                    <img class="login-logo" src="static/img/logo.png">
                 </div>
 
                 <form class="login form">
@@ -121,13 +121,22 @@
 
                                 this.$store.commit("setAuthUser",
                                 {authUser: userAuth, isAuthenticated: true})
+                                this.success();
                                 this.$router.push({name: 'Dashboard'})
+
                             })
 
                     })
                     .catch((error) => {
                         this.isActive = true;
                     })
+            },
+            success() {
+                this.$toast.open({
+                    message: 'Bienvenue sur votre espace Madera',
+                    type: 'is-success',
+                    position: 'is-bottom'
+                })
             },
         }
     }

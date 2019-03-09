@@ -11,7 +11,7 @@
                 </section>
                 <section class="section">
                     <div class="has-text-centered">
-                        <img class="login-logo" src="assets/img/logo.png">
+                        <img class="login-logo" src="/static/img/logo.png">
                     </div>
                     <div class="has-text-centered subtitle">
                         {{userAuth.first_name}} {{userAuth.last_name}}
@@ -57,7 +57,6 @@
         name: "Dashboard",
         computed : {
             userAuth(){
-                this.success();
                 return this.$store.getters.getUser;
             }
         },
@@ -71,13 +70,6 @@
             consult() {
                 this.$router.push({name: 'ViewQuote'})
             },
-            success() {
-                this.$toast.open({
-                    message: 'Bienvenue sur votre espace Madera',
-                    type: 'is-success',
-                    position: 'is-bottom'
-                })
-            },
         },
         created: function () {
             this.$store.commit('setAuthUser');
@@ -86,5 +78,4 @@
 </script>
 
 <style>
-
 </style>
