@@ -9,9 +9,15 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     context: __dirname,
-    entry: './staticfiles/js/index',
+    // DEV
+    entry: './assets/js/index',
+    // PROD
+    // entry: './staticfiles/js/index',
     output: {
-        path: path.resolve('./staticfiles/dist/'),
+        // DEV
+        path: path.resolve('./assets/dist/'),
+        // PROD
+        // path: path.resolve('./staticfiles/dist/'),
         filename: 'js/app.js'
     },
     plugins: [
