@@ -8,39 +8,30 @@ from .models import Quote
 class QuoteSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(required=False, max_length=20)
+    reference = serializers.CharField(required=True)
     price = serializers.DecimalField(max_digits=10, decimal_places=2)
     state = serializers.CharField(required=False, default='Brouillon')
     attachment = serializers.CharField(required=False, allow_null=True, allow_blank=True)
-    client = ClientSerializer(required=False)
-    salesperson = SalesPersonSerializer(required=False)
+    client = ClientSerializer()
+    salesperson = SalesPersonSerializer()
 
     created_at = serializers.DateTimeField(required=False)
     updated_at = serializers.DateTimeField(required=False)
 
     class Meta:
         model = Quote
-        fields = ('id', 'price', 'state', 'attachment', 'client', 'salesperson',
-                  'created_at', 'updated_at')
+        fields = ('id', 'name', 'reference', 'price', 'state', 'attachment',
+                  'client', 'salesperson', 'created_at', 'updated_at')
 
-    def create(self, validated_data, client=None, salesperson=None):
-        for user in ('client', 'salesperson'):
-            try:
-                user_data = validated_data.pop(user)
-            except KeyError as e:
-                print(e)
-            finally:
-                if user == 'client':
-                    client = ClientSerializer(data=user_data)
-                    if client.is_valid():
-                        import ipdb; ipdb.set_trace()
-                        client.save()
-                if user == 'salesperson':
-                    salesperson = SalesPersonSerializer(data=user_data)
-                    if salesperson.is_valid():
-                        salesperson = salesperson
-        quote = Quote.objects.create(client=client,
-                                     salesperson=salesperson,
-                                     **validated_data)
+    def create(self, validated_data):
+        client_data = validated_data.pop('client', None)
+        salesperson_data = validated_data.pop('salesperson', None)
+        if client_data:
+            client = Client.objects.get_or_create(**client_data)[0]
+        if salesperson_data:
+            salesperson = SalesPerson.objects.get_or_create(**salesperson_data)[0]
+        quote = Quote.objects.create(client=client, salesperson=salesperson, **validated_data)
         return quote
 
     def update(self, instance, validated_data):

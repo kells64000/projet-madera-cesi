@@ -3,18 +3,14 @@ import os
 
 from django.conf import settings
 from django.http import HttpResponse
-from django_xhtml2pdf.utils import generate_pdf
 from django.template.loader import get_template
 from xhtml2pdf import pisa
-from django.core import serializers
 from django.http import Http404
 from rest_framework import status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from users.models import Client
-from users.serializers import ClientSerializer, SalesPersonSerializer
 from .models import Quote
 from .serializers import QuoteSerializer
 
@@ -38,6 +34,10 @@ class ListQuote(APIView):
 
     def post(self, request, format=None):
         serializer = QuoteSerializer(data=request.data)
+        # client_data = serializer.initial_data.pop('client', None)
+        # client = ClientSerializer(client_data)
+        # salesperson_data = serializer.initial_data.pop('salesperson')
+        # salesperson = SalesPersonSerializer(salesperson_data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
