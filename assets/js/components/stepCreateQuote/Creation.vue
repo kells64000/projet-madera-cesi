@@ -7,7 +7,6 @@
                 <div class="columns align-center">
 
                     <div class="column-is-6 h-200 d-flex align-center">
-
                         <!-- Gamme -->
                         <div class="field">
                             <div class="control">
@@ -22,7 +21,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
 
                     <div class="column-is-6 h-200">
@@ -36,7 +34,7 @@
                 </div>
 
                 <!-- Forme -->
-                <div class="field">
+                <div class="field" v-if="gammeSelected !== ''">
                     <div class="control">
                         <div>
                             <label for="selectForme">Forme :</label>
@@ -99,11 +97,11 @@
                 </div>
 
                 <!-- Mur ext perso -->
-                <div class="field" v-if="formeSelected === 'Personaliser'">
+                <div class="field" v-if="formeSelected === 'Personnaliser'">
                     <div>
                         <label for="selectModuleWallExt">Murs Extérieur :</label>
                     </div>
-                    <v-select id="selectModuleWallExt" v-model="modulesWallExtSelected" multiple :options="modules.ext.rectangle" label="name" :disabled="modulesWallExtSelected === '' ? false : true">
+                    <v-select id="selectModuleWallExt" v-model="modulesWallExtSelected" multiple :options="modules.ext.rectangle" label="name">
                         <template slot="option" slot-scope="option">
                             {{option.name}}
                         </template>
@@ -118,126 +116,110 @@
                         </span>
                     </div>
                 </div>
-
-                <!--<div class="field">-->
-                    <!--<div>-->
-                        <!--<label for="selectModuleWallAngle">Murs Angle :</label>-->
+                
+                <div v-if="formeSelected !== ''">
+                    <!-- mur int -->
+                    <div class="field">
+                        <div>
+                            <label for="selectModuleWallInternal">Cloisons intérieures :</label>
+                        </div>
+                        <v-select id="selectModuleWallInternal" v-model="modulesWallIntSelected" multiple :options="modules" label="name">
+                            <template slot="option" slot-scope="option">
+                                {{option.name}}
+                            </template>
+                        </v-select>
+                    </div>
+    
+                    <div class="box" v-if="modulesWallIntSelected !== ''">
+                        <div class="tags">
+                            <span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"
+                                  @click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesWallIntSelected">
+                              {{module.name}}
+                            </span>
+                        </div>
+                    </div>
+                    <!--&lt;!&ndash; plaancher dalle &ndash;&gt;-->
+                    <!--<div class="field">-->
+                        <!--<div>-->
+                            <!--<label for="selectModuleFloorSlab">Plancher sur dalle :</label>-->
+                        <!--</div>-->
+                        <!--<v-select id="selectModuleFloorSlab" v-model="modulesWallIntSelected" multiple :options="modules" label="name">-->
+                            <!--<template slot="option" slot-scope="option">-->
+                                <!--{{option.name}}-->
+                            <!--</template>-->
+                        <!--</v-select>-->
                     <!--</div>-->
-                    <!--<v-select id="selectModuleWallAngle" v-model="modulesAngleWallSelected" multiple :options="modules" label="name">-->
-                        <!--<template slot="option" slot-scope="option">-->
-                            <!--{{option.name}}-->
-                        <!--</template>-->
-                    <!--</v-select>-->
-                <!--</div>-->
-
-                <!--<div class="box" v-if="modulesAngleWallSelected !== ''">-->
-                    <!--<div class="tags">-->
-                        <!--<span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"-->
-                              <!--@click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesAngleWallSelected">-->
-                          <!--{{module.name}}-->
-                        <!--</span>-->
+    <!---->
+                    <!--<div class="box" v-if="modulesWallIntSelected !== ''">-->
+                        <!--<div class="tags">-->
+                            <!--<span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"-->
+                                  <!--@click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesWallIntSelected">-->
+                              <!--{{module.name}}-->
+                            <!--</span>-->
+                        <!--</div>-->
                     <!--</div>-->
-                <!--</div>-->
-
-                <!--<div class="field">-->
-                    <!--<div>-->
-                        <!--<label for="selectModuleWallInternal">Cloisons intérieures :</label>-->
+                    <!--&lt;!&ndash; plancher porteur &ndash;&gt;-->
+                    <!--<div class="field">-->
+                        <!--<div>-->
+                            <!--<label for="selectModuleFloorCarrier">Plancher porteur :</label>-->
+                        <!--</div>-->
+                        <!--<v-select id="selectModuleFloorCarrier" v-model="modulesWallIntSelected" multiple :options="modules" label="name">-->
+                            <!--<template slot="option" slot-scope="option">-->
+                                <!--{{option.name}}-->
+                            <!--</template>-->
+                        <!--</v-select>-->
                     <!--</div>-->
-                    <!--<v-select id="selectModuleWallInternal" v-model="modulesInternalWallSelected" multiple :options="modules" label="name">-->
-                        <!--<template slot="option" slot-scope="option">-->
-                            <!--{{option.name}}-->
-                        <!--</template>-->
-                    <!--</v-select>-->
-                <!--</div>-->
-
-                <!--<div class="box" v-if="modulesInternalWallSelected !== ''">-->
-                    <!--<div class="tags">-->
-                        <!--<span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"-->
-                              <!--@click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesInternalWallSelected">-->
-                          <!--{{module.name}}-->
-                        <!--</span>-->
+    <!---->
+                    <!--<div class="box" v-if="modulesWallIntSelected !== ''">-->
+                        <!--<div class="tags">-->
+                            <!--<span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"-->
+                                  <!--@click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesWallIntSelected">-->
+                              <!--{{module.name}}-->
+                            <!--</span>-->
+                        <!--</div>-->
                     <!--</div>-->
-                <!--</div>-->
-
-                <!--<div class="field">-->
-                    <!--<div>-->
-                        <!--<label for="selectModuleFloorSlab">Plancher sur dalle :</label>-->
+                    <!--&lt;!&ndash; charpente &ndash;&gt;-->
+                    <!--<div class="field">-->
+                        <!--<div>-->
+                            <!--<label for="selectModuleStructuralFarms">Fermes de charpente :</label>-->
+                        <!--</div>-->
+                        <!--<v-select id="selectModuleStructuralFarms" v-model="modulesWallIntSelected" multiple :options="modules" label="name">-->
+                            <!--<template slot="option" slot-scope="option">-->
+                                <!--{{option.name}}-->
+                            <!--</template>-->
+                        <!--</v-select>-->
                     <!--</div>-->
-                    <!--<v-select id="selectModuleFloorSlab" v-model="modulesInternalWallSelected" multiple :options="modules" label="name">-->
-                        <!--<template slot="option" slot-scope="option">-->
-                            <!--{{option.name}}-->
-                        <!--</template>-->
-                    <!--</v-select>-->
-                <!--</div>-->
-
-                <!--<div class="box" v-if="modulesInternalWallSelected !== ''">-->
-                    <!--<div class="tags">-->
-                        <!--<span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"-->
-                              <!--@click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesInternalWallSelected">-->
-                          <!--{{module.name}}-->
-                        <!--</span>-->
+    <!---->
+                    <!--<div class="box" v-if="modulesWallIntSelected !== ''">-->
+                        <!--<div class="tags">-->
+                            <!--<span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"-->
+                                  <!--@click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesWallIntSelected">-->
+                              <!--{{module.name}}-->
+                            <!--</span>-->
+                        <!--</div>-->
                     <!--</div>-->
-                <!--</div>-->
-
-                <!--<div class="field">-->
-                    <!--<div>-->
-                        <!--<label for="selectModuleFloorCarrier">Plancher porteur :</label>-->
+                    <!--&lt;!&ndash; couverture &ndash;&gt;-->
+                    <!--<div class="field">-->
+                        <!--<div>-->
+                            <!--<label for="selectModuleRoofCover">Couverture :</label>-->
+                        <!--</div>-->
+                        <!--<v-select id="selectModuleRoofCover" v-model="modulesWallIntSelected" multiple :options="modules" label="name">-->
+                            <!--<template slot="option" slot-scope="option">-->
+                                <!--{{option.name}}-->
+                            <!--</template>-->
+                        <!--</v-select>-->
                     <!--</div>-->
-                    <!--<v-select id="selectModuleFloorCarrier" v-model="modulesInternalWallSelected" multiple :options="modules" label="name">-->
-                        <!--<template slot="option" slot-scope="option">-->
-                            <!--{{option.name}}-->
-                        <!--</template>-->
-                    <!--</v-select>-->
-                <!--</div>-->
-
-                <!--<div class="box" v-if="modulesInternalWallSelected !== ''">-->
-                    <!--<div class="tags">-->
-                        <!--<span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"-->
-                              <!--@click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesInternalWallSelected">-->
-                          <!--{{module.name}}-->
-                        <!--</span>-->
+    <!---->
+                    <!--<div class="box" v-if="modulesWallIntSelected !== ''">-->
+                        <!--<div class="tags">-->
+                            <!--<span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"-->
+                                  <!--@click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesWallIntSelected">-->
+                              <!--{{module.name}}-->
+                            <!--</span>-->
+                        <!--</div>-->
                     <!--</div>-->
-                <!--</div>-->
-
-                <!--<div class="field">-->
-                    <!--<div>-->
-                        <!--<label for="selectModuleStructuralFarms">Fermes de charpente :</label>-->
-                    <!--</div>-->
-                    <!--<v-select id="selectModuleStructuralFarms" v-model="modulesInternalWallSelected" multiple :options="modules" label="name">-->
-                        <!--<template slot="option" slot-scope="option">-->
-                            <!--{{option.name}}-->
-                        <!--</template>-->
-                    <!--</v-select>-->
-                <!--</div>-->
-
-                <!--<div class="box" v-if="modulesInternalWallSelected !== ''">-->
-                    <!--<div class="tags">-->
-                        <!--<span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"-->
-                              <!--@click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesInternalWallSelected">-->
-                          <!--{{module.name}}-->
-                        <!--</span>-->
-                    <!--</div>-->
-                <!--</div>-->
-
-                <!--<div class="field">-->
-                    <!--<div>-->
-                        <!--<label for="selectModuleRoofCover">Couverture :</label>-->
-                    <!--</div>-->
-                    <!--<v-select id="selectModuleRoofCover" v-model="modulesInternalWallSelected" multiple :options="modules" label="name">-->
-                        <!--<template slot="option" slot-scope="option">-->
-                            <!--{{option.name}}-->
-                        <!--</template>-->
-                    <!--</v-select>-->
-                <!--</div>-->
-
-                <!--<div class="box" v-if="modulesInternalWallSelected !== ''">-->
-                    <!--<div class="tags">-->
-                        <!--<span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"-->
-                              <!--@click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesInternalWallSelected">-->
-                          <!--{{module.name}}-->
-                        <!--</span>-->
-                    <!--</div>-->
-                <!--</div>-->
+                    
+                </div>
 
             </div>
 
@@ -304,7 +286,7 @@
                                     <p class="control has-icons-left">
                                         <input v-if="formeSelected === 'Carré'" class="input" type="text" v-model="currentModuleSelected.hauteur" :placeholder="currentModuleSelected.hauteur" @change="carreHauteur(currentModuleSelected.hauteur)">
                                         <input v-if="formeSelected === 'Rectangle'" class="input" type="text" v-model="currentModuleSelected.hauteur" :placeholder="currentModuleSelected.hauteur" @change="rectangleHauteur(currentModuleSelected.hauteur)">
-                                        <input v-if="formeSelected === 'Personaliser'" class="input" type="text" v-model="currentModuleSelected.hauteur" :placeholder="currentModuleSelected.hauteur">
+                                        <input v-if="formeSelected === 'Personnaliser'" class="input" type="text" v-model="currentModuleSelected.hauteur" :placeholder="currentModuleSelected.hauteur" @change="extHauteur(currentModuleSelected.hauteur)">
                                         <span class="icon is-small is-left">
                                       <i class="fas fa-ruler-vertical"></i>
                                     </span>
@@ -315,7 +297,7 @@
                                     <p class="control has-icons-left">
                                         <input v-if="formeSelected === 'Carré'" class="input" type="text" v-model="currentModuleSelected.longueur" :placeholder="currentModuleSelected.longueur" @change="carreLongueur(currentModuleSelected.longueur)">
                                         <input v-if="formeSelected === 'Rectangle'" class="input" type="text" :value="currentModuleSelected.longueur" :placeholder="currentModuleSelected.longueur"  @change="rectangleLongueur(currentModuleSelected.longueur, $event)">
-                                        <input v-if="formeSelected === 'Personaliser'" class="input" type="text" :value="currentModuleSelected.longueur" :placeholder="currentModuleSelected.longueur">
+                                        <input v-if="formeSelected === 'Personnaliser'" class="input" type="text" :value="currentModuleSelected.longueur" :placeholder="currentModuleSelected.longueur">
                                         <span class="icon is-small is-left">
                                       <i class="fas fa-ruler-horizontal"></i>
                                     </span>
@@ -331,6 +313,41 @@
                                     </span>
                                     </p>
                                 </div>
+
+                                <div class="field">
+                                    <div class="control">
+                                        <div>
+                                            <label for="selectAngle" class="label">Angle</label>
+                                        </div>
+
+                                        <div id="selectAngle" class="select">
+                                            <select v-model="currentModuleSelected.angle">
+                                                <option value="">Aucun</option>
+                                                <option>Entrant</option>
+                                                <option>Sortant</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="field" v-if="currentModuleSelected.angle !== '' && currentModuleSelected.angle !== 'Aucun'">
+                                    <label class="label">Degré de l'angle</label>
+                                    <p class="control has-icons-left">
+                                        <input class="input" type="text" v-model="currentModuleSelected.angleValeur" :placeholder="currentModuleSelected.angleValeur">
+                                        <span class="icon is-small is-left">
+                                      <i class="fas fa-drafting-compass"></i>
+                                    </span>
+                                    </p>
+
+                                    <label class="label">Longueur 2</label>
+                                    <p class="control has-icons-left">
+                                        <input class="input" type="text" v-model="currentModuleSelected.section" :placeholder="currentModuleSelected.section">
+                                        <span class="icon is-small is-left">
+                                      <i class="fas fa-ruler-horizontal"></i>
+                                    </span>
+                                    </p>
+                                </div>
+
                                 <div class="field">
                                     <label class="label">Prix</label>
                                     <p class="control has-icons-left">
@@ -347,7 +364,6 @@
                 </affix>
             </div>
         </div>
-        </div>
     </div>
 </template>
 
@@ -363,40 +379,59 @@
                 ],
                 formes: [
                     {name: 'Carré', img: '/static/img/house/forms/Maison_carree.jpg'},
-                    {name: 'Rectangle', img: '/static/img/house/forms/Maison_Rectangle.jpg'},
-                    {name: 'Personaliser', img: ''},
-
+                    {name: 'Rectangle', img: '/static/img/house/forms/Maison_rectangle.jpg'},
+                    {name: 'Personnaliser', img: '/static/img/house/forms/Maison_perso.jpg'},
                 ],
                 modules: {
                     ext: {
                         carre: [
-                            {name: 'Mur-nord', hauteur: '2.5', longueur: '2.0', unite_usage: 'm²', price: 1500},
-                            {name: 'Mur_sud', hauteur: '2.5', longueur: '2.0', unite_usage: 'm linéaire', price: 500.50},
-                            {name: 'Mur_ouest', hauteur: '2.5', longueur: '2.0', unite_usage: 'unite', price: 200.25},
-                            {name: 'Mur_est', hauteur: '2.5', longueur: '2.0', unite_usage: 'unite', price: 200.25},
+                            {name: 'Mur-nord', hauteur: '2.5', longueur: '2.0', unite_usage: 'm²', angle: '', angleValeur: '', section: '', price: 1500},
+                            {name: 'Mur_sud', hauteur: '2.5', longueur: '2.0', unite_usage: 'm linéaire', angle: '', angleValeur: '', section: '', price: 500.50},
+                            {name: 'Mur_ouest', hauteur: '2.5', longueur: '2.0', unite_usage: 'unite', angle: '', angleValeur: '', section: '', price: 200.25},
+                            {name: 'Mur_est', hauteur: '2.5', longueur: '2.0', unite_usage: 'unite', angle: '', angleValeur: '', section: '', price: 200.25},
                         ],
                         rectangle: [
-                            {name: 'Mur-nord', hauteur: '2.0', longueur: '1.5', unite_usage: 'm²', price: 1500},
-                            {name: 'Mur_sud', hauteur: '2.0', longueur: '1.5', unite_usage: 'm linéaire', price: 500.50},
-                            {name: 'Mur_ouest', hauteur: '2.0', longueur: '1.0', unite_usage: 'unite', price: 200.25},
-                            {name: 'Mur_est', hauteur: '2.0', longueur: '1.0', unite_usage: 'unite', price: 200.25},
+                            {name: 'Mur-nord', hauteur: '2.0', longueur: '1.5', unite_usage: 'm²', angle: '', angleValeur: '', section: '', price: 1500},
+                            {name: 'Mur_sud', hauteur: '2.0', longueur: '1.5', unite_usage: 'm linéaire', angle: '', angleValeur: '', section: '', price: 500.50},
+                            {name: 'Mur_ouest', hauteur: '2.0', longueur: '1.0', unite_usage: 'unite', angle: '', angleValeur: '', section: '', price: 200.25},
+                            {name: 'Mur_est', hauteur: '2.0', longueur: '1.0', unite_usage: 'unite', angle: '', angleValeur: '', section: '', price: 200.25},
                         ],
                         perso: [
-                            {name: 'Mur-nord', hauteur: '2.0', longueur: '1.5', unite_usage: 'm²', price: 1500},
-                            {name: 'Mur_sud', hauteur: '2.0', longueur: '1.5', unite_usage: 'm linéaire', price: 500.50},
-                            {name: 'Mur_ouest', hauteur: '2.0', longueur: '1.0', unite_usage: 'unite', price: 200.25},
-                            {name: 'Mur_est', hauteur: '2.0', longueur: '1.0', unite_usage: 'unite', price: 200.25},
+                            {name: 'Mur-nord', hauteur: '2.0', longueur: '1.5', unite_usage: 'm²', angle: '', angleValeur: '', section: '', price: 1500},
+                            {name: 'Mur_sud', hauteur: '2.0', longueur: '1.5', unite_usage: 'm linéaire', angle: '', angleValeur: '', section: '', price: 500.50},
+                            {name: 'Mur_ouest', hauteur: '2.0', longueur: '1.0', unite_usage: 'unite', angle: '', angleValeur: '', section: '', price: 200.25},
+                            {name: 'Mur_est', hauteur: '2.0', longueur: '1.0', unite_usage: 'unite', angle: '', angleValeur: '', section: '', price: 200.25},
                         ],
                     },
+                    int: [
+                        {name: 'Mur-nord', hauteur: '2.0', longueur: '1.5', unite_usage: 'm²', angle: '', angleValeur: '', section: '', price: 1500},
+                        {name: 'Mur_sud', hauteur: '2.0', longueur: '1.5', unite_usage: 'm linéaire', angle: '', angleValeur: '', section: '', price: 500.50},
+                        {name: 'Mur_ouest', hauteur: '2.0', longueur: '1.0', unite_usage: 'unite', angle: '', angleValeur: '', section: '', price: 200.25},
+                        {name: 'Mur_est', hauteur: '2.0', longueur: '1.0', unite_usage: 'unite', angle: '', angleValeur: '', section: '', price: 200.25},
+                    ],
+                    plancher: {
+                        dalle: [
+
+                        ],
+                        porteur: [
+
+                        ],
+                    },
+                    charpente: [
+
+                    ],
+                    couverture: [
+
+                    ],
                 },
                 gammeSelected: '',
                 formeSelected: '',
                 modulesWallExtCarreSelected: '',
                 modulesWallExtRectSelected: '',
                 modulesWallExtSelected: '',
+                modulesWallIntSelected: '',
 
-                // modulesInternalWallSelected: '',
-                // modulesAngleWallSelected: '',
+
                 modulesSelected : [],
                 currentGammeSelected: '',
                 currentModuleSelected: '',
@@ -439,7 +474,6 @@
                     module.hauteur = hauteur;
                 });
             },
-
             rectangleLongueur(oldLongueur, longueur) {
 
                 this.modulesWallExtRectSelected.forEach(function (module) {
@@ -453,7 +487,11 @@
                     module.hauteur = hauteur;
                 });
             },
-
+            extHauteur(hauteur) {
+                this.modulesWallExtSelected.forEach(function (module) {
+                    module.hauteur = hauteur;
+                });
+            }
         },
         watch: {
             formeSelected: {
@@ -480,45 +518,38 @@
                         this.modulesWallExtRectSelected = modulesRect;
                     }
 
-                    if(this.formeSelected === 'Personaliser') {
-                        let modulesExt = [];
-                        this.modules.ext.perso.forEach( function (module) {
-                            modulesExt.push(module)
-                        });
+                    if(this.formeSelected === 'Personnaliser') {
                         this.currentModuleSelected = '';
                         this.modulesWallExtCarreSelected = '';
                         this.modulesWallExtRectSelected = '';
-                        this.modulesWallExtSelected = modulesExt;
                     }
                 },
             },
-
-            modulesWallExtCarreSelected: {
-               handler: function () {
-                    if(!this.modulesSelected.includes(this.modulesWallExtCarreSelected)) {
-                        this.modulesSelected = this.modulesWallExtCarreSelected;
-                    }
-                }
-            },
-            modulesWallExtRectSelected: {
-               handler: function () {
-                    if(!this.modulesSelected.includes(this.modulesWallExtRectSelected)) {
-                        this.modulesSelected = this.modulesWallExtRectSelected;
-                    }
-                }
-            },
-
-            // modulesInternalWallSelected: {
-            //     handler: function () {
-            //          if(!this.modulesSelected.includes(this.modulesInternalWallSelected)) {
-            //             this.modulesSelected = this.modulesInternalWallSelected;
+            // modulesWallExtCarreSelected: {
+            //    handler: function () {
+            //         if(!this.modulesSelected.includes(this.modulesWallExtCarreSelected)) {
+            //             this.modulesSelected = this.modulesWallExtCarreSelected;
             //         }
             //     }
             // },
-            // modulesAngleWallSelected: {
+            // modulesWallExtRectSelected: {
+            //    handler: function () {
+            //         if(!this.modulesSelected.includes(this.modulesWallExtRectSelected)) {
+            //             this.modulesSelected = this.modulesWallExtRectSelected;
+            //         }
+            //     }
+            // },
+            // modulesWallExtSelected: {
+            //    handler: function () {
+            //         if(!this.modulesSelected.includes(this.modulesWallExtSelected)) {
+            //             this.modulesSelected = this.modulesWallExtSelected;
+            //         }
+            //     }
+            // },
+            // modulesWallIntSelected: {
             //     handler: function () {
-            //         if (!this.modulesSelected.includes(this.modulesAngleWallSelected)) {
-            //             this.modulesSelected = this.modulesAngleWallSelected;
+            //          if(!this.modulesSelected.includes(this.modulesWallIntSelected)) {
+            //             this.modulesSelected = this.modulesWallIntSelected;
             //         }
             //     }
             // },
@@ -537,7 +568,6 @@
                 },
                 deep: true
             },
-
             clickedNext() {
                 if (this.modulesSelected !== '') {
                     this.$emit('can-continue', {value: true});
