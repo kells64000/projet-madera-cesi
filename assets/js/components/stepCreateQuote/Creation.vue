@@ -8,6 +8,7 @@
 
                     <div class="column-is-6 h-200 d-flex align-center">
 
+                        <!-- Gamme -->
                         <div class="field">
                             <div class="control">
                                 <div>
@@ -34,7 +35,7 @@
 
                 </div>
 
-
+                <!-- Forme -->
                 <div class="field">
                     <div class="control">
                         <div>
@@ -55,47 +56,68 @@
                 </figure>
 
 
-
+                <!-- Mur ext carré -->
                 <div class="field" v-if="formeSelected === 'Carré'">
                     <div>
-                        <label for="selectModuleWallCarreExternal">Murs Extérieur :</label>
+                        <label for="selectModuleWallExtCarre">Murs Extérieur :</label>
                     </div>
-                    <v-select id="selectModuleWallCarreExternal" v-model="modulesExternalWallCarreSelected" multiple :options="modules.ext.carre" label="name" :disabled="modulesExternalWallCarreSelected === '' ? false : true">
+                    <v-select id="selectModuleWallExtCarre" v-model="modulesWallExtCarreSelected" multiple :options="modules.ext.carre" label="name" :disabled="modulesWallExtCarreSelected === '' ? false : true">
                         <template slot="option" slot-scope="option">
                             {{option.name}}
                         </template>
                     </v-select>
                 </div>
 
-                <div class="box" v-if="modulesExternalWallCarreSelected !== ''">
+                <div class="box" v-if="modulesWallExtCarreSelected !== ''">
                     <div class="tags">
                         <span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"
-                              @click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesExternalWallCarreSelected">
+                              @click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesWallExtCarreSelected">
+                            {{module.name}}
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Mur ext rectangle -->
+                <div class="field" v-if="formeSelected === 'Rectangle'">
+                    <div>
+                        <label for="selectModuleWallExtRect">Murs Extérieur :</label>
+                    </div>
+                    <v-select id="selectModuleWallExtRect" v-model="modulesWallExtRectSelected" multiple :options="modules.ext.rectangle" label="name" :disabled="modulesWallExtRectSelected === '' ? false : true">
+                        <template slot="option" slot-scope="option">
+                            {{option.name}}
+                        </template>
+                    </v-select>
+                </div>
+
+                <div class="box" v-if="modulesWallExtRectSelected !== ''">
+                    <div class="tags">
+                        <span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"
+                              @click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesWallExtRectSelected">
                             {{module.name}}
                         </span>
                     </div>
                 </div>
 
+                <!-- Mur ext perso -->
+                <div class="field" v-if="formeSelected === 'Personaliser'">
+                    <div>
+                        <label for="selectModuleWallExt">Murs Extérieur :</label>
+                    </div>
+                    <v-select id="selectModuleWallExt" v-model="modulesWallExtSelected" multiple :options="modules.ext.rectangle" label="name" :disabled="modulesWallExtSelected === '' ? false : true">
+                        <template slot="option" slot-scope="option">
+                            {{option.name}}
+                        </template>
+                    </v-select>
+                </div>
 
-                <!--<div class="field">-->
-                    <!--<div>-->
-                        <!--<label for="selectModuleWallExternal">Murs Extérieur :</label>-->
-                    <!--</div>-->
-                    <!--<v-select id="selectModuleWallExternal" v-model="modulesExternalWallSelected" multiple :options="modules" label="name" disable>-->
-                        <!--<template slot="option" slot-scope="option">-->
-                            <!--{{option.name}}-->
-                        <!--</template>-->
-                    <!--</v-select>-->
-                <!--</div>-->
-
-                <!--<div class="box" v-if="modulesExternalWallSelected !== ''">-->
-                    <!--<div class="tags">-->
-                        <!--<span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"-->
-                              <!--@click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesExternalWallSelected">-->
-                          <!--{{module.name}}-->
-                        <!--</span>-->
-                    <!--</div>-->
-                <!--</div>-->
+                <div class="box" v-if="modulesWallExtSelected !== ''">
+                    <div class="tags">
+                        <span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"
+                              @click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesWallExtSelected">
+                            {{module.name}}
+                        </span>
+                    </div>
+                </div>
 
                 <!--<div class="field">-->
                     <!--<div>-->
@@ -280,7 +302,9 @@
                                 <div class="field">
                                     <label class="label">Hauteur</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" type="text" v-model="currentModuleSelected.hauteur" :placeholder="currentModuleSelected.hauteur" @change="carreHauteur(currentModuleSelected.hauteur)">
+                                        <input v-if="formeSelected === 'Carré'" class="input" type="text" v-model="currentModuleSelected.hauteur" :placeholder="currentModuleSelected.hauteur" @change="carreHauteur(currentModuleSelected.hauteur)">
+                                        <input v-if="formeSelected === 'Rectangle'" class="input" type="text" v-model="currentModuleSelected.hauteur" :placeholder="currentModuleSelected.hauteur" @change="rectangleHauteur(currentModuleSelected.hauteur)">
+                                        <input v-if="formeSelected === 'Personaliser'" class="input" type="text" v-model="currentModuleSelected.hauteur" :placeholder="currentModuleSelected.hauteur">
                                         <span class="icon is-small is-left">
                                       <i class="fas fa-ruler-vertical"></i>
                                     </span>
@@ -289,7 +313,9 @@
                                 <div class="field">
                                     <label class="label">Longueur</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" type="text" v-model="currentModuleSelected.longueur" :placeholder="currentModuleSelected.longueur" @change="carreLongueur(currentModuleSelected.longueur)">
+                                        <input v-if="formeSelected === 'Carré'" class="input" type="text" v-model="currentModuleSelected.longueur" :placeholder="currentModuleSelected.longueur" @change="carreLongueur(currentModuleSelected.longueur)">
+                                        <input v-if="formeSelected === 'Rectangle'" class="input" type="text" :value="currentModuleSelected.longueur" :placeholder="currentModuleSelected.longueur"  @change="rectangleLongueur(currentModuleSelected.longueur, $event)">
+                                        <input v-if="formeSelected === 'Personaliser'" class="input" type="text" :value="currentModuleSelected.longueur" :placeholder="currentModuleSelected.longueur">
                                         <span class="icon is-small is-left">
                                       <i class="fas fa-ruler-horizontal"></i>
                                     </span>
@@ -338,31 +364,39 @@
                 formes: [
                     {name: 'Carré', img: '/static/img/house/forms/Maison_carree.jpg'},
                     {name: 'Rectangle', img: '/static/img/house/forms/Maison_Rectangle.jpg'},
-                    {name: 'U', img: '/static/img/house/forms/Maison_U.jpg'},
-                    {name: 'L', img: '/static/img/house/forms/Maison_L.jpg'},
+                    {name: 'Personaliser', img: ''},
+
                 ],
                 modules: {
                     ext: {
                         carre: [
-                            {name: 'Mur-nord', hauteur: '1.8', longueur: '1.7', unite_usage: 'm²', price: 1500},
-                            {name: 'Mur_sud', hauteur: '1.8', longueur: '1.7', unite_usage: 'm linéaire', price: 500.50},
-                            {name: 'Mur_ouest', hauteur: '1.8', longueur: '1.7', unite_usage: 'unite', price: 200.25},
-                            {name: 'Mur_est', hauteur: '1.8', longueur: '1.7', unite_usage: 'unite', price: 200.25},
+                            {name: 'Mur-nord', hauteur: '2.5', longueur: '2.0', unite_usage: 'm²', price: 1500},
+                            {name: 'Mur_sud', hauteur: '2.5', longueur: '2.0', unite_usage: 'm linéaire', price: 500.50},
+                            {name: 'Mur_ouest', hauteur: '2.5', longueur: '2.0', unite_usage: 'unite', price: 200.25},
+                            {name: 'Mur_est', hauteur: '2.5', longueur: '2.0', unite_usage: 'unite', price: 200.25},
                         ],
                         rectangle: [
                             {name: 'Mur-nord', hauteur: '2.0', longueur: '1.5', unite_usage: 'm²', price: 1500},
                             {name: 'Mur_sud', hauteur: '2.0', longueur: '1.5', unite_usage: 'm linéaire', price: 500.50},
-                            {name: 'Mur_ouest', hauteur: '2.0', longueur: '1.5', unite_usage: 'unite', price: 200.25},
-                            {name: 'Mur_est', hauteur: '2.0', longueur: '1.5', unite_usage: 'unite', price: 200.25},
+                            {name: 'Mur_ouest', hauteur: '2.0', longueur: '1.0', unite_usage: 'unite', price: 200.25},
+                            {name: 'Mur_est', hauteur: '2.0', longueur: '1.0', unite_usage: 'unite', price: 200.25},
+                        ],
+                        perso: [
+                            {name: 'Mur-nord', hauteur: '2.0', longueur: '1.5', unite_usage: 'm²', price: 1500},
+                            {name: 'Mur_sud', hauteur: '2.0', longueur: '1.5', unite_usage: 'm linéaire', price: 500.50},
+                            {name: 'Mur_ouest', hauteur: '2.0', longueur: '1.0', unite_usage: 'unite', price: 200.25},
+                            {name: 'Mur_est', hauteur: '2.0', longueur: '1.0', unite_usage: 'unite', price: 200.25},
                         ],
                     },
                 },
                 gammeSelected: '',
                 formeSelected: '',
-                modulesExternalWallCarreSelected: '',
-                modulesExternalWallSelected: '',
-                modulesInternalWallSelected: '',
-                modulesAngleWallSelected: '',
+                modulesWallExtCarreSelected: '',
+                modulesWallExtRectSelected: '',
+                modulesWallExtSelected: '',
+
+                // modulesInternalWallSelected: '',
+                // modulesAngleWallSelected: '',
                 modulesSelected : [],
                 currentGammeSelected: '',
                 currentModuleSelected: '',
@@ -383,7 +417,7 @@
             },
             checkModuleSelected() {
 
-                if(this.modulesExternalWallCarreSelected === '' && this.modulesInternalWallSelected === '' && this.modulesAngleWallSelected === ''){
+                if(this.modulesWallExtCarreSelected === '' && this.modulesWallExtRectSelected === '' && this.modulesWallExtSelected === ''){
                     this.currentModuleSelected = ''
                 }
 
@@ -396,26 +430,29 @@
         },
         methods: {
             carreLongueur(longueur) {
-                this.modulesExternalWallCarreSelected.forEach(function (module) {
+                this.modulesWallExtCarreSelected.forEach(function (module) {
                     module.longueur = longueur;
                 });
             },
             carreHauteur(hauteur) {
-                this.modulesExternalWallCarreSelected.forEach(function (module) {
+                this.modulesWallExtCarreSelected.forEach(function (module) {
                     module.hauteur = hauteur;
                 });
             },
 
-            // rectangleLongueur(longueur) {
-            //     this.modulesExternalWallRectSelected.forEach(function (module) {
-            //
-            //     });
-            // },
-            // rectangleHauteur(hauteur) {
-            //     this.modulesExternalWallRectSelected.forEach(function (module) {
-            //         module.hauteur = hauteur;
-            //     });
-            // },
+            rectangleLongueur(oldLongueur, longueur) {
+
+                this.modulesWallExtRectSelected.forEach(function (module) {
+                    if(module.longueur === oldLongueur) {
+                        module.longueur = longueur.target.value;
+                    }
+                });
+            },
+            rectangleHauteur(hauteur) {
+                this.modulesWallExtRectSelected.forEach(function (module) {
+                    module.hauteur = hauteur;
+                });
+            },
 
         },
         watch: {
@@ -426,44 +463,69 @@
                         this.modules.ext.carre.forEach( function (module) {
                             modulesCarre.push(module)
                         });
-                        this.modulesExternalWallCarreSelected = modulesCarre;
+                        this.currentModuleSelected = '';
+                        this.modulesWallExtRectSelected = '';
+                        this.modulesWallExtSelected = '';
+                        this.modulesWallExtCarreSelected = modulesCarre;
+                    }
+
+                    if(this.formeSelected === 'Rectangle') {
+                        let modulesRect = [];
+                        this.modules.ext.rectangle.forEach( function (module) {
+                            modulesRect.push(module)
+                        });
+                        this.currentModuleSelected = '';
+                        this.modulesWallExtCarreSelected = '';
+                        this.modulesWallExtSelected = '';
+                        this.modulesWallExtRectSelected = modulesRect;
+                    }
+
+                    if(this.formeSelected === 'Personaliser') {
+                        let modulesExt = [];
+                        this.modules.ext.perso.forEach( function (module) {
+                            modulesExt.push(module)
+                        });
+                        this.currentModuleSelected = '';
+                        this.modulesWallExtCarreSelected = '';
+                        this.modulesWallExtRectSelected = '';
+                        this.modulesWallExtSelected = modulesExt;
                     }
                 },
             },
 
-            modulesExternalWallCarreSelected: {
+            modulesWallExtCarreSelected: {
                handler: function () {
-                    if(!this.modulesSelected.includes(this.modulesExternalWallCarreSelected)) {
-                        this.modulesSelected = this.modulesExternalWallCarreSelected;
+                    if(!this.modulesSelected.includes(this.modulesWallExtCarreSelected)) {
+                        this.modulesSelected = this.modulesWallExtCarreSelected;
+                    }
+                }
+            },
+            modulesWallExtRectSelected: {
+               handler: function () {
+                    if(!this.modulesSelected.includes(this.modulesWallExtRectSelected)) {
+                        this.modulesSelected = this.modulesWallExtRectSelected;
                     }
                 }
             },
 
-            modulesExternalWallSelected: {
-                handler: function () {
-                    if(!this.modulesSelected.includes(this.modulesExternalWallSelected)) {
-                        this.modulesSelected = this.modulesExternalWallSelected;
-                    }
-                }
-            },
-            modulesInternalWallSelected: {
-                handler: function () {
-                     if(!this.modulesSelected.includes(this.modulesInternalWallSelected)) {
-                        this.modulesSelected = this.modulesInternalWallSelected;
-                    }
-                }
-            },
-            modulesAngleWallSelected: {
-                handler: function () {
-                    if (!this.modulesSelected.includes(this.modulesAngleWallSelected)) {
-                        this.modulesSelected = this.modulesAngleWallSelected;
-                    }
-                }
-            },
+            // modulesInternalWallSelected: {
+            //     handler: function () {
+            //          if(!this.modulesSelected.includes(this.modulesInternalWallSelected)) {
+            //             this.modulesSelected = this.modulesInternalWallSelected;
+            //         }
+            //     }
+            // },
+            // modulesAngleWallSelected: {
+            //     handler: function () {
+            //         if (!this.modulesSelected.includes(this.modulesAngleWallSelected)) {
+            //             this.modulesSelected = this.modulesAngleWallSelected;
+            //         }
+            //     }
+            // },
             modulesSelected: {
                 handler: function () {
                     if (this.modulesSelected !== '') {
-                        console.log(this.modulesSelected);
+                        // console.log(this.modulesSelected);
                         this.$store.commit("setQuoteModules", this.modulesSelected);
                         this.$emit('can-continue', {value: true});
                     } else {
