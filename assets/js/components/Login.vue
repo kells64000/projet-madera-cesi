@@ -119,15 +119,14 @@
                                     }
                                 });
 
-                                this.$store.commit("setAuthUser",
-                                {authUser: userAuth, isAuthenticated: true})
+                                this.$store.commit("setAuthUser", {authUser: userAuth, isAuthenticated: true});
                                 this.success();
                                 this.$router.push({name: 'Dashboard'})
 
                             })
 
                     })
-                    .catch((error) => {
+                    .catch(() => {
                         this.isActive = true;
                     })
             },

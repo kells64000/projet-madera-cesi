@@ -207,7 +207,7 @@
 <script>
     import axios from 'axios'
     import {validationMixin} from 'vuelidate'
-    import {required, minLength, email, requiredIf, between, withParams} from 'vuelidate/lib/validators'
+    import {required, minLength, email, requiredIf} from 'vuelidate/lib/validators'
 
     export default {
         props: ['clickedNext', 'currentStep'],
