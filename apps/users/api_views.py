@@ -11,7 +11,7 @@ from .serializers import MaderaUserSerializer, SalesPersonSerializer, ClientSeri
 
 class ListUser(APIView):
 
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, format=None):
         users = MaderaUser.objects.all()
@@ -28,7 +28,7 @@ class ListUser(APIView):
 
 class DetailUser(APIView):
 
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
 
     def get_object(self, pk):
         try:
@@ -58,7 +58,7 @@ class DetailUser(APIView):
 
 class ListSalesPerson(APIView):
 
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request, format=None):
         salespersons = SalesPerson.objects.all()
@@ -75,7 +75,7 @@ class ListSalesPerson(APIView):
 
 class DetailSalesPerson(APIView):
 
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
 
     def get_object(self, pk):
         try:
@@ -121,7 +121,7 @@ class ListClient(APIView):
 
 class DetailClient(APIView):
 
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
 
     def get_object(self, pk):
         try:
