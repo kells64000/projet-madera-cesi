@@ -341,7 +341,7 @@
                     'last_name': this.form.lastName,
                     'address': {
                         'street': this.form.address,
-                        'zipcode': this.form.zipcode,
+                        'zipcode': this.form.zipCode,
                         'city': this.form.city,
                     },
                     'email': this.form.email,
