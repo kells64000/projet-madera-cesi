@@ -11,7 +11,8 @@ class Quote(models.Model):
     reference = models.CharField(max_length=10, null=False, default='0000000000')
     price = models.DecimalField(max_digits=10, decimal_places=2)
     state = models.TextField()
-    attachment = models.TextField(null=True, blank=True, default=None)
+    attachment = models.FileField(_('attachment'), max_length=100, null=True, blank=True,
+        default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     # ForeignKeys

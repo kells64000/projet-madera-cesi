@@ -35,10 +35,6 @@ class ListQuote(APIView):
 
     def post(self, request, format=None):
         serializer = QuoteSerializer(data=request.data)
-        # client_data = serializer.initial_data.pop('client', None)
-        # client = ClientSerializer(client_data)
-        # salesperson_data = serializer.initial_data.pop('salesperson')
-        # salesperson = SalesPersonSerializer(salesperson_data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

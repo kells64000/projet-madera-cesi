@@ -54,7 +54,7 @@ class MaderaUserSerializer(DynamicFieldsModelSerializer):
 
     def create(self, validated_data, address=None):
         try:
-            address_data = validated_data.pop('address')
+            address_data = validated_data.pop('address', None)
             address = Address.objects.create(**address_data)
             address.save()
         except KeyError as e:
@@ -68,15 +68,17 @@ class MaderaUserSerializer(DynamicFieldsModelSerializer):
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
         instance.phone = validated_data.get('phone', instance.phone)
+        address_data = validated_data.get('address', None)
 
-        if instance.address:
-            for k, v in validated_data.get('address').items():
+        if instance.address and address_data:
+            for k, v in address_data.items():
                 instance.address.__dict__[k] = v
             instance.address.save(update_fields=validated_data.get('address').keys())
         else:
-            address_data = validated_data.get('address')
-            instance.address = Address.objects.create(**address_data)
-            instance.address.save()
+            address_data = validated_data.get('address', None)
+            if address_data:
+                instance.address = Address.objects.create(**address_data)
+                instance.address.save()
         instance.save()
         return instance
 
@@ -156,15 +158,16 @@ class ProviderSerializer(serializers.ModelSerializer):
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
         instance.phone = validated_data.get('phone', instance.phone)
+        address_data = validated_data.get('address', None)
 
         if instance.address:
             for k, v in validated_data.get('address').items():
                 instance.address.__dict__[k] = v
             instance.address.save(update_fields=validated_data.get('address').keys())
         else:
-            address_data = validated_data.get('address')
-            instance.address = Address.objects.create(**address_data)
-            instance.address.save()
+            if address_data:
+                instance.address = Address.objects.create(**address_data)
+                instance.address.save()
         instance.save()
         return instance
 

@@ -33,3 +33,15 @@ NATURE_CHOICES = (
     (NATURAL, 'natural'),
     (BIO, 'biological'),
 )
+
+# House shape
+
+SQUARE = 'SQR'
+RECTANGLE = 'REC'
+CUSTOM = 'CUS'
+
+SHAPE_CHOICES = (
+    (SQUARE, 'square'),
+    (RECTANGLE, 'rectangle'),
+    (CUSTOM, 'custom'),
+)
