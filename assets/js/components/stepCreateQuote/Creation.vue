@@ -1,7 +1,7 @@
 <template>
-    <div style="padding-left: 3rem; padding-right: 3rem; text-align: left; height: 100%">
+    <div id="content-modules" style="padding-left: 3rem; padding-right: 3rem; text-align: left; height: 90%; position: relative">
 
-        <div class="columns" style="height: 50%">
+        <div class="columns">
             <div class="column">
 
                 <div class="columns align-center">
@@ -196,105 +196,110 @@
                     </div>
                 </div>
 
-
             </div>
 
-
             <div class="column">
+                <affix class="sidebar-menu" relative-element-selector="#content-modules">
+                    <div class="card" v-if="checkModuleSelected === true || checkGammeSelected === true">
+                        <header class="card-header">
+                            <p class="card-header-title" v-if="currentGammeSelected !== ''">
+                                Gamme : {{currentGammeSelected.name}}
+                            </p>
+                            <p class="card-header-title" v-if="currentModuleSelected !== ''">
+                                Module : {{currentModuleSelected.name}}
+                            </p>
+                        </header>
+                        <div class="card-content">
+                            <div class="content" v-if="currentGammeSelected !== ''">
 
-                <div class="card" style="position: fixed;" v-if="checkModuleSelected === true || checkGammeSelected === true">
-                    <header class="card-header">
-                        <p class="card-header-title" v-if="currentGammeSelected !== ''">
-                            Gamme : {{currentGammeSelected.name}}
-                        </p>
-                        <p class="card-header-title" v-if="currentModuleSelected !== ''">
-                            Module : {{currentModuleSelected.name}}
-                        </p>
-                    </header>
-                    <div class="card-content">
-                        <div class="content" v-if="currentGammeSelected !== ''">
-
-                            <div class="field">
-                                <label class="label">Finition Exterieure</label>
-                                <p class="control has-icons-left">
-                                    <input class="input" type="text" :value="currentGammeSelected.finitionExterieure" readonly>
-                                    <span class="icon is-small is-left">
+                                <div class="field">
+                                    <label class="label">Finition Exterieure</label>
+                                    <p class="control has-icons-left">
+                                        <input class="input" type="text"
+                                               :value="currentGammeSelected.finitionExterieure" readonly>
+                                        <span class="icon is-small is-left">
                                       <i class="fas fa-brush"></i>
                                     </span>
-                                </p>
-                            </div>
-                            <div class="field">
-                                <label class="label">Isolation</label>
-                                <p class="control has-icons-left">
-                                    <input class="input" type="text" :value="currentGammeSelected.isolation" readonly>
-                                    <span class="icon is-small is-left">
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <label class="label">Isolation</label>
+                                    <p class="control has-icons-left">
+                                        <input class="input" type="text" :value="currentGammeSelected.isolation"
+                                               readonly>
+                                        <span class="icon is-small is-left">
                                       <i class="fas fa-igloo"></i>
                                     </span>
-                                </p>
-                            </div>
-                            <div class="field">
-                                <label class="label">Couverture</label>
-                                <p class="control has-icons-left">
-                                    <input class="input" type="text" :value="currentGammeSelected.couverture" readonly>
-                                    <span class="icon is-small is-left">
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <label class="label">Couverture</label>
+                                    <p class="control has-icons-left">
+                                        <input class="input" type="text" :value="currentGammeSelected.couverture"
+                                               readonly>
+                                        <span class="icon is-small is-left">
                                       <i class="fas fa-home"></i>
                                     </span>
-                                </p>
+                                    </p>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="content" v-if="currentModuleSelected !== ''">
+                            <div class="content" v-if="currentModuleSelected !== ''">
 
-                            <div class="field">
-                                <label class="label">Nom</label>
-                                <p class="control has-icons-left">
-                                    <input class="input" type="text" v-model="currentModuleSelected.name" :placeholder="currentModuleSelected.name">
-                                    <span class="icon is-small is-left">
+                                <div class="field">
+                                    <label class="label">Nom</label>
+                                    <p class="control has-icons-left">
+                                        <input class="input" type="text" v-model="currentModuleSelected.name"
+                                               :placeholder="currentModuleSelected.name">
+                                        <span class="icon is-small is-left">
                                       <i class="fas fa-user-edit"></i>
                                     </span>
-                                </p>
-                            </div>
-                            <div class="field">
-                                <label class="label">Hauteur</label>
-                                <p class="control has-icons-left">
-                                    <input class="input" type="text" :placeholder="currentModuleSelected.hauteur">
-                                    <span class="icon is-small is-left">
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <label class="label">Hauteur</label>
+                                    <p class="control has-icons-left">
+                                        <input class="input" type="text" :placeholder="currentModuleSelected.hauteur">
+                                        <span class="icon is-small is-left">
                                       <i class="fas fa-ruler-vertical"></i>
                                     </span>
-                                </p>
-                            </div>
-                            <div class="field">
-                                <label class="label">Longueur</label>
-                                <p class="control has-icons-left">
-                                    <input class="input" type="text" :placeholder="currentModuleSelected.longueur">
-                                    <span class="icon is-small is-left">
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <label class="label">Longueur</label>
+                                    <p class="control has-icons-left">
+                                        <input class="input" type="text" :placeholder="currentModuleSelected.longueur">
+                                        <span class="icon is-small is-left">
                                       <i class="fas fa-ruler-horizontal"></i>
                                     </span>
-                                </p>
-                            </div>
-                            <div class="field">
-                                <label class="label">Unite d'usage</label>
-                                <p class="control has-icons-left">
-                                    <input class="input" type="text" :placeholder="currentModuleSelected.unite_usage" readonly>
-                                    <span class="icon is-small is-left">
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <label class="label">Unite d'usage</label>
+                                    <p class="control has-icons-left">
+                                        <input class="input" type="text"
+                                               :placeholder="currentModuleSelected.unite_usage" readonly>
+                                        <span class="icon is-small is-left">
                                       <i class="fas fa-balance-scale"></i>
                                     </span>
-                                </p>
-                            </div>
-                            <div class="field">
-                                <label class="label">Prix</label>
-                                <p class="control has-icons-left">
-                                    <input class="input" type="text" :placeholder="currentModuleSelected.price" readonly>
-                                    <span class="icon is-small is-left">
+                                    </p>
+                                </div>
+                                <div class="field">
+                                    <label class="label">Prix</label>
+                                    <p class="control has-icons-left">
+                                        <input class="input" type="text" :placeholder="currentModuleSelected.price"
+                                               readonly>
+                                        <span class="icon is-small is-left">
                                       <i class="fas fa-euro-sign"></i>
                                     </span>
-                                </p>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div style="clear:both;"></div>
+                </affix>
             </div>
+        </div>
         </div>
     </div>
 </template>
