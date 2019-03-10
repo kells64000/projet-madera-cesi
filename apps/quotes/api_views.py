@@ -4,6 +4,7 @@ import os
 from django.conf import settings
 from django.http import HttpResponse
 from django.template.loader import get_template
+from django.core.mail import EmailMessage
 from xhtml2pdf import pisa
 from django.http import Http404
 from rest_framework import status, viewsets
@@ -90,6 +91,14 @@ class DetailQuote(APIView):
         # if error then show some funy view
         if pisaStatus.err:
             return HttpResponse('We had some errors <pre>' + html + '</pre>')
+
+        # Envoi email
+        subject, from_email, to = 'Madera', 'no-reply@madera.com', ''
+        text_content = 'Veuillez trouver ci-joint le devis'
+        msg = EmailMessage(subject, text_content, from_email, [to])
+        msg.attach_file('/assets/pdf/client1-facture_exemple.pdf')
+        msg.send()
+
         return response
 
     def link_callback(self, uri, rel):
