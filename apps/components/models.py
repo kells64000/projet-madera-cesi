@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from users.models import MaderaUser
-from .constants import FAMILY_CHOICES, NATURE_CHOICES, SHAPE_CHOICES
+from .constants import FAMILY_CHOICES, NATURE_CHOICES, TYPE_CHOICES, SHAPE_CHOICES
 
 
 class Component(models.Model):
@@ -35,9 +35,12 @@ class Module(models.Model):
     nature = models.CharField(_('nature'), max_length=20)
     length = models.DecimalField(_('length'), max_digits=8,
                                  decimal_places=2, blank=False, null=True)
+    length2 = models.DecimalField(_('length'), max_digits=8,
+                                  decimal_places=2, blank=False, null=True)
     width = models.DecimalField(_('width'), max_digits=8,
                                 decimal_places=2, blank=False, null=True)
     depth = models.DecimalField(_('depth'), max_digits=8, decimal_places=2, null=True)
+    angle = models.IntegerField(_('angle'), blank=False, null=True)
     unit = models.CharField(_('unit'), max_length=10, blank=False, null=True)
     price = models.DecimalField(_('price'), max_digits=10, decimal_places=2, null=True)
     family = models.CharField(_('family'), max_length=3, choices=FAMILY_CHOICES, null=True)
@@ -77,11 +80,17 @@ class Module(models.Model):
             setattr(self, "components", components)
         return components
 
+    def price(self):
+        price = 0
+        for comp in self.components:
+            price += comp.price
+        return price
+
 
 class Gamme(models.Model):
 
     name = models.CharField(_('name'), max_length=30, blank=False, null=False)
-    nature = models.CharField(_('nature'), max_length=20, null=True)
+    quality = models.CharField(_('quality'), max_length=3, choices=TYPE_CHOICES, default='NAT')
     ratio = models.DecimalField(_('length'), max_digits=4,
                                 decimal_places=2, blank=False, null=True)
 
