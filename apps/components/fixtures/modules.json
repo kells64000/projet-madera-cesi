@@ -190,7 +190,7 @@
     "model": "components.Module",
     "pk": 12,
     "fields": {
-      "name": "ferme_charpente1",
+      "name": "ferme_charpente2",
       "nature": "charp",
       "length": null,
       "height": null,

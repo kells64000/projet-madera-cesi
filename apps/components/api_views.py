@@ -11,7 +11,7 @@ from .serializers import ComponentSerializer, ModuleSerializer, GammeSerializer,
 
 class ListComponent(APIView):
 
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get(self, request, format=None):
         components = Component.objects.all()
@@ -26,10 +26,9 @@ class ListComponent(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 class DetailComponent(APIView):
 
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get_object(self, pk):
         try:
@@ -59,7 +58,7 @@ class DetailComponent(APIView):
 
 class ListModule(APIView):
 
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get(self, request, format=None):
         modules = Module.objects.all()
@@ -77,7 +76,7 @@ class ListModule(APIView):
 
 
 class ListModuleFamily(generics.ListAPIView):
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
     serializer_class = ModuleSerializer
 
     def get_queryset(self):
@@ -90,7 +89,7 @@ class ListModuleFamily(generics.ListAPIView):
 
 class DetailModule(APIView):
 
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get_object(self, pk):
         try:
@@ -121,7 +120,7 @@ class DetailModule(APIView):
 
 class ListGamme(APIView):
 
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get(self, request, format=None):
         gammes = Gamme.objects.all()
@@ -138,7 +137,7 @@ class ListGamme(APIView):
 
 class DetailGamme(APIView):
 
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get_object(self, pk):
         try:
@@ -167,7 +166,7 @@ class DetailGamme(APIView):
 
 class ListHouse(APIView):
 
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get(self, request, format=None):
         houses = House.objects.all()
@@ -197,7 +196,7 @@ class ListHouseShape(generics.ListAPIView):
 
 class DetailHouse(APIView):
 
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get_object(self, pk):
         try:
