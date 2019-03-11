@@ -14,19 +14,16 @@ class Component(models.Model):
                                  decimal_places=2, blank=False, null=True)
     width = models.DecimalField(_('width'), max_digits=8,
                                 decimal_places=2, blank=False, null=True)
-    depth = models.DecimalField(_('depth'), max_digits=8, decimal_places=2, null=True)
     unit = models.CharField(_('unit'), max_length=10, blank=False, null=True)
     price = models.DecimalField(_('price'), max_digits=10, decimal_places=2, null=True)
+    quantity = models.IntegerField(_('quantity'), blank=False, null=True)
 
     @property
     def surface(self):
-        return (self.length * self.width * (self.depth if self.depth else 1)
-                ).quantize(Decimal(10) ** -2)
+        return (self.length * self.width).quantize(Decimal(10) ** -2)
 
     def dimensions_verbose(self):
-        return 'Dimensions for {n}: length {l} x width {w}'.format(n=self.name,
-                                                                   l=self.length,
-                                                                   w=self.width)
+        return 'Dimensions for {n}: length {l} x width {w}'.format(n=self.name, l=self.length)
 
 
 class Module(models.Model):
@@ -39,7 +36,6 @@ class Module(models.Model):
                                   decimal_places=2, blank=False, null=True)
     width = models.DecimalField(_('width'), max_digits=8,
                                 decimal_places=2, blank=False, null=True)
-    depth = models.DecimalField(_('depth'), max_digits=8, decimal_places=2, null=True)
     angle = models.IntegerField(_('angle'), blank=False, null=True)
     unit = models.CharField(_('unit'), max_length=10, blank=False, null=True)
     price = models.DecimalField(_('price'), max_digits=10, decimal_places=2, null=True)
@@ -63,14 +59,10 @@ class Module(models.Model):
 
     @property
     def surface(self):
-        if self.length and self.width:
-            return (self.length * self.width * (self.depth if self.depth else 1)
-                    ).quantize(Decimal(10) ** -2)
+        return (self.length * self.width).quantize(Decimal(10) ** -2)
 
     def dimensions_verbose(self):
-        return 'Dimensions for {n}: length {l} x width {w}'.format(n=self.name,
-                                                                   l=self.length,
-                                                                   w=self.width)
+        return 'Dimensions for {n}: length {l} x width {w}'.format(n=self.name, l=self.length)
 
     def get_components(self):
         if hasattr(self, "components"):
@@ -80,10 +72,12 @@ class Module(models.Model):
             setattr(self, "components", components)
         return components
 
-    def price(self):
+    @property
+    def calculated_price(self):
         price = 0
-        for comp in self.components:
-            price += comp.price
+        for comp in self.components.all():
+            if comp.price:
+                price += comp.price
         return price
 
 
