@@ -1,0 +1,173 @@
+[
+  {
+    "model": "components.Component",
+    "pk": 1,
+    "fields": {
+      "name": "lisse1",
+      "nature": "lisse",
+      "length": 100,
+      "width": 30,
+      "unit": "cm",
+      "price": 50,
+      "depth": 5,
+      "component_type": null
+    }
+  },
+  {
+    "model": "components.Component",
+    "pk": 2,
+    "fields": {
+      "name": "contrefort1",
+      "nature": "contrefort",
+      "length": 50,
+      "width": 50,
+      "unit": "cm",
+      "price": 30,
+      "depth": 10,
+      "component_type": null
+    }
+  },
+  {
+    "model": "components.Component",
+    "pk": 3,
+    "fields": {
+      "name": "montant_vert1",
+      "nature": "montant_verticaux",
+      "length": null,
+      "width": null,
+      "unit": "piece",
+      "price": 10,
+      "depth": null,
+      "component_type": null
+    }
+  },
+  {
+    "model": "components.Component",
+    "pk": 4,
+    "fields": {
+      "name": "sabots1",
+      "nature": "sabot",
+      "length": null,
+      "width": null,
+      "unit": "piece",
+      "price": 5,
+      "depth": null,
+      "component_type": null
+    }
+  },
+  {
+    "model": "components.Component",
+    "pk": 5,
+    "fields": {
+      "name": "bardage1",
+      "nature": "bardage",
+      "length": null,
+      "width": null,
+      "unit": "piece",
+      "price": 40,
+      "depth": null,
+      "component_type": null
+    }
+  },
+  {
+    "model": "components.Component",
+    "pk": 6,
+    "fields": {
+      "name": "pare_pluie1",
+      "nature": "pare_pluie",
+      "length": 50,
+      "width": 75,
+      "unit": "m2",
+      "price": 70,
+      "depth": 5,
+      "component_type": null
+    }
+  },
+  {
+    "model": "components.Component",
+    "pk": 7,
+    "fields": {
+      "name": "tasseau1",
+      "nature": "tasseau",
+      "length": null,
+      "width": null,
+      "unit": "piece",
+      "price": 7,
+      "depth": null,
+      "component_type": null
+    }
+  },
+  {
+    "model": "components.Component",
+    "pk": 8,
+    "fields": {
+      "name": "panneau_coupevent1",
+      "nature": "panneau_coupe_vent",
+      "length": 30,
+      "width": 25,
+      "unit": "m2",
+      "price": 19,
+      "depth": 6,
+      "component_type": null
+    }
+  },
+  {
+    "model": "components.Component",
+    "pk": 9,
+    "fields": {
+      "name": "isolant1",
+      "nature": "isolant",
+      "length": 35,
+      "width": 17,
+      "unit": "m2",
+      "price": 26,
+      "depth": 4,
+      "component_type": null
+    }
+  },
+  {
+    "model": "components.Component",
+    "pk": 10,
+    "fields": {
+      "name": "pare_vapeur1",
+      "nature": "pare_vapeur",
+      "length": 85,
+      "width": 42,
+      "unit": "m2",
+      "price": 68,
+      "depth": 2,
+      "component_type": null
+    }
+  },
+  {
+    "model": "components.Component",
+    "pk": 11,
+    "fields": {
+      "name": "panneau_platre1",
+      "nature": "panneau_platre",
+      "length": 39,
+      "width": 26,
+      "unit": "m2",
+      "price": 13,
+      "depth": 8,
+      "component_type": null
+    }
+  },
+  {
+    "model": "components.Module",
+    "pk": 1,
+    "fields": {
+      "name": "mur_ext_droit",
+      "nature": "panneau_platre",
+      "length": 5,
+      "height": 3,
+      "unit": "M lineaire",
+      "designer_id": 1,
+      "family": "",
+      "angle": null,
+      "length2": null,
+      "angle_type": null,
+      "components": [1,2,3,4,5,6,7,8,9,10,11]
+    }
+  }
+]
