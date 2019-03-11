@@ -61,7 +61,6 @@ class Module(models.Model):
     angle = models.IntegerField(_('angle'), blank=False, null=True)
     angle_type = models.CharField(_('angle_type'), max_length=20, null=True)
     unit = models.CharField(_('unit'), max_length=10, blank=False, null=True)
-    price = models.DecimalField(_('price'), max_digits=10, decimal_places=2, null=True)
     family = models.CharField(_('family'), max_length=3, choices=FAMILY_CHOICES, null=True)
     designer = models.ForeignKey(MaderaUser,
                                  blank=True,
@@ -103,14 +102,6 @@ class Module(models.Model):
             gammes = self.gammes.all()
             setattr(self, "gammes", gammes)
         return gammes
-
-    @property
-    def calculated_price(self):
-        price = 0
-        for comp in self.components.all():
-            if comp.total_price:
-                price += comp.total_price
-        return price
 
 
 class House(models.Model):
