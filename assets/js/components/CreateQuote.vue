@@ -118,3 +118,5 @@
 
 <style>
 </style>
+
+<!--this.$store.state.endpoints.baseUrl +-->
