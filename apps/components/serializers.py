@@ -37,10 +37,12 @@ class ComponentSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(required=False, max_length=30)
-    component_type = serializers.CharField(required=False, max_length=30)
+    component_type = serializers.CharField(required=False, max_length=30, allow_blank=True)
     nature = serializers.ChoiceField(choices=NATURE_CHOICES, required=False, allow_blank=True)
-    length = serializers.DecimalField(required=False, max_digits=8, decimal_places=2)
-    width = serializers.DecimalField(required=False, max_digits=8, decimal_places=2)
+    length = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
+        allow_blank=True)
+    width = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
+        allow_blank=True)
     unit = serializers.CharField(required=False, max_length=10)
     surface = serializers.SerializerMethodField(required=False)
     price = serializers.DecimalField(required=False, max_digits=8, decimal_places=2)
@@ -108,9 +110,12 @@ class ModuleSerializer(serializers.ModelSerializer):
     name = serializers.CharField(required=False, max_length=30)
     nature = serializers.CharField(required=False, max_length=20)
     family = serializers.CharField(required=False, max_length=3)
-    length = serializers.DecimalField(required=False, max_digits=8, decimal_places=2)
+    length = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
+        allow_blank=True)
+    length2 = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
+        allow_blank=True)
     height = serializers.DecimalField(required=False, max_digits=8, decimal_places=2)
-    unit = serializers.CharField(required=False, max_length=10)
+    unit = serializers.CharField(required=False, max_length=10, allow_blank=True)
     surface = serializers.SerializerMethodField(required=False)
     family = serializers.ChoiceField(choices=FAMILY_CHOICES, required=False, allow_blank=True)
     designer = MaderaUserSerializer(required=False)
