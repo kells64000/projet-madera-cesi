@@ -1,3 +1,4 @@
+from collections import Counter
 from decimal import Decimal
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -26,10 +27,6 @@ class Gamme(models.Model):
     ratio = models.DecimalField(_('ratio'), max_digits=4,
                                 decimal_places=2, blank=False, null=True)
 
-    @property
-    def name_verbose(self):
-        return self.get_name_display()
-
 
 class Component(models.Model):
 
@@ -47,10 +44,13 @@ class Component(models.Model):
 
     @property
     def surface(self):
-        return (self.length * self.width).quantize(Decimal(10) ** -2)
+        return ((self.length * self.width).quantize(Decimal(10) ** -2) if
+                self.length and self.width else None)
 
     def dimensions_verbose(self):
-        return 'Dimensions for {n}: length {l} x width {w}'.format(n=self.name, l=self.length)
+        return 'Dimensions for {n}: length {l} x width {w}'.format(n=self.name,
+            l=self.length,
+            w=self.width)
 
     def get_gammes(self):
         if hasattr(self, "gammes"):
@@ -93,8 +93,8 @@ class Module(models.Model):
 
     @property
     def surface(self):
-        if self.length and self.height:
-            return (self.length * self.height).quantize(Decimal(10) ** -2)
+        return ((self.length * self.height).quantize(Decimal(10) ** -2) if
+                self.length and self.height else None)
 
     def dimensions_verbose(self):
         return 'Dimensions for {n}: length {l} x height {h}'.format(n=self.name,
@@ -116,15 +116,16 @@ class Module(models.Model):
             setattr(self, "gammes", gammes)
         return gammes
 
-    @property
-    def get_components_by_family(self):
-        queryset = Component.objecs.all()
-        queryset.filter(component_type=self.get_family_display())
-        return queryset
+    def qty_comp(self):
+        return Counter(self.components.all())
 
     @property
-    def qty_comp(self):
-        return self.components.all().count()
+    def total_price(self):
+        price = 0
+        for component in self.components.all():
+            if component.price:
+                price += component.price
+        return price
 
 
 class House(models.Model):
