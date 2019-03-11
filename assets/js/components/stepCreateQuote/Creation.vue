@@ -575,6 +575,14 @@
                 this.$emit('can-continue', {value: true});
             }
 
+            axios.get(`http://127.0.0.1:8000/api/gammes`)
+                .then(response => {
+                    this.modules.ext.perso = response.data
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                });
+
             axios.get(`http://127.0.0.1:8000/api/modules/family/ext`)
                 .then(response => {
                     this.modules.ext.perso = response.data
