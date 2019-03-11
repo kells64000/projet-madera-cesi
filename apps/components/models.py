@@ -8,7 +8,7 @@ from users.models import MaderaUser
 class Gamme(models.Model):
 
     name = models.CharField(_('name'), max_length=30, blank=False, null=False)
-    ratio = models.DecimalField(_('length'), max_digits=4,
+    ratio = models.DecimalField(_('ratio'), max_digits=4,
                                 decimal_places=2, blank=False, null=True)
 
     @property
@@ -106,7 +106,7 @@ class House(models.Model):
 
     shape = models.CharField(_('shape'), max_length=20)
     shape_img = models.FileField(_('shape_img'), max_length=100, null=True)
-    gamme = models.ManyToManyField(Gamme)
+    gammes = models.ManyToManyField(Gamme)
     modules = models.ManyToManyField(Module)
 
     def get_modules(self):
@@ -120,6 +120,14 @@ class House(models.Model):
     def get_modules_by_nature(self):
         modules = Module.objects.filter(nature=self.nature)
         return modules
+
+    def get_gammes(self):
+        if hasattr(self, "gammes"):
+            gammes = self.gammes
+        else:
+            gammes = self.gammes.all()
+            setattr(self, "gammes", gammes)
+        return gammes
 
     @property
     def total_price(self):
