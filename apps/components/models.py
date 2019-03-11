@@ -5,10 +5,24 @@ from django.utils.translation import ugettext_lazy as _
 from users.models import MaderaUser
 
 
+EXTERIOR = 'EXT'
+INTERIOR = 'INT'
+TOITURE = 'TOI'
+SOL_DALLE = 'DAL'
+SOL_PLANCHER = 'PLA'
+FAMILY_CHOICES = (
+    (EXTERIOR, 'exterieur'),
+    (INTERIOR, 'interieur'),
+    (TOITURE, 'toiture'),
+    (SOL_DALLE, 'sol_dalle'),
+    (SOL_PLANCHER, 'sol_plancher'),
+)
+
+
 class Gamme(models.Model):
 
     name = models.CharField(_('name'), max_length=30, blank=False, null=False)
-    ratio = models.DecimalField(_('length'), max_digits=4,
+    ratio = models.DecimalField(_('ratio'), max_digits=4,
                                 decimal_places=2, blank=False, null=True)
 
     @property
@@ -59,7 +73,7 @@ class Module(models.Model):
     angle = models.IntegerField(_('angle'), blank=False, null=True)
     angle_type = models.CharField(_('angle_type'), max_length=20, null=True)
     unit = models.CharField(_('unit'), max_length=10, blank=False, null=True)
-    family = models.CharField(_('family'), max_length=3, null=True)
+    family = models.CharField(_('family'), max_length=3, null=True, choices=FAMILY_CHOICES)
     designer = models.ForeignKey(MaderaUser,
                                  blank=True,
                                  default=None,
@@ -101,12 +115,16 @@ class Module(models.Model):
             setattr(self, "gammes", gammes)
         return gammes
 
+    @property
+    def qty_comp(self):
+        return self.components.all().count()
+
 
 class House(models.Model):
 
     shape = models.CharField(_('shape'), max_length=20)
     shape_img = models.FileField(_('shape_img'), max_length=100, null=True)
-    gamme = models.ManyToManyField(Gamme)
+    gammes = models.ManyToManyField(Gamme)
     modules = models.ManyToManyField(Module)
 
     def get_modules(self):
@@ -120,6 +138,14 @@ class House(models.Model):
     def get_modules_by_nature(self):
         modules = Module.objects.filter(nature=self.nature)
         return modules
+
+    def get_gammes(self):
+        if hasattr(self, "gammes"):
+            gammes = self.gammes
+        else:
+            gammes = self.gammes.all()
+            setattr(self, "gammes", gammes)
+        return gammes
 
     @property
     def total_price(self):

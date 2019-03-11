@@ -54,15 +54,17 @@ class MaderaUserSerializer(DynamicFieldsModelSerializer):
     def validate_password(self, value):
         return make_password(value)
 
-    def create(self, validated_data, address=None):
-        try:
-            address_data = validated_data.pop('address', None)
-            address = Address.objects.create(**address_data)
-            address.save()
-        except KeyError as e:
-            print(e)
-        finally:
-            user = MaderaUser.objects.create(address=address, **validated_data)
+    def create(self, validated_data):
+        address_data = validated_data.pop('address', None)
+        user = MaderaUser.objects.create(**validated_data)
+        if address_data:
+            address = Address.objects.get_or_create(id=address_data.get('id', None))[0]
+            if address:
+                user.address = address
+            else:
+                address = Address.objects.create(**address_data)
+                address.save
+        user.save(update_fields=['address'])
         return user
 
     def update(self, instance, validated_data):
@@ -72,16 +74,9 @@ class MaderaUserSerializer(DynamicFieldsModelSerializer):
         instance.phone = validated_data.get('phone', instance.phone)
         instance.password = validated_data.get('password', instance.password)
         address_data = validated_data.get('address', None)
-
-        if instance.address and address_data:
-            for k, v in address_data.items():
-                instance.address.__dict__[k] = v
-            instance.address.save(update_fields=validated_data.get('address').keys())
-        else:
-            address_data = validated_data.get('address', None)
-            if address_data:
-                instance.address = Address.objects.create(**address_data)
-                instance.address.save()
+        if address_data:
+            address = Address.objects.get_or_create(id=address_data.get('id'))[0]
+            instance.address = address
         instance.save()
         return instance
 
@@ -104,14 +99,7 @@ class SalesPersonSerializer(MaderaUserSerializer):
         fields = MaderaUserSerializer.Meta.fields + ('workplace',)
 
     def create(self, validated_data, address=None):
-        try:
-            address_data = validated_data.pop('address')
-            address = Address.objects.create(**address_data)
-            address.save()
-        except KeyError as e:
-            print(e)
-        finally:
-            salesperson = SalesPerson.objects.create(address=address, **validated_data)
+        salesperson = SalesPerson.objects.create(**validated_data)
         return salesperson
 
 
@@ -125,14 +113,7 @@ class ClientSerializer(MaderaUserSerializer):
         fields = MaderaUserSerializer.Meta.fields + ('is_pro', 'company')
 
     def create(self, validated_data, address=None):
-        try:
-            address_data = validated_data.pop('address')
-            address = Address.objects.create(**address_data)
-            address.save()
-        except KeyError as e:
-            print(e)
-        finally:
-            client = Client.objects.create(address=address, **validated_data)
+        client = Client.objects.create(**validated_data)
         return client
 
 
