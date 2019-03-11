@@ -232,7 +232,7 @@
         },
         async created() {
             try {
-                const response = await axios.get(`http://127.0.0.1:8000/api/quotes`)
+                const response = await axios.get(this.$store.state.endpoints.baseUrl + 'api/quotes')
                 this.quotes = response.data
             } catch (e) {
                 this.errors.push(e)
@@ -287,7 +287,7 @@
                 this.showModalDelete = false
             },
             getQuotes() {
-                axios.get(`http://127.0.0.1:8000/api/quotes`)
+                axios.get(this.$store.state.endpoints.baseUrl + 'api/quotes')
                 .then(response => {
                     this.quotes = response.data
                 })
@@ -329,10 +329,10 @@
                     'updated_at': now
                 };
 
-                axios.put('http://127.0.0.1:8000/api/quotes/' + this.selectedQuote.id,
+                axios.put(this.$store.state.endpoints.baseUrl + 'api/quotes/' + this.selectedQuote.id,
                     quoteUpdate, {
                         headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
+                            'Content-Type': 'application/json'
                         }
                     }).then((response) => {
                         this.clientId = 0;
@@ -350,7 +350,7 @@
             deleteQuote() {
                 let index = this.quotes.indexOf(this.selectedQuote);
 
-                axios.delete('http://127.0.0.1:8000/api/quotes/' + this.selectedQuote.id)
+                axios.delete(this.$store.state.endpoints.baseUrl + 'api/quotes' + this.selectedQuote.id)
                     .then(response => {
                         this.quotes.splice(index, 1);
                         this.selectedQuote = null;
@@ -393,6 +393,24 @@
             totalQuotes: function () {
                 return this.quotes.length
             }
+        },
+        mounted() {
+
+            axios.get(this.$store.state.endpoints.baseUrl + `api/salespersons`)
+                .then(response => {
+                    this.salesmans = response.data
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                });
+
+            axios.get(this.$store.state.endpoints.baseUrl + `api/clients`)
+                .then(response => {
+                    this.clients = response.data
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                });
         }
     }
 </script>

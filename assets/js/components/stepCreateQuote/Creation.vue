@@ -226,6 +226,15 @@
                                     </span>
                                     </p>
                                 </div>
+                                <div class="field" v-if="currentGammeSelected.family === 'CHA'" >
+                                    <label class="label">Hauteur</label>
+                                    <p class="control has-icons-left">
+                                        <input class="input" type="text" v-model="currentModuleSelected.unit" :placeholder="currentModuleSelected.unit" @change="extHauteur(currentModuleSelected.unit)">
+                                        <span class="icon is-small is-left">
+                                      <i class="fas fa-ruler-vertical"></i>
+                                    </span>
+                                    </p>
+                                </div>
                                 <div class="field">
                                     <label class="label">Longueur</label>
                                     <p class="control has-icons-left">
@@ -440,7 +449,7 @@
                 this.$emit('can-continue', {value: true});
             }
 
-            // axios.get(`http://127.0.0.1:8000/api/gammes`)
+            // axios.get(this.$store.state.endpoints.baseUrl + `api/gammes`)
             //     .then(response => {
             //         this.modules.ext.perso = response.data
             //     })
@@ -448,7 +457,7 @@
             //         this.errors.push(e)
             //     });
 
-            // axios.get(`http://127.0.0.1:8000/api/modules/family/ext`)
+            // axios.get(this.$store.state.endpoints.baseUrl + `api/modules/family/ext`)
             //     .then(response => {
             //         this.modules.ext.perso = response.data
             //     })
@@ -456,7 +465,7 @@
             //         this.errors.push(e)
             //     });
 
-            // axios.get(`http://127.0.0.1:8000/api/modules/family/int`)
+            // axios.get(this.$store.state.endpoints.baseUrl + `api/modules/family/int`)
             //     .then(response => {
             //         this.modules.int = response.data
             //     })
