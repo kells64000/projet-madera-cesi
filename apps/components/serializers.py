@@ -46,9 +46,6 @@ class ComponentSerializer(serializers.ModelSerializer):
     unit = serializers.CharField(required=False, max_length=10, allow_null=True)
     surface = serializers.SerializerMethodField(required=False)
     price = serializers.DecimalField(required=False, max_digits=8, decimal_places=2)
-    total_price = serializers.SerializerMethodField(required=False)
-    quantity = serializers.IntegerField(required=False)
-    gammes = serializers.SerializerMethodField()
 
     class Meta:
         model = Component
@@ -74,7 +71,6 @@ class ComponentSerializer(serializers.ModelSerializer):
         instance.width = validated_data.get('width', instance.width)
         instance.unit = validated_data.get('unit', instance.unit)
         instance.price = validated_data.get('price', instance.price)
-        instance.quantity = validated_data.get('quantity', instance.quantity)
         gammes_data = validated_data.get('gammes')
         gammes_list = list()
         if gammes_data:
@@ -85,9 +81,6 @@ class ComponentSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
-
-    def get_total_price(self, obj):
-        return obj.total_price
 
     def get_surface(self, obj):
         return obj.surface
