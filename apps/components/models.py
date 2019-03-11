@@ -3,13 +3,11 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from users.models import MaderaUser
-from .constants import FAMILY_CHOICES, NATURE_CHOICES, GAMME_CHOICES, SHAPE_CHOICES
 
 
 class Gamme(models.Model):
 
-    name = models.CharField(_('name'), max_length=30, blank=False, null=False,
-        choices=GAMME_CHOICES)
+    name = models.CharField(_('name'), max_length=30, blank=False, null=False)
     ratio = models.DecimalField(_('length'), max_digits=4,
                                 decimal_places=2, blank=False, null=True)
 
@@ -22,7 +20,7 @@ class Component(models.Model):
 
     name = models.CharField(_('name'), max_length=30, blank=False, null=False)
     component_type = models.CharField(_('type'), max_length=30, blank=False, null=True)
-    nature = models.CharField(_('nature'), max_length=3, choices=NATURE_CHOICES, null=True)
+    nature = models.CharField(_('nature'), max_length=20, null=True)
     length = models.DecimalField(_('length'), max_digits=8,
                                  decimal_places=2, blank=False, null=True)
     width = models.DecimalField(_('width'), max_digits=8,
@@ -61,7 +59,7 @@ class Module(models.Model):
     angle = models.IntegerField(_('angle'), blank=False, null=True)
     angle_type = models.CharField(_('angle_type'), max_length=20, null=True)
     unit = models.CharField(_('unit'), max_length=10, blank=False, null=True)
-    family = models.CharField(_('family'), max_length=3, choices=FAMILY_CHOICES, null=True)
+    family = models.CharField(_('family'), max_length=3, null=True)
     designer = models.ForeignKey(MaderaUser,
                                  blank=True,
                                  default=None,
@@ -106,7 +104,7 @@ class Module(models.Model):
 
 class House(models.Model):
 
-    shape = models.CharField(_('shape'), max_length=3, choices=SHAPE_CHOICES)
+    shape = models.CharField(_('shape'), max_length=20)
     shape_img = models.FileField(_('shape_img'), max_length=100, null=True)
     gamme = models.ManyToManyField(Gamme)
     modules = models.ManyToManyField(Module)

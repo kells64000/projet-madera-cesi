@@ -3,14 +3,13 @@ from rest_framework import serializers
 
 from users.models import MaderaUser, Provider
 from users.serializers import MaderaUserSerializer
-from .constants import FAMILY_CHOICES, NATURE_CHOICES, GAMME_CHOICES, SHAPE_CHOICES
 from .models import Component, Module, Gamme, House
 
 
 class GammeSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(read_only=True)
-    name = serializers.ChoiceField(choices=GAMME_CHOICES, required=False, allow_blank=True)
+    name = serializers.CharField(required=False, max_length=30, allow_null=True)
     name_verbose = serializers.SerializerMethodField(required=False)
     ratio = serializers.DecimalField(required=False, max_digits=4, decimal_places=2)
 
@@ -41,7 +40,7 @@ class ComponentSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(required=False, max_length=30)
     component_type = serializers.CharField(required=False, max_length=30, allow_null=True)
-    nature = serializers.ChoiceField(choices=NATURE_CHOICES, required=False, allow_null=True)
+    nature = serializers.CharField(required=False, max_length=30, allow_null=True)
     length = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
         allow_null=True)
     width = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
@@ -113,7 +112,7 @@ class ModuleSerializer(serializers.ModelSerializer):
         allow_null=True)
     unit = serializers.CharField(required=False, max_length=10, allow_null=True)
     surface = serializers.SerializerMethodField(required=False)
-    family = serializers.ChoiceField(choices=FAMILY_CHOICES, required=False, allow_null=True)
+    family = serializers.CharField(required=False, max_length=30, allow_null=True)
     designer = MaderaUserSerializer(required=False)
     designed_by = serializers.SerializerMethodField()
     components = serializers.SerializerMethodField()
@@ -208,7 +207,7 @@ class ModuleSerializer(serializers.ModelSerializer):
 class HouseSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(read_only=True)
-    shape = serializers.ChoiceField(choices=SHAPE_CHOICES, required=False, allow_null=True)
+    shape = serializers.CharField(required=False, max_length=20, allow_null=True)
     modules = serializers.SerializerMethodField(read_only=True)
     price = serializers.SerializerMethodField()
 
