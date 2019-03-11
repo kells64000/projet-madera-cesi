@@ -13,12 +13,16 @@ class Gamme(models.Model):
     ratio = models.DecimalField(_('length'), max_digits=4,
                                 decimal_places=2, blank=False, null=True)
 
+    @property
+    def name_verbose(self):
+        return self.get_name_display()
+
 
 class Component(models.Model):
 
     name = models.CharField(_('name'), max_length=30, blank=False, null=False)
     component_type = models.CharField(_('type'), max_length=30, blank=False, null=True)
-    nature = models.CharField(_('nature'), max_length=3, choices=NATURE_CHOICES)
+    nature = models.CharField(_('nature'), max_length=3, choices=NATURE_CHOICES, null=True)
     length = models.DecimalField(_('length'), max_digits=8,
                                  decimal_places=2, blank=False, null=True)
     width = models.DecimalField(_('width'), max_digits=8,
