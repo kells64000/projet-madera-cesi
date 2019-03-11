@@ -20,9 +20,10 @@ class ListComponent(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        gammes_data = request.data.get('gammes', None)
         serializer = ComponentSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(gammes=gammes_data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -44,9 +45,10 @@ class DetailComponent(APIView):
 
     def put(self, request, pk, format=None):
         component = self.get_object(pk)
+        gammes_data = request.data.get('gammes', None)
         serializer = ComponentSerializer(component, data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(gammes=gammes_data)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -67,9 +69,10 @@ class ListModule(APIView):
 
     def post(self, request, format=None):
         component_data = request.data.get('components', None)
+        gammes_data = request.data.get('gammes', None)
         serializer = ModuleSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(components=component_data)
+            serializer.save(components=component_data, gammes=gammes_data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -128,9 +131,10 @@ class DetailModule(APIView):
     def put(self, request, pk, format=None):
         module = self.get_object(pk)
         component_data = request.data.get('components', None)
+        gammes_data = request.data.get('gammes', None)
         serializer = ModuleSerializer(module, data=request.data)
         if serializer.is_valid():
-            serializer.save(components=component_data)
+            serializer.save(components=component_data, gammes=gammes_data)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -150,10 +154,9 @@ class ListGamme(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
-        module_data = request.data.get('modules', None)
         serializer = GammeSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(modules=module_data)
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -175,10 +178,9 @@ class DetailGamme(APIView):
 
     def put(self, request, pk, format=None):
         gamme = self.get_object(pk)
-        module_data = request.data.get('modules', None)
         serializer = GammeSerializer(gamme, data=request.data)
         if serializer.is_valid():
-            serializer.save(modules=module_data)
+            serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

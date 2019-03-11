@@ -40,7 +40,7 @@ EXCELLENCE = 'EXL'
 LUXE = 'LUX'
 NATURAL = 'NAT'
 
-TYPE_CHOICES = (
+GAMME_CHOICES = (
     (EXCELLENCE, 'excellence'),
     (LUXE, 'luxe'),
     (NATURAL, 'natural'),
