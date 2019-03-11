@@ -38,7 +38,7 @@ class GammeSerializer(serializers.ModelSerializer):
 class ComponentSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(required=False, max_length=30)
+    name = serializers.CharField(required=False, max_length=30, allow_null=True)
     component_type = serializers.CharField(required=False, max_length=30, allow_null=True)
     nature = serializers.CharField(required=False, max_length=30, allow_null=True)
     length = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
@@ -102,7 +102,7 @@ class ComponentSerializer(serializers.ModelSerializer):
 class ModuleSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(required=False, max_length=30)
+    name = serializers.CharField(required=False, max_length=30, allow_null=True)
     family = serializers.CharField(required=False, max_length=3)
     length = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
         allow_null=True)
@@ -210,6 +210,7 @@ class HouseSerializer(serializers.ModelSerializer):
     shape = serializers.CharField(required=False, max_length=20, allow_null=True)
     modules = serializers.SerializerMethodField(read_only=True)
     price = serializers.SerializerMethodField()
+    gammes = serializers.SerializerMethodField()
 
     class Meta:
         model = House
@@ -243,6 +244,10 @@ class HouseSerializer(serializers.ModelSerializer):
 
     def get_modules(self, obj):
         serializer = ModuleSerializer(obj.get_modules(), many=True, context=self.context)
+        return serializer.data
+
+    def get_gammes(self, obj):
+        serializer = GammeSerializer(obj.get_gammes(), many=True, context=self.context)
         return serializer.data
 
     def get_price(self, obj):
