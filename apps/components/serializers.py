@@ -94,7 +94,6 @@ class ModuleSerializer(serializers.ModelSerializer):
                 instance.designer = MaderaUser.objects.create(**designer_data)
                 instance.designer.save()
         components_list = list()
-        import ipdb; ipdb.set_trace()
         if components_data:
             for component_id in components_data:
                 component = Component.objects.get_or_create(id=component_id)[0]
