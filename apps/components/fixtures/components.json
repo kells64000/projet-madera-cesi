@@ -334,5 +334,131 @@
       "depth": null,
       "component_type": null
     }
+  },
+  {
+    "model": "components.Component",
+    "pk": 25,
+    "fields": {
+      "name": "finition_ext_excellence",
+      "nature": "fin_ext",
+      "length": null,
+      "width": null,
+      "unit": null,
+      "price": null,
+      "depth": null,
+      "component_type": "fin_ext"
+    }
+  },
+  {
+    "model": "components.Component",
+    "pk": 26,
+    "fields": {
+      "name": "isolation_excellence",
+      "nature": "fin_ext",
+      "length": null,
+      "width": null,
+      "unit": null,
+      "price": null,
+      "depth": null,
+      "component_type": "isolation"
+    }
+  },
+  {
+    "model": "components.Component",
+    "pk": 27,
+    "fields": {
+      "name": "couverture_excellence",
+      "nature": "fin_ext",
+      "length": null,
+      "width": null,
+      "unit": null,
+      "price": null,
+      "depth": null,
+      "component_type": "couverture"
+    }
+  },
+  {
+    "model": "components.Component",
+    "pk": 28,
+    "fields": {
+      "name": "finition_ext_nature",
+      "nature": "fin_ext",
+      "length": null,
+      "width": null,
+      "unit": null,
+      "price": null,
+      "depth": null,
+      "component_type": "fin_ext"
+    }
+  },
+  {
+    "model": "components.Component",
+    "pk": 29,
+    "fields": {
+      "name": "isolation_nature",
+      "nature": "fin_ext",
+      "length": null,
+      "width": null,
+      "unit": null,
+      "price": null,
+      "depth": null,
+      "component_type": "isolation"
+    }
+  },
+  {
+    "model": "components.Component",
+    "pk": 30,
+    "fields": {
+      "name": "couverture_nature",
+      "nature": "fin_ext",
+      "length": null,
+      "width": null,
+      "unit": null,
+      "price": null,
+      "depth": null,
+      "component_type": "couverture"
+    }
+  },
+  {
+    "model": "components.Component",
+    "pk": 31,
+    "fields": {
+      "name": "finition_ext_luxe",
+      "nature": "fin_ext",
+      "length": null,
+      "width": null,
+      "unit": null,
+      "price": null,
+      "depth": null,
+      "component_type": "fin_ext"
+    }
+  },
+  {
+    "model": "components.Component",
+    "pk": 32,
+    "fields": {
+      "name": "isolation_luxe",
+      "nature": "fin_ext",
+      "length": null,
+      "width": null,
+      "unit": null,
+      "price": null,
+      "depth": null,
+      "component_type": "isolation"
+    }
+  },
+  {
+    "model": "components.Component",
+    "pk": 33,
+    "fields": {
+      "name": "couverture_luxe",
+      "nature": "fin_ext",
+      "length": null,
+      "width": null,
+      "unit": null,
+      "price": null,
+      "depth": null,
+      "component_type": "couverture"
+    }
   }
 ]
