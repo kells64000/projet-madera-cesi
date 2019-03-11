@@ -8,6 +8,14 @@ from .models import Component, Module, Gamme, House
 
 class ComponentSerializer(serializers.ModelSerializer):
 
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(required=False, max_length=30)
+    nature = serializers.CharField(required=False, max_length=20)
+    length = serializers.DecimalField(required=False, max_digits=8, decimal_places=2)
+    width = serializers.DecimalField(required=False, max_digits=8, decimal_places=2)
+    unit = serializers.CharField(required=False, max_length=10)
+    surface = serializers.SerializerMethodField(required=False)
+
     class Meta:
         model = Component
         fields = ('__all__')
@@ -21,7 +29,6 @@ class ComponentSerializer(serializers.ModelSerializer):
         instance.nature = validated_data.get('nature', instance.nature)
         instance.length = validated_data.get('length', instance.length)
         instance.width = validated_data.get('width', instance.width)
-        instance.depth = validated_data.get('depth', instance.depth)
         instance.unit = validated_data.get('unit', instance.unit)
         instance.price = validated_data.get('price', instance.price)
         instance.save()
@@ -47,13 +54,12 @@ class ModuleSerializer(serializers.ModelSerializer):
     family = serializers.CharField(required=False, max_length=3)
     length = serializers.DecimalField(required=False, max_digits=8, decimal_places=2)
     width = serializers.DecimalField(required=False, max_digits=8, decimal_places=2)
-    depth = serializers.DecimalField(required=False, allow_null=False,
-                                     max_digits=8, decimal_places=2)
     unit = serializers.CharField(required=False, max_length=10)
     surface = serializers.SerializerMethodField(required=False)
     designer = MaderaUserSerializer(required=False)
     designed_by = serializers.SerializerMethodField()
     components = serializers.SerializerMethodField()
+    price = serializers.SerializerMethodField()
 
     class Meta:
         model = Module
@@ -119,6 +125,9 @@ class ModuleSerializer(serializers.ModelSerializer):
     def to_representation(self, obj):
         ret = super(ModuleSerializer, self).to_representation(obj)
         return ret
+
+    def get_price(self, obj):
+        return obj.calculated_price
 
 
 class GammeSerializer(serializers.ModelSerializer):
