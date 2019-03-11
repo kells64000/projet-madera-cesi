@@ -1,5 +1,5 @@
 <template>
-    <div id="content-modules" style="padding-left: 3rem; padding-right: 3rem; text-align: left; height: 90%; position: relative">
+    <div id="content-modules" style="padding-left: 3rem; padding-right: 3rem; text-align: left; height: 100%; position: relative">
 
         <div class="columns">
             <div class="column">
@@ -39,7 +39,7 @@
                     <!-- Mur ext -->
                     <div class="field">
                         <div>
-                            <label for="selectModuleWallExt">Murs Extérieur :</label>
+                            <label for="selectModuleWallExt">Murs Extérieurs :</label>
                         </div>
                         <v-select id="selectModuleWallExt" v-model="modulesWallExtSelected" multiple :options="modules.ext.perso" label="name">
                             <template slot="option" slot-scope="option">
@@ -188,8 +188,7 @@
                                 <div class="field">
                                     <label class="label">Isolation</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" type="text" :value="currentGammeSelected.isolation"
-                                               readonly>
+                                        <input class="input" type="text" :value="currentGammeSelected.isolation" readonly>
                                         <span class="icon is-small is-left">
                                       <i class="fas fa-igloo"></i>
                                     </span>
@@ -198,8 +197,7 @@
                                 <div class="field">
                                     <label class="label">Couverture</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" type="text" :value="currentGammeSelected.couverture"
-                                               readonly>
+                                        <input class="input" type="text" :value="currentGammeSelected.couverture" readonly>
                                         <span class="icon is-small is-left">
                                       <i class="fas fa-home"></i>
                                     </span>
@@ -219,7 +217,7 @@
                                     </span>
                                     </p>
                                 </div>
-                                <div class="field" v-if="currentGammeSelected.family === 'ext' ||  currentGammeSelected.family === 'int'" >
+                                <div class="field" v-if="currentGammeSelected.family !== 'CHA'" >
                                     <label class="label">Hauteur</label>
                                     <p class="control has-icons-left">
                                         <input class="input" type="text" v-model="currentModuleSelected.height" :placeholder="currentModuleSelected.height" @change="extHauteur(currentModuleSelected.height)">
@@ -240,15 +238,14 @@
                                 <div class="field">
                                     <label class="label">Unite d'usage</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" type="text"
-                                               :placeholder="currentModuleSelected.unit" readonly>
+                                        <input class="input" type="text" :placeholder="currentModuleSelected.unit" readonly>
                                         <span class="icon is-small is-left">
                                       <i class="fas fa-balance-scale"></i>
                                     </span>
                                     </p>
                                 </div>
 
-                                <div v-if="currentModuleSelected.family === 'ext' || currentModuleSelected.family === 'int'">
+                                <div v-if="currentModuleSelected.family === 'EXT' || currentModuleSelected.family === 'INT'">
 
                                     <div class="field">
                                         <div class="control">
@@ -292,8 +289,7 @@
                                 <div class="field">
                                     <label class="label">Prix</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" type="text" :placeholder="currentModuleSelected.price"
-                                               readonly>
+                                        <input class="input" type="text" :placeholder="currentModuleSelected.price" readonly>
                                         <span class="icon is-small is-left">
                                       <i class="fas fa-euro-sign"></i>
                                     </span>
