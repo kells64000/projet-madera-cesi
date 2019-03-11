@@ -14,6 +14,7 @@ class ComponentSerializer(serializers.ModelSerializer):
     length = serializers.DecimalField(required=False, max_digits=8, decimal_places=2)
     width = serializers.DecimalField(required=False, max_digits=8, decimal_places=2)
     unit = serializers.CharField(required=False, max_length=10)
+    price = serializers.DecimalField(required=False, max_digits=8, decimal_places=2)
     surface = serializers.SerializerMethodField(required=False)
 
     class Meta:
