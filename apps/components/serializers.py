@@ -37,13 +37,13 @@ class ComponentSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(required=False, max_length=30)
-    component_type = serializers.CharField(required=False, max_length=30, allow_blank=True)
-    nature = serializers.ChoiceField(choices=NATURE_CHOICES, required=False, allow_blank=True)
+    component_type = serializers.CharField(required=False, max_length=30, allow_null=True)
+    nature = serializers.ChoiceField(choices=NATURE_CHOICES, required=False, allow_null=True)
     length = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
-        allow_blank=True)
+        allow_null=True)
     width = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
-        allow_blank=True)
-    unit = serializers.CharField(required=False, max_length=10)
+        allow_null=True)
+    unit = serializers.CharField(required=False, max_length=10, allow_null=True)
     surface = serializers.SerializerMethodField(required=False)
     price = serializers.DecimalField(required=False, max_digits=8, decimal_places=2)
     total_price = serializers.SerializerMethodField(required=False)
@@ -111,14 +111,14 @@ class ModuleSerializer(serializers.ModelSerializer):
     nature = serializers.CharField(required=False, max_length=20)
     family = serializers.CharField(required=False, max_length=3)
     length = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
-        allow_blank=True)
+        allow_null=True)
     length2 = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
-        allow_blank=True)
+        allow_null=True)
     height = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
-        allow_blank=True)
-    unit = serializers.CharField(required=False, max_length=10, allow_blank=True)
+        allow_null=True)
+    unit = serializers.CharField(required=False, max_length=10, allow_null=True)
     surface = serializers.SerializerMethodField(required=False)
-    family = serializers.ChoiceField(choices=FAMILY_CHOICES, required=False, allow_blank=True)
+    family = serializers.ChoiceField(choices=FAMILY_CHOICES, required=False, allow_null=True)
     designer = MaderaUserSerializer(required=False)
     designed_by = serializers.SerializerMethodField()
     components = serializers.SerializerMethodField()
@@ -214,7 +214,7 @@ class ModuleSerializer(serializers.ModelSerializer):
 class HouseSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(read_only=True)
-    shape = serializers.ChoiceField(choices=SHAPE_CHOICES, required=False, allow_blank=True)
+    shape = serializers.ChoiceField(choices=SHAPE_CHOICES, required=False, allow_null=True)
     modules = serializers.SerializerMethodField(read_only=True)
     price = serializers.SerializerMethodField()
 

@@ -27,17 +27,12 @@ class Component(models.Model):
     unit = models.CharField(_('unit'), max_length=10, blank=False, null=True)
     price = models.DecimalField(_('price'), max_digits=10, decimal_places=2, null=True)
     total_price = models.DecimalField(_('total_price'), max_digits=10, decimal_places=2, null=True)
-    quantity = models.IntegerField(_('quantity'), blank=False, null=True)
 
     gammes = models.ManyToManyField(Gamme)
 
     @property
     def surface(self):
         return (self.length * self.width).quantize(Decimal(10) ** -2)
-
-    @property
-    def total_price(self):
-        return self.price * self.quantity if self.quantity and self.price else None
 
     def dimensions_verbose(self):
         return 'Dimensions for {n}: length {l} x width {w}'.format(n=self.name, l=self.length)
