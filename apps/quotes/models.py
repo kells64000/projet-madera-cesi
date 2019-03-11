@@ -19,12 +19,12 @@ class Quote(models.Model):
     client = models.ForeignKey(Client,
                                blank=False,
                                default=None,
-                               null=False,
+                               null=True,
                                on_delete=models.DO_NOTHING,
                                related_name=_('client'))
     salesperson = models.ForeignKey(SalesPerson,
                                     blank=False,
                                     default=None,
-                                    null=False,
+                                    null=True,
                                     on_delete=models.DO_NOTHING,
                                     related_name=_('salesperson'))

@@ -13,8 +13,6 @@ class QuoteSerializer(serializers.ModelSerializer):
     price = serializers.DecimalField(max_digits=10, decimal_places=2)
     state = serializers.CharField(required=False, default='Brouillon')
     attachment = serializers.CharField(required=False, allow_null=True, allow_blank=True)
-    client = ClientSerializer()
-    salesperson = SalesPersonSerializer()
 
     created_at = serializers.DateTimeField(required=False)
     updated_at = serializers.DateTimeField(required=False)
@@ -27,35 +25,36 @@ class QuoteSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         client_data = validated_data.pop('client', None)
         salesperson_data = validated_data.pop('salesperson', None)
+        quote = Quote.objects.create(**validated_data)
         if client_data:
-            client = Client.objects.get_or_create(**client_data)[0]
+            client = Client.objects.get_or_create(id=client_data.get('id'))[0]
+            client.save()
+            quote.client_id = client.id
         if salesperson_data:
-            salesperson = SalesPerson.objects.get_or_create(**salesperson_data)[0]
-        quote = Quote.objects.create(client=client, salesperson=salesperson, **validated_data)
+            salesperson = SalesPerson.objects.get_or_create(id=salesperson_data.get('id'))[0]
+            salesperson.save()
+            quote.salesperson_id = salesperson.id
+        quote.save()
         return quote
 
     def update(self, instance, validated_data):
-        instance.email = validated_data.get('email', instance.email)
-        instance.first_name = validated_data.get('first_name', instance.first_name)
-        instance.last_name = validated_data.get('last_name', instance.last_name)
-        instance.phone = validated_data.get('phone', instance.phone)
+        instance.name = validated_data.get('name', instance.name)
+        instance.reference = validated_data.get('reference', instance.reference)
+        instance.price = validated_data.get('price', instance.price)
+        instance.state = validated_data.get('state', instance.state)
+        instance.attachment = validated_data.get('attachment', instance.attachment)
+        client_data = validated_data.pop('client', None)
+        salesperson_data = validated_data.pop('salesperson', None)
 
-        if instance.client:
-            for k, v in validated_data.get('client').items():
-                instance.client.__dict__[k] = v
-            instance.client.save(update_fields=validated_data.get('client').keys())
-        else:
-            address_data = validated_data.get('client')
-            instance.client = Client.objects.create(**address_data)
-            instance.client.save()
-
-        if instance.salesperson:
-            for k, v in validated_data.get('salesperson').items():
-                instance.salesperson.__dict__[k] = v
-            instance.salesperson.save(update_fields=validated_data.get('salesperson').keys())
-        else:
-            address_data = validated_data.get('salesperson')
-            instance.salesperson = SalesPerson.objects.create(**address_data)
-            instance.salesperson.save()
+        if client_data:
+            client, created = Client.objects.update_or_create(id=client_data.get('id'))
+            if created:
+                client.save()
+            instance.client_id = client.id
+        if salesperson_data:
+            salesperson, created = SalesPerson.objects.update_or_create(id=salesperson_data.get('id'))
+            if created:
+                salesperson.save()
+            instance.salesperson_id = salesperson.id
         instance.save()
         return instance
