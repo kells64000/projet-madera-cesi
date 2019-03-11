@@ -4,18 +4,19 @@ from django.utils.translation import ugettext_lazy as _
 
 from users.models import MaderaUser
 
-
 EXTERIOR = 'EXT'
 INTERIOR = 'INT'
 TOITURE = 'TOI'
 SOL_DALLE = 'DAL'
 SOL_PLANCHER = 'PLA'
+CHARPENTE = 'CHA'
 FAMILY_CHOICES = (
     (EXTERIOR, 'exterieur'),
     (INTERIOR, 'interieur'),
     (TOITURE, 'toiture'),
     (SOL_DALLE, 'sol_dalle'),
     (SOL_PLANCHER, 'sol_plancher'),
+    (CHARPENTE, 'charpente')
 )
 
 
@@ -63,7 +64,7 @@ class Component(models.Model):
 class Module(models.Model):
 
     name = models.CharField(_('name'), max_length=30, blank=False, null=False)
-    nature = models.CharField(_('nature'), max_length=20)
+    nature = models.CharField(_('nature'), max_length=20, null=True)
     length = models.DecimalField(_('length'), max_digits=8,
                                  decimal_places=2, blank=False, null=True)
     length2 = models.DecimalField(_('length'), max_digits=8,
@@ -116,14 +117,19 @@ class Module(models.Model):
         return gammes
 
     @property
+    def get_components_by_family(self):
+        queryset = Component.objecs.all()
+        queryset.filter(component_type=self.get_family_display())
+        return queryset
+
+    @property
     def qty_comp(self):
         return self.components.all().count()
 
 
 class House(models.Model):
 
-    shape = models.CharField(_('shape'), max_length=20)
-    shape_img = models.FileField(_('shape_img'), max_length=100, null=True)
+    img = models.FileField(_('shape_img'), max_length=100, null=True)
     gammes = models.ManyToManyField(Gamme)
     modules = models.ManyToManyField(Module)
 
