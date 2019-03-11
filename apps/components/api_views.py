@@ -5,7 +5,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .import constants as cst
 from .models import Component, Module, Gamme, House
 from .serializers import ComponentSerializer, ModuleSerializer, GammeSerializer, HouseSerializer
 
@@ -86,12 +85,12 @@ class ListModuleShape(generics.ListAPIView):
         queryset = Module.objects.all()
         shape = self.kwargs['shape']
         module_compare = queryset.first()
-        if shape == cst.SQUARE.lower():
+        if shape == 'carré':
             allowed_modules = allowed_modules['square']
             for module in queryset:
                 if module.length == module_compare.length and module.width == module_compare.width:
                     allowed_modules.append(module)
-        if shape == cst.RECTANGLE.lower():
+        if shape == 'rectangle':
             allowed_modules = allowed_modules['rectangle']
             for module in queryset:
                 if module.length == module_compare.length and module.width == module_compare.width:
