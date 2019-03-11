@@ -24,6 +24,7 @@
                     </div>
                 </div>
             </section>
+            <b-loading :is-full-page="isFullPage" :active.sync="isLoading" :can-cancel="true"></b-loading>
         </div>
    </div>
 </template>
@@ -76,7 +77,9 @@
                         component: Recapitulatif,
                         completed: false
                     }
-                ]
+                ],
+                isLoading: false,
+                isFullPage: true
             }
         },
         methods: {
@@ -103,7 +106,11 @@
             },
             // Executed when @stepper-finished event is triggered
             alert(payload) {
-                alert('Création du devis en bdd et génération du PDF =)')
+                this.isLoading = true;
+                //alert('Création du devis en bdd et génération du PDF =)')
+                setTimeout(() => {
+                    this.isLoading = false
+                }, 10 * 1000)
             }
         }
     }
