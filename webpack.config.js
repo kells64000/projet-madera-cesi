@@ -3,15 +3,15 @@ const webpack = require('webpack');
 const BundleTracker = require('webpack-bundle-tracker');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const devMode = process.env.NODE_ENV === 'production';
+const devMode = process.env.NODE_ENV !== 'production';
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 
 module.exports = {
     context: __dirname,
-    entry: './staticfiles/js/index',
+    entry: devMode ? './assets/js/index' : './staticfiles/js/index',
     output: {
-        path: path.resolve('./staticfiles/dist/'),
+        path: devMode ? path.resolve('./assets/dist/') : path.resolve('./staticfiles/dist/'),
         filename: 'js/app.js'
     },
     plugins: [

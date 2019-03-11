@@ -33,3 +33,27 @@ NATURE_CHOICES = (
     (NATURAL, 'natural'),
     (BIO, 'biological'),
 )
+
+# Gamme type
+
+EXCELLENCE = 'EXL'
+LUXE = 'LUX'
+NATURAL = 'NAT'
+
+GAMME_CHOICES = (
+    (EXCELLENCE, 'excellence'),
+    (LUXE, 'luxe'),
+    (NATURAL, 'natural'),
+)
+
+# House shape
+
+SQUARE = 'SQR'
+RECTANGLE = 'REC'
+CUSTOM = 'CUS'
+
+SHAPE_CHOICES = (
+    (SQUARE, 'square'),
+    (RECTANGLE, 'rectangle'),
+    (CUSTOM, 'custom'),
+)

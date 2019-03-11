@@ -26,6 +26,7 @@
             project: {
                 handler: function () {
                     if (this.project !== '') {
+                        this.$store.commit("setQuoteDate", this.dateToday());
                         this.$store.commit("setQuoteProject", this.project);
                         this.$emit('can-continue', {value: true});
                     } else {
@@ -42,6 +43,13 @@
                 if (this.project !== '') {
                     this.$emit('can-continue', {value: true});
                 }
+            }
+        },
+        methods: {
+            dateToday() {
+                let date = new Date();
+
+                return date.getFullYear() + '-' + (date.getMonth() +1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + (date.getMinutes()<10?'0':'') + date.getMinutes();
             }
         },
         mounted() {

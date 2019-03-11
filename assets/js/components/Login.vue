@@ -98,11 +98,8 @@
                             xhrFields: {
                                 withCredentials: true
                             }
-                        }
-                        // Even though the authentication returned a user object that can be
-                        // decoded, we fetch it again. This way we aren't super dependant on
-                        // JWT and can plug in something else.
-                        const axiosInstance = axios.create(base)
+                        };
+                        const axiosInstance = axios.create(base);
                         axiosInstance({
                             url: "api/users/",
                             method: "get",
@@ -119,15 +116,14 @@
                                     }
                                 });
 
-                                this.$store.commit("setAuthUser",
-                                {authUser: userAuth, isAuthenticated: true})
+                                this.$store.commit("setAuthUser", {authUser: userAuth, isAuthenticated: true});
                                 this.success();
                                 this.$router.push({name: 'Dashboard'})
 
                             })
 
                     })
-                    .catch((error) => {
+                    .catch(() => {
                         this.isActive = true;
                     })
             },

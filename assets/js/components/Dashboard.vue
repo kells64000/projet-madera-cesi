@@ -70,9 +70,6 @@
             consult() {
                 this.$router.push({name: 'ViewQuote'})
             },
-        },
-        created: function () {
-            this.$store.commit('setAuthUser');
         }
     }
 </script>
