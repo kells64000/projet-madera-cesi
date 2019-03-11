@@ -11,11 +11,12 @@ class GammeSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(read_only=True)
     name = serializers.ChoiceField(choices=GAMME_CHOICES, required=False, allow_blank=True)
+    name_verbose = serializers.SerializerMethodField(required=False)
     ratio = serializers.DecimalField(required=False, max_digits=4, decimal_places=2)
 
     class Meta:
         model = Module
-        fields = ('id', 'name', 'ratio')
+        fields = ('id', 'name', 'name_verbose', 'ratio')
 
     def create(self, validated_data):
         gamme = Gamme.objects.create(**validated_data)
@@ -25,8 +26,10 @@ class GammeSerializer(serializers.ModelSerializer):
         instance.name = validated_data.get('name', instance.name)
         instance.ratio = validated_data.get('ratio', instance.ratio)
         instance.save()
-
         return instance
+
+    def get_name_verbose(self, obj):
+        return obj.name_verbose
 
     def to_representation(self, obj):
         ret = super(GammeSerializer, self).to_representation(obj)
@@ -101,7 +104,6 @@ class ModuleSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(required=False, max_length=30)
-    nature = serializers.CharField(required=False, max_length=20)
     family = serializers.CharField(required=False, max_length=3)
     length = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
         allow_null=True)
@@ -147,7 +149,6 @@ class ModuleSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
-        instance.nature = validated_data.get('nature', instance.nature)
         instance.length = validated_data.get('length', instance.length)
         instance.height = validated_data.get('height', instance.height)
         instance.family = validated_data.get('family', instance.family)

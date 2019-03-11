@@ -12,6 +12,6 @@ urlpatterns = [
     path('gammes/', api_views.ListGamme.as_view(), name='gammes'),
     path('gammes/<int:pk>', api_views.DetailGamme.as_view(), name='gamme'),
     path('houses/', api_views.ListHouse.as_view(), name='houses'),
-    url('^houses/(?P<shape>.+)/$', api_views.ListHouseShape.as_view(), name='house-shape'),
+    url('^houses/shape/(?P<shape>.+)/$', api_views.ListHouseShape.as_view(), name='house-shape'),
     path('houses/<int:pk>', api_views.DetailHouse.as_view(), name='house')
 ]
