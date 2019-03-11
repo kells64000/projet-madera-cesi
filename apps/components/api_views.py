@@ -76,37 +76,13 @@ class ListModule(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ListModuleShape(generics.ListAPIView):
-    permission_classes = (IsAuthenticated,)
-    serializer_class = ModuleSerializer
-
-    def get_queryset(self):
-        allowed_modules = {'square': [], 'rectangle': []}
-        queryset = Module.objects.all()
-        shape = self.kwargs['shape']
-        module_compare = queryset.first()
-        if shape == 'carré':
-            allowed_modules = allowed_modules['square']
-            for module in queryset:
-                if module.length == module_compare.length and module.width == module_compare.width:
-                    allowed_modules.append(module)
-        if shape == 'rectangle':
-            allowed_modules = allowed_modules['rectangle']
-            for module in queryset:
-                if module.length == module_compare.length and module.width == module_compare.width:
-                    allowed_modules.append(module)
-        else:
-            return Module.objects.all()
-        return allowed_modules
-
-
 class ListModuleFamily(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = ModuleSerializer
 
     def get_queryset(self):
         queryset = Module.objects.all()
-        family = self.kwargs['family']
+        family = self.kwargs['family'].upper()
         if family:
             queryset = queryset.filter(family=family)
         return queryset

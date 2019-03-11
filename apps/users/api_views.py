@@ -19,9 +19,10 @@ class ListUser(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        address_data = request.data.get('address', None)
         serializer = MaderaUserSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(address=address_data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -43,10 +44,11 @@ class DetailUser(APIView):
 
     def put(self, request, pk, format=None):
         user = self.get_object(pk)
+        address_data = request.data.get('address', None)
         serializer = MaderaUserSerializer(user, data=request.data)
         serializer.fields['email'].required = False
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(address=address_data)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -66,9 +68,10 @@ class ListSalesPerson(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        address_data = request.data.get('address', None)
         serializer = SalesPersonSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(address=address_data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -89,12 +92,13 @@ class DetailSalesPerson(APIView):
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
+        address_data = request.data.get('address', None)
         salesperson = self.get_object(pk)
         serializer = SalesPersonSerializer(salesperson, data=request.data)
         for field in ['email', 'workplace']:
             serializer.fields[field].required = False
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(address=address_data)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -112,9 +116,10 @@ class ListClient(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        address_data = request.data.get('address', None)
         serializer = ClientSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(address=address_data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -135,12 +140,13 @@ class DetailClient(APIView):
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
+        address_data = request.data.get('address', None)
         client = self.get_object(pk)
         serializer = ClientSerializer(client, data=request.data)
         for field in ['email', 'is_pro']:
             serializer.fields[field].required = False
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(address=address_data)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

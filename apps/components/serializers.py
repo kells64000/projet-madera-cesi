@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 from users.models import MaderaUser, Provider
 from users.serializers import MaderaUserSerializer
-from .models import Component, Module, Gamme, House
+from .models import Component, Module, Gamme, House, FAMILY_CHOICES
 
 
 class GammeSerializer(serializers.ModelSerializer):
@@ -103,7 +103,7 @@ class ModuleSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(required=False, max_length=30, allow_null=True)
-    family = serializers.CharField(required=False, max_length=3)
+    family = serializers.ChoiceField(required=False, choices=FAMILY_CHOICES)
     length = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
         allow_null=True)
     length2 = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
