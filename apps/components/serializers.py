@@ -201,7 +201,9 @@ class ModuleSerializer(serializers.ModelSerializer):
         return ret
 
     def get_price(self, obj):
-        return obj.calculated_price
+        return ''
+        # origine de ton bug car ton objet n'a pas de champ calculated_price | dsl de pas avoir pu t'aider avant .....
+        # obj.calculated_price
 
 
 class HouseSerializer(serializers.ModelSerializer):
@@ -250,5 +252,5 @@ class HouseSerializer(serializers.ModelSerializer):
         serializer = GammeSerializer(obj.get_gammes(), many=True, context=self.context)
         return serializer.data
 
-    def get_price(self, obj):
-        return obj.total_price
+    # def get_price(self, obj):
+    #     return obj.total_price
