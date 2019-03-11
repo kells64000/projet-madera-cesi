@@ -1,0 +1,206 @@
+[
+  {
+    "model": "components.Module",
+    "pk": 1,
+    "fields": {
+      "name": "mur_ext_droit",
+      "nature": "mur exterieur",
+      "length": 5,
+      "height": 3,
+      "unit": "M lineaire",
+      "designer_id": 1,
+      "family": "EXT",
+      "angle": null,
+      "length2": null,
+      "angle_type": null,
+      "components": [1,2,3,4,5,6,7,8,9,10,11]
+    }
+  },
+  {
+    "model": "components.Module",
+    "pk": 2,
+    "fields": {
+      "name": "mur_ext_droit2",
+      "nature": "mur exterieur",
+      "length": 5,
+      "height": 3,
+      "unit": "M lineaire",
+      "designer_id": 1,
+      "family": "EXT",
+      "angle": null,
+      "length2": null,
+      "angle_type": null,
+      "components": [1,2,3,4,5,7,8,9,11]
+    }
+  },
+  {
+    "model": "components.Module",
+    "pk": 3,
+    "fields": {
+      "name": "mur_int_droit",
+      "nature": "mur_interieur",
+      "length": 5,
+      "height": 3,
+      "unit": "M lineaire",
+      "designer_id": 1,
+      "family": "INT",
+      "angle": null,
+      "length2": null,
+      "angle_type": null,
+      "components": [1,2,7,9,11]
+    }
+  },
+  {
+    "model": "components.Module",
+    "pk": 4,
+    "fields": {
+      "name": "mur_int_droit2",
+      "nature": "mur_interieur",
+      "length": 5,
+      "height": 3,
+      "unit": "M lineaire",
+      "designer_id": 1,
+      "family": "INT",
+      "angle": null,
+      "length2": null,
+      "angle_type": null,
+      "components": [1,2,4,9,11]
+    }
+  },
+  {
+    "model": "components.Module",
+    "pk": 5,
+    "fields": {
+      "name": "plancher_porteur1",
+      "nature": "plancher_porteur",
+      "length": 3,
+      "height": 2,
+      "unit": "m²",
+      "designer_id": 1,
+      "family": "PLA",
+      "angle": null,
+      "length2": null,
+      "angle_type": null,
+      "components": [12,13,14]
+    }
+  },
+  {
+    "model": "components.Module",
+    "pk": 6,
+    "fields": {
+      "name": "plancher_porteur2",
+      "nature": "plancher_porteur",
+      "length": 5,
+      "height": 3,
+      "unit": "m²",
+      "designer_id": 1,
+      "family": "PLA",
+      "angle": null,
+      "length2": null,
+      "angle_type": null,
+      "components": [12,14]
+    }
+  },
+  {
+    "model": "components.Module",
+    "pk": 7,
+    "fields": {
+      "name": "plancher_dalle1",
+      "nature": "plancher_dalle",
+      "length": 3,
+      "height": 2,
+      "unit": "m²",
+      "designer_id": 1,
+      "family": "DAL",
+      "angle": null,
+      "length2": null,
+      "angle_type": null,
+      "components": [15,16,17]
+    }
+  },
+  {
+    "model": "components.Module",
+    "pk": 8,
+    "fields": {
+      "name": "plancher_dalle2",
+      "nature": "plancher_dalle",
+      "length": 5,
+      "height": 3,
+      "unit": "m²",
+      "designer_id": 1,
+      "family": "DAL",
+      "angle": null,
+      "length2": null,
+      "angle_type": null,
+      "components": [16,17]
+    }
+  },
+  {
+    "model": "components.Module",
+    "pk": 9,
+    "fields": {
+      "name": "toit1",
+      "nature": "toit",
+      "length": 5,
+      "height": 5,
+      "unit": "m²",
+      "designer_id": 1,
+      "family": "TOI",
+      "angle": null,
+      "length2": null,
+      "angle_type": null,
+      "components": [18,19,20]
+    }
+  },
+  {
+    "model": "components.Module",
+    "pk": 10,
+    "fields": {
+      "name": "toit2",
+      "nature": "toit",
+      "length": 5,
+      "height": 5,
+      "unit": "m²",
+      "designer_id": 1,
+      "family": "TOI",
+      "angle": null,
+      "length2": null,
+      "angle_type": null,
+      "components": [19,20,21]
+    }
+  },
+  {
+    "model": "components.Module",
+    "pk": 11,
+    "fields": {
+      "name": "ferme_charpente1",
+      "nature": "charp",
+      "length": null,
+      "height": null,
+      "unit": "piece",
+      "designer_id": 1,
+      "family": "CHA",
+      "angle": null,
+      "length2": null,
+      "angle_type": null,
+      "components": [22,23,24]
+    }
+  },
+  {
+    "model": "components.Module",
+    "pk": 12,
+    "fields": {
+      "name": "ferme_charpente1",
+      "nature": "charp",
+      "length": null,
+      "height": null,
+      "unit": "piece",
+      "designer_id": 1,
+      "family": "CHA",
+      "angle": null,
+      "length2": null,
+      "angle_type": null,
+      "components": [22,23]
+    }
+  }
+]
