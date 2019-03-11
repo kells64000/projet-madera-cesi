@@ -158,16 +158,33 @@
     "pk": 1,
     "fields": {
       "name": "mur_ext_droit",
-      "nature": "panneau_platre",
+      "nature": "mur exterieur",
       "length": 5,
       "height": 3,
       "unit": "M lineaire",
       "designer_id": 1,
-      "family": "",
+      "family": "ext",
       "angle": null,
       "length2": null,
       "angle_type": null,
       "components": [1,2,3,4,5,6,7,8,9,10,11]
+    }
+  },
+    {
+    "model": "components.Module",
+    "pk": 2,
+    "fields": {
+      "name": "mur_ext_droit2",
+      "nature": "mur exterieur",
+      "length": 5,
+      "height": 3,
+      "unit": "M lineaire",
+      "designer_id": 1,
+      "family": "ext",
+      "angle": null,
+      "length2": null,
+      "angle_type": null,
+      "components": [1,2,3,4,5,7,8,9,11]
     }
   }
 ]

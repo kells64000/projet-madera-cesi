@@ -139,5 +139,5 @@ const app = new Vue({
 
 Nous avons choisi [Heroku](https://madera-dev.herokuapp.com/)
 
-Les dossiers d'assets sont mis dans le dossier static via la commande `collectstatic`
+Les dossiers d'assets sont mis dans le dossier static via la commande `python manage.py collectstatic`
 

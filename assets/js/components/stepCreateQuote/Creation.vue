@@ -28,96 +28,34 @@
                          <figure class="image is-128x128 mt-2" v-show="gammeSelected === gamme.name" @click="currentGammeSelected = gamme, currentModuleSelected = ''" v-for="gamme in gammes">
                             <img :src="gamme.img" >
                         </figure>
-
                     </div>
 
                 </div>
 
-                <!-- Forme -->
-                <div class="field" v-if="gammeSelected !== ''">
-                    <div class="control">
+                <div v-if="gammeSelected !== ''">
+                    <figure class="mt-2 mb-1">
+                        <img :src="'/static/img/house/forms/Maison_perso.jpg'">
+                    </figure>
+                    <!-- Mur ext -->
+                    <div class="field">
                         <div>
-                            <label for="selectForme">Forme :</label>
+                            <label for="selectModuleWallExt">Murs Extérieur :</label>
                         </div>
+                        <v-select id="selectModuleWallExt" v-model="modulesWallExtSelected" multiple :options="modules.ext.perso" label="name">
+                            <template slot="option" slot-scope="option">
+                                {{option.name}}
+                            </template>
+                        </v-select>
+                    </div>
 
-                        <div id="selectForme" class="select">
-                            <select v-model="formeSelected">
-                                <option :value="forme.name" v-for="forme in formes">{{forme.name}}</option>
-                            </select>
+                    <div class="box" v-if="modulesWallExtSelected !== ''">
+                        <div class="tags">
+                            <span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"
+                                  @click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesWallExtSelected">
+                                {{module.name}}
+                            </span>
                         </div>
                     </div>
-                </div>
-
-                <figure class="mt-2" v-show="formeSelected === forme.name"
-                        v-for="forme in formes">
-                    <img :src="forme.img">
-                </figure>
-
-
-                <!-- Mur ext carré -->
-                <div class="field" v-if="formeSelected === 'Carré'">
-                    <div>
-                        <label for="selectModuleWallExtSquare">Murs Extérieur :</label>
-                    </div>
-                    <v-select id="selectModuleWallExtSquare" v-model="modulesWallExtSquareSelected" multiple :options="modules.ext.carre" label="name" :disabled="modulesWallExtSquareSelected === '' ? false : true">
-                        <template slot="option" slot-scope="option">
-                            {{option.name}}
-                        </template>
-                    </v-select>
-                </div>
-
-                <div class="box" v-if="modulesWallExtSquareSelected !== ''">
-                    <div class="tags">
-                        <span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"
-                              @click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesWallExtSquareSelected">
-                            {{module.name}}
-                        </span>
-                    </div>
-                </div>
-                
-                <!-- Mur ext rectangle -->
-                <div class="field" v-if="formeSelected === 'Rectangle'">
-                    <div>
-                        <label for="selectModuleWallExtRect">Murs Extérieur :</label>
-                    </div>
-                    <v-select id="selectModuleWallExtRect" v-model="modulesWallExtRectSelected" multiple :options="modules.ext.rectangle" label="name" :disabled="modulesWallExtRectSelected === '' ? false : true">
-                        <template slot="option" slot-scope="option">
-                            {{option.name}}
-                        </template>
-                    </v-select>
-                </div>
-
-                <div class="box" v-if="modulesWallExtRectSelected !== ''">
-                    <div class="tags">
-                        <span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"
-                              @click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesWallExtRectSelected">
-                            {{module.name}}
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Mur ext perso -->
-                <div class="field" v-if="formeSelected === 'Personnaliser'">
-                    <div>
-                        <label for="selectModuleWallExt">Murs Extérieur :</label>
-                    </div>
-                    <v-select id="selectModuleWallExt" v-model="modulesWallExtSelected" multiple :options="modules.ext.perso" label="name">
-                        <template slot="option" slot-scope="option">
-                            {{option.name}}
-                        </template>
-                    </v-select>
-                </div>
-
-                <div class="box" v-if="modulesWallExtSelected !== ''">
-                    <div class="tags">
-                        <span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"
-                              @click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesWallExtSelected">
-                            {{module.name}}
-                        </span>
-                    </div>
-                </div>
-                
-                <div v-if="formeSelected !== ''">
                     <!-- mur int -->
                     <div class="field">
                         <div>
@@ -281,12 +219,10 @@
                                     </span>
                                     </p>
                                 </div>
-                                <div class="field">
+                                <div class="field" v-if="currentGammeSelected.family === 'ext' ||  currentGammeSelected.family === 'int'" >
                                     <label class="label">Hauteur</label>
                                     <p class="control has-icons-left">
-                                        <input v-if="formeSelected === 'Carré'" class="input" type="text" v-model="currentModuleSelected.height" :placeholder="currentModuleSelected.height" @change="carreHauteur(currentModuleSelected.height)">
-                                        <input v-if="formeSelected === 'Rectangle'" class="input" type="text" v-model="currentModuleSelected.height" :placeholder="currentModuleSelected.height" @change="rectangleHauteur(currentModuleSelected.height)">
-                                        <input v-if="formeSelected === 'Personnaliser'" class="input" type="text" v-model="currentModuleSelected.height" :placeholder="currentModuleSelected.height" @change="extHauteur(currentModuleSelected.height)">
+                                        <input class="input" type="text" v-model="currentModuleSelected.height" :placeholder="currentModuleSelected.height" @change="extHauteur(currentModuleSelected.height)">
                                         <span class="icon is-small is-left">
                                       <i class="fas fa-ruler-vertical"></i>
                                     </span>
@@ -295,9 +231,7 @@
                                 <div class="field">
                                     <label class="label">Longueur</label>
                                     <p class="control has-icons-left">
-                                        <input v-if="formeSelected === 'Carré'" class="input" type="text" :value="currentModuleSelected.length" :placeholder="currentModuleSelected.length" @change="prixModuleCarre(currentModuleSelected, currentModuleSelected.length, $event); carreLongueur($event)">
-                                        <input v-if="formeSelected === 'Rectangle'" class="input" type="text" :value="currentModuleSelected.length" :placeholder="currentModuleSelected.length" @change="prixModuleRect(currentModuleSelected, currentModuleSelected.length, $event); rectangleLongueur(currentModuleSelected.length, $event)">
-                                        <input v-if="formeSelected === 'Personnaliser'" class="input" type="text" :value="currentModuleSelected.length" :placeholder="currentModuleSelected.length" @change="prixModule(currentModuleSelected, currentModuleSelected.length, $event)">
+                                        <input class="input" type="text" :value="currentModuleSelected.length" :placeholder="currentModuleSelected.length" @change="prixModule(currentModuleSelected, currentModuleSelected.length, $event)">
                                         <span class="icon is-small is-left">
                                       <i class="fas fa-ruler-horizontal"></i>
                                     </span>
@@ -371,6 +305,7 @@
                 </affix>
             </div>
         </div>
+        <b-loading :is-full-page="isFullPage" :active.sync="isLoading" :can-cancel="true"></b-loading>
     </div>
 </template>
 
@@ -385,27 +320,8 @@
                     {name: 'Luxe', finitionExterieure: 'Crépi', isolation: 'Laine de roche', couverture: 'Zinc', img: '/static/img/house/gammes/luxe.jpeg'},
                     {name: 'Naturelle', finitionExterieure: 'Bois', isolation: 'Ouate de cellulose', couverture: 'Brande', img: '/static/img/house/gammes/naturelle.jpeg'},
                 ],
-                formes: [
-                    {name: 'Carré', img: '/static/img/house/forms/Maison_carree.jpg'},
-                    {name: 'Rectangle', img: '/static/img/house/forms/Maison_rectangle.jpg'},
-                    {name: 'Personnaliser', img: '/static/img/house/forms/Maison_perso.jpg'},
-                ],
                 modules: {
-                    ext: {
-                        carre: [
-                            {name: 'Mur-nord', family: "ext", height: '2.5', length: '1.0', unit: 'm²', angle: '', angle_type: '', length2: '', price: 1000},
-                            {name: 'Mur_sud', family: "ext", height: '2.5', length: '1.0', unit: 'm linéaire', angle: '', angle_type: '', length2: '', price: 1000},
-                            {name: 'Mur_ouest', family: "ext", height: '2.5', length: '1.0', unit: 'unite', angle: '', angle_type: '', length2: '', price: 1000},
-                            {name: 'Mur_est', family: "ext", height: '2.5', length: '1.0', unit: 'unite', angle: '', angle_type: '', length2: '', price: 1000},
-                        ],
-                        rectangle: [
-                            {name: 'Mur-nord', family: "ext", height: '2.0', length: '1.5', unit: 'm²', angle: '', angle_type: '', length2: '', price: 1500},
-                            {name: 'Mur_sud', family: "ext", height: '2.0', length: '1.5', unit: 'm linéaire', angle: '', angle_type: '', length2: '', price: 1500},
-                            {name: 'Mur_ouest', family: "ext", height: '2.0', length: '1.0', unit: 'unite', angle: '', angle_type: '', length2: '', price: 1000},
-                            {name: 'Mur_est', family: "ext", height: '2.0', length: '1.0', unit: 'unite', angle: '', angle_type: '', length2: '', price: 1000},
-                        ],
-                        perso: [],
-                    },
+                    ext: [],
                     int: [],
                     plancher: {
                         dalle: [],
@@ -416,19 +332,18 @@
                         couverture: [],
                     },
                 },
-                gammeSelected: '',
-                formeSelected: '',
-                modulesWallExtSquareSelected: '',
-                modulesWallExtRectSelected: '',
                 modulesWallExtSelected: '',
                 modulesWallIntSelected: '',
                 modulesFloorSlabSelected: '',
                 modulesFloorStructuralSelected: '',
                 modulesRoofCarpentersSelected: '',
                 modulesRoofCoverSelected: '',
-                modulesSelected : [],
+                gammeSelected: '',
                 currentGammeSelected: '',
+                modulesSelected : [],
                 currentModuleSelected: '',
+                isLoading: false,
+                isFullPage: true
             }
         },
         computed: {
@@ -446,7 +361,7 @@
             },
             checkModuleSelected() {
 
-                if(this.modulesWallExtSquareSelected === '' && this.modulesWallExtRectSelected === '' && this.modulesWallExtSelected === '' && this.modulesWallIntSelected === '' && this.modulesFloorSlabSelected === '' && this.modulesFloorStructuralSelected === '' && this.modulesRoofCarpentersSelected === '' && this.modulesRoofCoverSelected === ''){
+                if(this.modulesWallExtSelected === '' && this.modulesWallIntSelected === '' && this.modulesFloorSlabSelected === '' && this.modulesFloorStructuralSelected === '' && this.modulesRoofCarpentersSelected === '' && this.modulesRoofCoverSelected === ''){
                     this.currentModuleSelected = ''
                 }
 
@@ -458,48 +373,9 @@
             },
         },
         methods: {
-            carreLongueur(length) {
-                this.modulesWallExtSquareSelected.forEach(function (module) {
-                    module.length = length.target.value;
-                });
-            },
-            rectangleLongueur(oldLength, length) {
-
-                this.modulesWallExtRectSelected.forEach(function (module) {
-                    if(module.length === oldLength) {
-                        module.length = length.target.value;
-                    }
-                });
-            },
-            carreHauteur(height) {
-                this.modulesWallExtSquareSelected.forEach(function (module) {
-                    module.height = height;
-                });
-            },
-            rectangleHauteur(height) {
-                this.modulesWallExtRectSelected.forEach(function (module) {
-                    module.height = height;
-                });
-            },
             extHauteur(height) {
                 this.modulesWallExtSelected.forEach(function (module) {
                     module.height = height;
-                });
-            },
-            prixModuleCarre(module, oldLength, length) {
-                let lenghtDiff = length.target.value - oldLength;
-                let newPrice = lenghtDiff * module.price + module.price;
-                this.modulesWallExtSquareSelected.forEach(function (module) {
-                    module.price = newPrice;
-                });
-            },
-            prixModuleRect(module, oldLength, length) {
-                let lenghtDiff = length.target.value - oldLength;
-                let newPrice = module.price = lenghtDiff * module.price + module.price;
-                this.modulesWallExtRectSelected.forEach(function (module) {
-                    if(module.length === oldLength) {
-                        module.price = newPrice;
-                    }
                 });
             },
             prixModule(module, oldLength, length) {
@@ -508,50 +384,6 @@
             }
         },
         watch: {
-            formeSelected: {
-                handler: function () {
-                    if(this.formeSelected === 'Carré') {
-                        this.currentModuleSelected = '';
-                        this.modulesWallExtRectSelected = '';
-                        this.modulesWallExtSelected = '';
-
-                        let modulesCarre = [];
-                        this.modules.ext.carre.forEach( function (module) {
-                            modulesCarre.push(module)
-                        });
-                        this.modulesWallExtSquareSelected = modulesCarre;
-
-                    }
-
-                    if(this.formeSelected === 'Rectangle') {
-                        this.currentModuleSelected = '';
-                        this.modulesWallExtSquareSelected = '';
-                        this.modulesWallExtSelected = '';
-
-                        let modulesRect = [];
-                        this.modules.ext.rectangle.forEach( function (module) {
-                            modulesRect.push(module)
-                        });
-                        this.modulesWallExtRectSelected = modulesRect;
-                    }
-
-                    if(this.formeSelected === 'Personnaliser') {
-                        this.currentModuleSelected = '';
-                        this.modulesWallExtSquareSelected = '';
-                        this.modulesWallExtRectSelected = '';
-                    }
-                },
-            },
-            modulesWallExtSquareSelected: {
-               handler: function () {
-                    this.modulesSelected = this.modulesSelected + 1
-                }
-            },
-            modulesWallExtRectSelected: {
-               handler: function () {
-                    this.modulesSelected = this.modulesSelected + 1
-                }
-            },
             modulesWallExtSelected: {
                handler: function () {
                     this.modulesSelected = this.modulesSelected + 1
@@ -604,19 +436,21 @@
             }
         },
         mounted() {
+            this.isLoading = true;
+
             if (this.modulesSelected === '') {
                 this.$emit('can-continue', {value: false});
             } else {
                 this.$emit('can-continue', {value: true});
             }
 
-            axios.get(`http://127.0.0.1:8000/api/gammes`)
-                .then(response => {
-                    this.modules.ext.perso = response.data
-                })
-                .catch(e => {
-                    this.errors.push(e)
-                });
+            // axios.get(`http://127.0.0.1:8000/api/gammes`)
+            //     .then(response => {
+            //         this.modules.ext.perso = response.data
+            //     })
+            //     .catch(e => {
+            //         this.errors.push(e)
+            //     });
 
             // axios.get(`http://127.0.0.1:8000/api/modules/family/ext`)
             //     .then(response => {
@@ -632,9 +466,9 @@
             //     })
             //     .catch(e => {
             //         this.errors.push(e)
-            //     })
+            //     });
 
-
+            this.isLoading = false;
         }
     }
 </script>

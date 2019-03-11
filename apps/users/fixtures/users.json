@@ -13,7 +13,7 @@
     "model": "users.MaderaUser",
     "pk": 1,
     "fields": {
-      "password": "maderamadera",
+      "password": "pbkdf2_sha256$120000$RW8xxsNB2pFr$oTtRjH6eDFuzmgbzcGMMMMf293FwEOKZgJgLXRHYFYI=",
       "is_superuser": "True",
       "email": "admin@madera.com",
       "first_name": "admin",
