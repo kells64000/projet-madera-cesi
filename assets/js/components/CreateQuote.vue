@@ -43,22 +43,22 @@
         data: function () {
             return {
                 quoteSteps: [
-                    {
-                        icon: 'assignment',
-                        name: 'Projet',
-                        title: 'Projet',
-                        subtitle: 'Nom du projet',
-                        component: Projet,
-                        completed: false
-                    },
-                    {
-                        icon: 'person',
-                        name: 'client',
-                        title: 'Client',
-                        subtitle: 'Affectation du client',
-                        component: Client,
-                        completed: false
-                    },
+                    // {
+                    //     icon: 'assignment',
+                    //     name: 'Projet',
+                    //     title: 'Projet',
+                    //     subtitle: 'Nom du projet',
+                    //     component: Projet,
+                    //     completed: false
+                    // },
+                    // {
+                    //     icon: 'person',
+                    //     name: 'client',
+                    //     title: 'Client',
+                    //     subtitle: 'Affectation du client',
+                    //     component: Client,
+                    //     completed: false
+                    // },
                     {
                         icon: 'view_quilt',
                         name: 'création',

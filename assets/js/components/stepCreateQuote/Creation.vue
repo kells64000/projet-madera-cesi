@@ -101,7 +101,7 @@
                     <div>
                         <label for="selectModuleWallExt">Murs Extérieur :</label>
                     </div>
-                    <v-select id="selectModuleWallExt" v-model="modulesWallExtSelected" multiple :options="modules.ext.rectangle" label="name">
+                    <v-select id="selectModuleWallExt" v-model="modulesWallExtSelected" multiple :options="modules.ext.perso" label="name">
                         <template slot="option" slot-scope="option">
                             {{option.name}}
                         </template>
@@ -284,9 +284,9 @@
                                 <div class="field">
                                     <label class="label">Hauteur</label>
                                     <p class="control has-icons-left">
-                                        <input v-if="formeSelected === 'Carré'" class="input" type="text" v-model="currentModuleSelected.hauteur" :placeholder="currentModuleSelected.hauteur" @change="carreHauteur(currentModuleSelected.hauteur)">
-                                        <input v-if="formeSelected === 'Rectangle'" class="input" type="text" v-model="currentModuleSelected.hauteur" :placeholder="currentModuleSelected.hauteur" @change="rectangleHauteur(currentModuleSelected.hauteur)">
-                                        <input v-if="formeSelected === 'Personnaliser'" class="input" type="text" v-model="currentModuleSelected.hauteur" :placeholder="currentModuleSelected.hauteur" @change="extHauteur(currentModuleSelected.hauteur)">
+                                        <input v-if="formeSelected === 'Carré'" class="input" type="text" v-model="currentModuleSelected.height" :placeholder="currentModuleSelected.height" @change="carreHauteur(currentModuleSelected.height)">
+                                        <input v-if="formeSelected === 'Rectangle'" class="input" type="text" v-model="currentModuleSelected.height" :placeholder="currentModuleSelected.height" @change="rectangleHauteur(currentModuleSelected.height)">
+                                        <input v-if="formeSelected === 'Personnaliser'" class="input" type="text" v-model="currentModuleSelected.height" :placeholder="currentModuleSelected.height" @change="extHauteur(currentModuleSelected.height)">
                                         <span class="icon is-small is-left">
                                       <i class="fas fa-ruler-vertical"></i>
                                     </span>
@@ -295,9 +295,9 @@
                                 <div class="field">
                                     <label class="label">Longueur</label>
                                     <p class="control has-icons-left">
-                                        <input v-if="formeSelected === 'Carré'" class="input" type="text" v-model="currentModuleSelected.longueur" :placeholder="currentModuleSelected.longueur" @change="carreLongueur(currentModuleSelected.longueur)">
-                                        <input v-if="formeSelected === 'Rectangle'" class="input" type="text" :value="currentModuleSelected.longueur" :placeholder="currentModuleSelected.longueur"  @change="rectangleLongueur(currentModuleSelected.longueur, $event)">
-                                        <input v-if="formeSelected === 'Personnaliser'" class="input" type="text" :value="currentModuleSelected.longueur" :placeholder="currentModuleSelected.longueur">
+                                        <input v-if="formeSelected === 'Carré'" class="input" type="text" v-model="currentModuleSelected.length" :placeholder="currentModuleSelected.length" @change="carreLongueur(currentModuleSelected.length)">
+                                        <input v-if="formeSelected === 'Rectangle'" class="input" type="text" :value="currentModuleSelected.length" :placeholder="currentModuleSelected.length"  @change="rectangleLongueur(currentModuleSelected.length, $event)">
+                                        <input v-if="formeSelected === 'Personnaliser'" class="input" type="text" :value="currentModuleSelected.length" :placeholder="currentModuleSelected.length">
                                         <span class="icon is-small is-left">
                                       <i class="fas fa-ruler-horizontal"></i>
                                     </span>
@@ -307,45 +307,52 @@
                                     <label class="label">Unite d'usage</label>
                                     <p class="control has-icons-left">
                                         <input class="input" type="text"
-                                               :placeholder="currentModuleSelected.unite_usage" readonly>
+                                               :placeholder="currentModuleSelected.unit" readonly>
                                         <span class="icon is-small is-left">
                                       <i class="fas fa-balance-scale"></i>
                                     </span>
                                     </p>
                                 </div>
 
-                                <div class="field">
-                                    <div class="control">
-                                        <div>
-                                            <label for="selectAngle" class="label">Angle</label>
-                                        </div>
+                                <div v-if="currentModuleSelected.family === 'ext' || currentModuleSelected.family === 'int'">
 
-                                        <div id="selectAngle" class="select">
-                                            <select v-model="currentModuleSelected.angle">
-                                                <option value="">Aucun</option>
-                                                <option>Entrant</option>
-                                                <option>Sortant</option>
-                                            </select>
+                                    <div class="field">
+                                        <div class="control">
+                                            <div>
+                                                <label for="selectAngle" class="label">Angle</label>
+                                            </div>
+
+                                            <div id="selectAngle" class="select">
+                                                <select v-model="currentModuleSelected.angle">
+                                                    <option value="">Aucun</option>
+                                                    <option>Entrant</option>
+                                                    <option>Sortant</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="field" v-if="currentModuleSelected.angle !== '' && currentModuleSelected.angle !== 'Aucun'">
-                                    <label class="label">Degré de l'angle</label>
-                                    <p class="control has-icons-left">
-                                        <input class="input" type="text" v-model="currentModuleSelected.angleValeur" :placeholder="currentModuleSelected.angleValeur">
-                                        <span class="icon is-small is-left">
-                                      <i class="fas fa-drafting-compass"></i>
-                                    </span>
-                                    </p>
+                                    <div class="field"
+                                         v-if="currentModuleSelected.angle !== '' && currentModuleSelected.angle !== 'Aucun'">
+                                        <label class="label">Degré de l'angle</label>
+                                        <p class="control has-icons-left">
+                                            <input class="input" type="text" v-model="currentModuleSelected.angleValeur"
+                                                   :placeholder="currentModuleSelected.angleValeur">
+                                            <span class="icon is-small is-left">
+                                              <i class="fas fa-drafting-compass"></i>
+                                            </span>
+                                        </p>
 
-                                    <label class="label">Longueur 2</label>
-                                    <p class="control has-icons-left">
-                                        <input class="input" type="text" v-model="currentModuleSelected.section" :placeholder="currentModuleSelected.section">
-                                        <span class="icon is-small is-left">
-                                      <i class="fas fa-ruler-horizontal"></i>
-                                    </span>
-                                    </p>
+                                        <label class="label">Longueur 2</label>
+                                        <p class="control has-icons-left">
+                                            <input class="input" type="text" v-model="currentModuleSelected.section"
+                                                   :placeholder="currentModuleSelected.section">
+                                            <span class="icon is-small is-left">
+                                              <i class="fas fa-ruler-horizontal"></i>
+                                            </span>
+                                        </p>
+                                    </div>
+
                                 </div>
 
                                 <div class="field">
@@ -368,6 +375,7 @@
 </template>
 
 <script>
+    import axios from 'axios'
     export default {
         props: ['clickedNext', 'currentStep'],
         data() {
@@ -385,37 +393,23 @@
                 modules: {
                     ext: {
                         carre: [
-                            {name: 'Mur-nord', hauteur: '2.5', longueur: '2.0', unite_usage: 'm²', angle: '', angleValeur: '', section: '', price: 1500},
-                            {name: 'Mur_sud', hauteur: '2.5', longueur: '2.0', unite_usage: 'm linéaire', angle: '', angleValeur: '', section: '', price: 500.50},
-                            {name: 'Mur_ouest', hauteur: '2.5', longueur: '2.0', unite_usage: 'unite', angle: '', angleValeur: '', section: '', price: 200.25},
-                            {name: 'Mur_est', hauteur: '2.5', longueur: '2.0', unite_usage: 'unite', angle: '', angleValeur: '', section: '', price: 200.25},
+                            {name: 'Mur-nord', family: "ext", height: '2.5', length: '2.0', unit: 'm²', angle: '', angleValeur: '', section: '', price: 1500},
+                            {name: 'Mur_sud', family: "ext", height: '2.5', length: '2.0', unit: 'm linéaire', angle: '', angleValeur: '', section: '', price: 500.50},
+                            {name: 'Mur_ouest', family: "ext", height: '2.5', length: '2.0', unit: 'unite', angle: '', angleValeur: '', section: '', price: 200.25},
+                            {name: 'Mur_est', family: "ext", height: '2.5', length: '2.0', unit: 'unite', angle: '', angleValeur: '', section: '', price: 200.25},
                         ],
                         rectangle: [
-                            {name: 'Mur-nord', hauteur: '2.0', longueur: '1.5', unite_usage: 'm²', angle: '', angleValeur: '', section: '', price: 1500},
-                            {name: 'Mur_sud', hauteur: '2.0', longueur: '1.5', unite_usage: 'm linéaire', angle: '', angleValeur: '', section: '', price: 500.50},
-                            {name: 'Mur_ouest', hauteur: '2.0', longueur: '1.0', unite_usage: 'unite', angle: '', angleValeur: '', section: '', price: 200.25},
-                            {name: 'Mur_est', hauteur: '2.0', longueur: '1.0', unite_usage: 'unite', angle: '', angleValeur: '', section: '', price: 200.25},
+                            {name: 'Mur-nord', family: "ext", height: '2.0', length: '1.5', unit: 'm²', angle: '', angleValeur: '', section: '', price: 1500},
+                            {name: 'Mur_sud', family: "ext", height: '2.0', length: '1.5', unit: 'm linéaire', angle: '', angleValeur: '', section: '', price: 500.50},
+                            {name: 'Mur_ouest', family: "ext", height: '2.0', length: '1.0', unit: 'unite', angle: '', angleValeur: '', section: '', price: 200.25},
+                            {name: 'Mur_est', family: "ext", height: '2.0', length: '1.0', unit: 'unite', angle: '', angleValeur: '', section: '', price: 200.25},
                         ],
-                        perso: [
-                            {name: 'Mur-nord', hauteur: '2.0', longueur: '1.5', unite_usage: 'm²', angle: '', angleValeur: '', section: '', price: 1500},
-                            {name: 'Mur_sud', hauteur: '2.0', longueur: '1.5', unite_usage: 'm linéaire', angle: '', angleValeur: '', section: '', price: 500.50},
-                            {name: 'Mur_ouest', hauteur: '2.0', longueur: '1.0', unite_usage: 'unite', angle: '', angleValeur: '', section: '', price: 200.25},
-                            {name: 'Mur_est', hauteur: '2.0', longueur: '1.0', unite_usage: 'unite', angle: '', angleValeur: '', section: '', price: 200.25},
-                        ],
+                        perso: [],
                     },
-                    int: [
-                        {name: 'Mur-nord', hauteur: '2.0', longueur: '1.5', unite_usage: 'm²', angle: '', angleValeur: '', section: '', price: 1500},
-                        {name: 'Mur_sud', hauteur: '2.0', longueur: '1.5', unite_usage: 'm linéaire', angle: '', angleValeur: '', section: '', price: 500.50},
-                        {name: 'Mur_ouest', hauteur: '2.0', longueur: '1.0', unite_usage: 'unite', angle: '', angleValeur: '', section: '', price: 200.25},
-                        {name: 'Mur_est', hauteur: '2.0', longueur: '1.0', unite_usage: 'unite', angle: '', angleValeur: '', section: '', price: 200.25},
-                    ],
+                    int: [],
                     plancher: {
-                        dalle: [
-
-                        ],
-                        porteur: [
-
-                        ],
+                        dalle: [],
+                        porteur: [],
                     },
                     charpente: [
 
@@ -580,6 +574,24 @@
             } else {
                 this.$emit('can-continue', {value: true});
             }
+
+            axios.get(`http://127.0.0.1:8000/api/modules/family/ext`)
+                .then(response => {
+                    this.modules.ext.perso = response.data
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                });
+
+            // axios.get(`http://127.0.0.1:8000/api/modules/family/int`)
+            //     .then(response => {
+            //         this.modules.int = response.data
+            //     })
+            //     .catch(e => {
+            //         this.errors.push(e)
+            //     })
+
+
         }
     }
 </script>
