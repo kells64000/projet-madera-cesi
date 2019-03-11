@@ -1,5 +1,8 @@
+# -*- coding: utf-8 -*-
+from django.contrib.auth.hashers import make_password
 from rest_exceptions import CustomValidation
 from rest_framework import serializers, status
+
 from addresses.models import Address
 from addresses.serializers import AddressSerializer
 from .models import MaderaUser, SalesPerson, Client, Provider
@@ -12,14 +15,10 @@ class DynamicFieldsModelSerializer(serializers.ModelSerializer):
     """
 
     def __init__(self, *args, **kwargs):
-        # Don't pass the 'fields' arg up to the superclass
         fields = kwargs.pop('fields', None)
-
-        # Instantiate the superclass normally
         super(DynamicFieldsModelSerializer, self).__init__(*args, **kwargs)
 
         if fields is not None:
-            # Drop any fields that are not specified in the `fields` argument.
             allowed = set(fields)
             existing = set(self.fields)
             for field_name in existing - allowed:
@@ -42,7 +41,7 @@ class MaderaUserSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = MaderaUser
         fields = ('id', 'email', 'first_name', 'last_name', 'full_name', 'phone',
-                  'address', 'date_joined', 'is_active', 'is_staff')
+                  'address', 'password', 'date_joined', 'is_active', 'is_staff')
         write_only_fields = ('password',)
 
     def validate_email(self, value):
@@ -51,6 +50,9 @@ class MaderaUserSerializer(DynamicFieldsModelSerializer):
                 'email',
                 status_code=status.HTTP_409_CONFLICT)
         return value
+
+    def validate_password(self, value):
+        return make_password(value)
 
     def create(self, validated_data, address=None):
         try:
@@ -68,6 +70,7 @@ class MaderaUserSerializer(DynamicFieldsModelSerializer):
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
         instance.phone = validated_data.get('phone', instance.phone)
+        instance.password = validated_data.get('password', instance.password)
         address_data = validated_data.get('address', None)
 
         if instance.address and address_data:

@@ -155,7 +155,6 @@ class ListGamme(APIView):
 
     def post(self, request, format=None):
         serializer = GammeSerializer(data=request.data)
-        import ipdb; ipdb.set_trace()
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
