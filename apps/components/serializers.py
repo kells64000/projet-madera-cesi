@@ -114,7 +114,8 @@ class ModuleSerializer(serializers.ModelSerializer):
         allow_blank=True)
     length2 = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
         allow_blank=True)
-    height = serializers.DecimalField(required=False, max_digits=8, decimal_places=2)
+    height = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
+        allow_blank=True)
     unit = serializers.CharField(required=False, max_length=10, allow_blank=True)
     surface = serializers.SerializerMethodField(required=False)
     family = serializers.ChoiceField(choices=FAMILY_CHOICES, required=False, allow_blank=True)
