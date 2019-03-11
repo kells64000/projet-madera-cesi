@@ -26,8 +26,6 @@ class Component(models.Model):
     depth = models.DecimalField(_('depth'), max_digits=8, decimal_places=2, null=True)
     unit = models.CharField(_('unit'), max_length=10, blank=False, null=True)
     price = models.DecimalField(_('price'), max_digits=10, decimal_places=2, null=True)
-    total_price = models.DecimalField(_('total_price'), max_digits=10, decimal_places=2, null=True)
-
     gammes = models.ManyToManyField(Gamme)
 
     @property
@@ -61,9 +59,6 @@ class Module(models.Model):
     unit = models.CharField(_('unit'), max_length=10, blank=False, null=True)
     price = models.DecimalField(_('price'), max_digits=10, decimal_places=2, null=True)
     family = models.CharField(_('family'), max_length=3, choices=FAMILY_CHOICES, null=True)
-    quantity = models.IntegerField(_('quantity'), blank=False, null=True)
-
-    # ForeignKeys
     designer = models.ForeignKey(MaderaUser,
                                  blank=True,
                                  default=None,
@@ -112,11 +107,6 @@ class Module(models.Model):
             if comp.total_price:
                 price += comp.total_price
         return price
-
-    @property
-    def total_price(self):
-        return (self.calculated_price * self.quantity if self.quantity and
-            self.calculated_priceprice else None)
 
 
 class House(models.Model):
