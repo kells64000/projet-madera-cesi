@@ -1,29 +1,26 @@
 [
   {
-    "model": "GAMME",
+    "model": "components.Gamme",
     "pk": 1,
     "fields": {
       "name": "Excellence",
-      "ratio": 1.5,
-      "components": [25,26,27]
+      "ratio": 1.5
     }
   },
   {
-    "model": "GAMME",
+    "model": "components.Gamme",
     "pk": 1,
     "fields": {
       "name": "Nature",
-      "ratio": 1.0,
-      "components": [28,29,30]
+      "ratio": 1.0
     }
   },
   {
-    "model": "GAMME",
+    "model": "components.Gamme",
     "pk": 1,
     "fields": {
       "name": "Luxe",
-      "ratio": 2,
-      "components": [31,32,33]
+      "ratio": 2
     }
   }
 ]
