@@ -124,38 +124,38 @@
                             'Content-Type': 'application/json'
                         }
                     }).then((response) => {
-                        this.pathPdf = response.data.filename
+                        this.createQuote(response.data.filename);
 
                     }).catch(e => {
 
                         console.log(e.response);
 
-                        this.errors.push(e);
+                        // this.errors.push(e);
                     });
             },
-            createQuote() {
+            createQuote(pdf) {
 
                 let QuoteCreate = {
                     'name': this.quoteProject,
                     'reference': this.quoteProjectRef,
                     'price': this.quotePrice,
                     'state': 'Brouillon',
-                    'attachment': this.pathPdf,
+                    'attachment': pdf,
                     'client': {
                         'id': this.quoteClient.id,
                         'full_name': this.quoteClient.full_name,
                         'phone': this.quoteClient.phone,
                         'email': this.quoteClient.email,
-                        'street': this.quoteClient.street,
-                        'city': this.quoteClient.city,
-                        'zipcode': this.quoteClient.zipcode,
+                        'street': this.quoteClient.address.street,
+                        'city': this.quoteClient.address.city,
+                        'zipcode': this.quoteClient.address.zipcode,
                     },
                     'salesperson': {
                         'id': this.quoteSalesperson.id,
                         'full_name': this.quoteSalesperson.full_name,
                     },
                 };
-
+                console.log(QuoteCreate);
                 axios.post(this.$store.state.endpoints.baseUrl + 'api/quotes/',
                     QuoteCreate, {
                         headers: {
@@ -175,7 +175,7 @@
             alert() {
                 this.isLoading = true;
                 this.createPDF();
-                this.createQuote();
+                // this.createQuote();
                 this.isLoading = false;
             }
         },
