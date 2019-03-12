@@ -232,10 +232,6 @@ EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 EMAIL_SUBJECT_PREFIX = '[Devis]'
 
-# # EMAIL DEV
-# EMAIL_HOST = 'localhost'
-# EMAIL_PORT = 1030
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 

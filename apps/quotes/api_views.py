@@ -92,14 +92,14 @@ def generate_pdf(request):
     html = render_to_string(template_path, context)
     filename = 'quote_{}.pdf'.format(context.get('ref'))
     pisaStatus = pisa.CreatePDF(html, dest=response)
-    with open(settings.STATIC_ROOT + '/pdf/' + filename, 'wb') as f:
+    with open('assets/pdf/' + filename, 'wb') as f:
         f.write(response.content)
 
     # Envoi email
     subject, from_email, to = 'Madera', 'no-reply@madera.com', context.get('client').get('email')
     text_content = 'Veuillez trouver ci-joint le devis'
     msg = EmailMessage(subject, text_content, from_email, [to])
-    msg.attach_file(settings.STATIC_ROOT + '/pdf/' + filename)
+    msg.attach_file('assets/pdf/' + filename)
     msg.send()
 
     return JsonResponse({"filename": filename})
