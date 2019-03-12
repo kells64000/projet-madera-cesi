@@ -1,8 +1,7 @@
 from rest_framework import serializers
-from users.serializers import ClientSerializer, SalesPersonSerializer
-
-from users.models import Client, SalesPerson
 from .models import Quote
+from components.models import House
+from users.models import Client, SalesPerson
 
 
 class QuoteSerializer(serializers.ModelSerializer):
@@ -20,11 +19,12 @@ class QuoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Quote
         fields = ('id', 'name', 'reference', 'price', 'state', 'attachment',
-                  'client', 'salesperson', 'created_at', 'updated_at')
+                  'client', 'salesperson', 'house', 'created_at', 'updated_at')
 
     def create(self, validated_data):
         client_data = validated_data.pop('client', None)
         salesperson_data = validated_data.pop('salesperson', None)
+        house_data = validated_data.pop('house', None)
         quote = Quote.objects.create(**validated_data)
         if client_data:
             client = Client.objects.get_or_create(id=client_data.get('id'))[0]
@@ -34,6 +34,10 @@ class QuoteSerializer(serializers.ModelSerializer):
             salesperson = SalesPerson.objects.get_or_create(id=salesperson_data.get('id'))[0]
             salesperson.save()
             quote.salesperson_id = salesperson.id
+        if house_data:
+            house = House.objects.get_or_create(id=house_data.get('id'))[0]
+            house.save()
+            quote.salesperson_id = house.id
         quote.save()
         return quote
 
@@ -45,6 +49,7 @@ class QuoteSerializer(serializers.ModelSerializer):
         instance.attachment = validated_data.get('attachment', instance.attachment)
         client_data = validated_data.pop('client', None)
         salesperson_data = validated_data.pop('salesperson', None)
+        house_data = validated_data.pop('house', None)
 
         if client_data:
             client, created = Client.objects.update_or_create(id=client_data.get('id'))
@@ -56,5 +61,10 @@ class QuoteSerializer(serializers.ModelSerializer):
             if created:
                 salesperson.save()
             instance.salesperson_id = salesperson.id
+        if salesperson_data:
+            house, created = House.objects.update_or_create(id=house_data.get('id'))
+            if created:
+                house.save()
+            instance.salesperson_id = house.id
         instance.save()
         return instance

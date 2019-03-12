@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from django.core import serializers
+
 from django.http import Http404
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
@@ -80,11 +82,11 @@ class ListModuleFamily(generics.ListAPIView):
     serializer_class = ModuleSerializer
 
     def get_queryset(self):
-        queryset = Module.objects.all()
+        qs = Module.objects.all()
         family = self.kwargs['family'].upper()
         if family:
-            queryset = queryset.filter(family=family)
-        return queryset
+            qs = qs.filter(family=family)
+        return qs
 
 
 class DetailModule(APIView):
@@ -104,8 +106,8 @@ class DetailModule(APIView):
 
     def put(self, request, pk, format=None):
         module = self.get_object(pk)
-        component_data = request.data.get('components', None)
-        gammes_data = request.data.get('gammes', None)
+        component_data = request.data.pop('components', None)
+        gammes_data = request.data.pop('gammes', None)
         serializer = ModuleSerializer(module, data=request.data)
         if serializer.is_valid():
             serializer.save(components=component_data, gammes=gammes_data)
