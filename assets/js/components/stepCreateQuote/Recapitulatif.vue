@@ -18,11 +18,15 @@
         <div class="card-content">
             <div class="content">
 
-                <div class="subtitle is-size-6 d-flex justify-content-space-beetween" v-for="module in quoteModules">
-                    {{module.name}}
-                    <span>
-                        {{module.price}}€
-                    </span>
+                <div v-for="module in quoteModules">
+                    <div class="title is-4 mb-1" v-for="element in module">
+                        <p>{{element.name}} {{element.price}}€</p>
+
+                        <div class="subtitle is-size-6" v-for="components in element.components">
+                            {{components.name}} {{components.price}}€
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -55,6 +59,9 @@
             },
             quoteModules() {
                 return this.$store.getters.getQuoteModules;
+            },
+            quotePrice() {
+                return this.$store.getters.getQuotePrice;
             },
         },
         watch: {

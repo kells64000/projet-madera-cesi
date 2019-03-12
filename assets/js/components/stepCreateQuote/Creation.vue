@@ -410,7 +410,7 @@
                 let prixTotal = 0;
                 modules.forEach( function (element, i) {
 
-                    console.log(element[i].price);
+                    // console.log(element[i].price);
 
                     // element.forEach( function (element) {
                     //     prixTotal = prixTotal + element.price
@@ -471,9 +471,10 @@
 
                         let montantTotal = this.prixTotal(this.modulesSelected);
 
-                        console.log(montantTotal);
+                        // console.log(montantTotal);
 
                         this.$store.commit("setQuoteModules", this.modulesSelected);
+                        // this.$store.commit("setQuotePrice", montantTotal);
 
                         this.$emit('can-continue', {value: true});
                     } else {
