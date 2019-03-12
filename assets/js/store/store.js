@@ -31,6 +31,7 @@ export default new Vuex.Store({
     quoteClient: {},
     quoteModules: {},
     quotePrice: '',
+    quoteGamme: '',
   },
   getters: {
     getUser: state => {
@@ -45,6 +46,9 @@ export default new Vuex.Store({
     },
     getQuoteProjectRef: state => {
       return state.quoteProjectRef;
+    },
+    getQuoteGamme: state => {
+      return state.quoteGamme;
     },
     getQuoteClient: state => {
       return state.quoteClient;
@@ -89,6 +93,9 @@ export default new Vuex.Store({
     },
     setQuotePrice(state, price) {
        Vue.set(state, 'quotePrice', price);
+    },
+    setQuoteGamme(state, gamme) {
+       Vue.set(state, 'quoteGamme', gamme);
     }
   }
 })
