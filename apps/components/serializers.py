@@ -10,12 +10,11 @@ class GammeSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(required=False, max_length=30, allow_null=True)
-    name_verbose = serializers.SerializerMethodField(required=False)
     ratio = serializers.DecimalField(required=False, max_digits=4, decimal_places=2)
 
     class Meta:
         model = Module
-        fields = ('id', 'name', 'name_verbose', 'ratio')
+        fields = ('id', 'name', 'ratio')
 
     def create(self, validated_data):
         gamme = Gamme.objects.create(**validated_data)
@@ -202,7 +201,6 @@ class ModuleSerializer(serializers.ModelSerializer):
 
     def get_price(self, obj):
         return ''
-        # origine de ton bug car ton objet n'a pas de champ calculated_price | dsl de pas avoir pu t'aider avant .....
         # obj.calculated_price
 
 

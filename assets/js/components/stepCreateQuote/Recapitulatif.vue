@@ -27,7 +27,7 @@
             </div>
         </div>
         <footer class="card-footer justify-content-end pr-1-5">
-            {{totalPrice()}}€
+            €
         </footer>
     </div>
 </template>
@@ -35,10 +35,12 @@
 <script>
     export default {
         props: ['clickedNext', 'currentStep'],
+        data() {
+            return {
+                nom: 1
+            }
+        },
         computed: {
-            quoteDate() {
-                return this.$store.getters.getQuoteDate;
-            },
             quoteProject() {
                 return this.$store.getters.getQuoteProject;
             },
@@ -52,21 +54,10 @@
                 return this.$store.getters.getQuoteModules;
             },
         },
-        methods: {
-          totalPrice() {
-              let price = 0;
-
-              this.quoteModules.forEach(function (module) {
-
-                  price += module.price;
-              });
-              return price;
-          },
-        },
         watch: {
-            totalPrice: {
+            nom: {
                 handler: function () {
-                    if (this.totalPrice() !== 0) {
+                    if (this.nom !== 0) {
                         this.$emit('can-continue', {value: true});
                     } else {
                         this.$emit('can-continue', {value: true});
@@ -79,13 +70,13 @@
             },
 
             clickedNext() {
-                if (this.totalPrice() !== 0) {
+                if (this.nom !== 0) {
                     this.$emit('can-continue', {value: true});
                 }
             }
         },
         mounted() {
-            if (this.totalPrice() === 0) {
+            if (this.nom === 0) {
                 this.$emit('can-continue', {value: false});
             } else {
                 this.$emit('can-continue', {value: true});

@@ -30,9 +30,10 @@
                     <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
                         <thead>
                         <tr class="table-quotes-head">
-                            <th class="has-text-centered" @click="sort('id')">N° Devis <span><i class="fas" v-if="currentSort === 'id'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
-                            <th class="has-text-centered" @click="sort('salesman')">Commercial <span><i class="fas" v-if="currentSort === 'salesman'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
-                            <th class="has-text-centered" @click="sort('customer')">Client <span><i class="fas" v-if="currentSort === 'customer'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
+                            <th class="has-text-centered" @click="sort('ref')">Ref Devis <span><i class="fas" v-if="currentSort === 'ref'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
+                            <th class="has-text-centered" @click="sort('project')">Nom Projet <span><i class="fas" v-if="currentSort === 'project'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
+                            <th class="has-text-centered" @click="sort('salesperson')">Commercial <span><i class="fas" v-if="currentSort === 'salesperson'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
+                            <th class="has-text-centered" @click="sort('client')">Client <span><i class="fas" v-if="currentSort === 'client'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
                             <th class="has-text-centered" @click="sort('phone')">N° Téléphone <span><i class="fas" v-if="currentSort === 'phone'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
                             <th class="has-text-centered" @click="sort('email')">Adresse Mail <span><i class="fas" v-if="currentSort === 'email'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
                             <th class="has-text-centered" @click="sort('price')">Prix <span><i class="fas" v-if="currentSort === 'price'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
@@ -46,15 +47,16 @@
                         <tbody>
                         <tr v-for="quote in filteredAndSortedQuotes" >
 
-                            <td class="has-text-centered">{{quote.id}}</td>
-                            <td class="has-text-centered">{{quote.salesman.name}}</td>
-                            <td class="has-text-centered">{{quote.client.name}}</td>
+                            <td class="has-text-centered">{{quote.reference}}</td>
+                            <td class="has-text-centered">{{quote.name}}</td>
+                            <td class="has-text-centered">{{quote.salesperson.full_name}}</td>
+                            <td class="has-text-centered">{{quote.client.full_name}}</td>
                             <td class="has-text-centered">{{quote.client.phone}}</td>
                             <td class="has-text-centered">{{quote.client.email}}</td>
                             <td class="has-text-centered">{{quote.price}}€</td>
                             <td class="has-text-centered">
                                 <div v-if="quote.attachment !== null">
-                                    <a :href="'/assets/pdf/' + quote.attachment" target="_blank">
+                                    <a :href="'/static/pdf/' + quote.attachment" target="_blank">
                                         <i class="fas fa-file-pdf"></i>
                                     </a>
                                 </div>
@@ -99,11 +101,11 @@
                     </table>
                 </div>
 
-                <div class="modal" :class="{'is-active': (showModalUpdate === true)}">
+                <div class="modal" :class="{'is-active': (showModalUpdate === true)}" v-if="showModalUpdate === true">
                     <div class="modal-background"></div>
                     <div class="modal-card">
                         <header class="modal-card-head has-background-link">
-                            <p class="modal-card-title has-text-centered has-text-white">Edition du devis N° {{this.id}}</p>
+                            <p class="modal-card-title has-text-centered has-text-white">Edition du devis Ref {{this.reference}}</p>
                             <button @click="hideModalUpdate" class="delete" aria-label="close"></button>
                         </header>
                         <section class="modal-card-body">
@@ -122,7 +124,7 @@
                                 <div class="field">
                                     <label class="label">Client</label>
 
-                                    <v-select v-model="salesmanId" :options="salesmans" label="fullName" @focus="salesmanId = ''">
+                                    <v-select v-model="salespersonId" :options="salespersons" label="fullName" @focus="salespersonId = ''">
                                         <template slot="option" slot-scope="option">
                                             {{option.firstName}}  {{option.lastName}}
                                         </template>
@@ -179,11 +181,11 @@
                     </div>
                 </div>
 
-                <div class="modal" :class="{'is-active': (showModalDelete === true)}">
+                <div class="modal" :class="{'is-active': (showModalDelete === true)}" v-if="showModalDelete === true">
                     <div class="modal-background"></div>
                     <div class="modal-card">
                         <header class="modal-card-head has-background-danger">
-                            <p class="modal-card-title has-text-centered has-text-white">Suppression du devis N° {{this.id}}</p>
+                            <p class="modal-card-title has-text-centered has-text-white">Suppression du devis Ref {{this.reference}}</p>
                             <button @click="hideModalDelete" class="delete" aria-label="close"></button>
                         </header>
                         <section class="modal-card-body d-flex justify-content-center">
@@ -211,11 +213,11 @@
             return {
                 quotes: [],
                 clients: [],
-                salesmans: [],
+                salespersons: [],
                 errors: [],
                 search: '',
-                loading: true,
-                currentSort: 'id',
+                loading: false,
+                currentSort: 'ref',
                 currentSortDir: 'asc',
                 pageSize: null,
                 currentPage: 1,
@@ -224,7 +226,7 @@
                 showModalDelete: false,
                 selectedQuote: null,
                 clientId: 0,
-                salesmanId: 0,
+                salespersonId: 0,
                 quotePrice: '',
                 quoteState: '',
                 selectFocus: '',
@@ -232,7 +234,7 @@
         },
         async created() {
             try {
-                const response = await axios.get(this.$store.state.endpoints.baseUrl + 'api/quotes')
+                const response = await axios.get(this.$store.state.endpoints.baseUrl + 'api/quotes/')
                 this.quotes = response.data
             } catch (e) {
                 this.errors.push(e)
@@ -267,9 +269,9 @@
             setModalUpdateQuote(quote) {
                 this.showModalUpdate = true;
                 this.selectedQuote = quote;
-                this.id = quote.id;
-                this.clientId = quote.name;
-                this.salesmanId = quote.name;
+                this.reference = quote.reference;
+                this.clientId = quote.client.full_name;
+                this.salespersonId = quote.salesperson.full_name;
                 this.state = quote.state;
             },
             setModalDeleteQuote(quote) {
@@ -280,14 +282,14 @@
             hideModalUpdate: function () {
                 this.showModalUpdate = false;
                 this.clientId = '';
-                this.salesmanId = '';
+                this.salespersonId = '';
                 this.quoteState = '';
             },
             hideModalDelete: function () {
                 this.showModalDelete = false
             },
             getQuotes() {
-                axios.get(this.$store.state.endpoints.baseUrl + 'api/quotes')
+                axios.get(this.$store.state.endpoints.baseUrl + 'api/quotes/')
                 .then(response => {
                     this.quotes = response.data
                 })
@@ -303,8 +305,8 @@
                 if (this.clientId === '') {
                     this.clientId = this.selectedQuote.clientId
                 }
-                if (this.salesmanId === '') {
-                    this.salesmanId = this.selectedQuote.salesmanId
+                if (this.salespersonId === '') {
+                    this.salespersonId = this.selectedQuote.salespersonId
                 }
                 // if (this.clientPhone === '') {
                 //     this.clientPhone = this.selectedQuote.phone
@@ -321,7 +323,7 @@
 
                 let quoteUpdate = {
                     'customer_id': this.clientId,
-                    'salesman_id': this.salesmanId,
+                    'salesperson_id': this.salespersonId,
                     'price': this.quotePrice,
                     'state': this.quoteState,
                     'attachment': this.selectedQuote.attachment,
@@ -336,7 +338,7 @@
                         }
                     }).then((response) => {
                         this.clientId = 0;
-                        this.salesmanId = 0;
+                        this.salespersonId = 0;
                         this.quotePrice = '';
                         this.quoteState = '';
                         this.selectedQuote = null;
@@ -350,7 +352,7 @@
             deleteQuote() {
                 let index = this.quotes.indexOf(this.selectedQuote);
 
-                axios.delete(this.$store.state.endpoints.baseUrl + 'api/quotes' + this.selectedQuote.id)
+                axios.delete(this.$store.state.endpoints.baseUrl + 'api/quotes/' + this.selectedQuote.id)
                     .then(response => {
                         this.quotes.splice(index, 1);
                         this.selectedQuote = null;
@@ -365,10 +367,12 @@
                 let self = this;
 
                 let result = this.quotes.filter(function (quote) {
-                    return  quote.id.toString().indexOf(self.search) >= 0
-                        // || quote.name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
-                        // || quote.phone.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
-                        // || quote.email.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                    return  quote.reference.indexOf(self.search) >= 0
+                        || quote.name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                        || quote.salesperson.full_name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                        || quote.client.full_name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                        || quote.client.phone.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                        || quote.client.email.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
                         || quote.price.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
                         || quote.state.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
                         || quote.created_at.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
@@ -396,15 +400,15 @@
         },
         mounted() {
 
-            axios.get(this.$store.state.endpoints.baseUrl + `api/salespersons`)
+            axios.get(this.$store.state.endpoints.baseUrl + `api/salespersons/`)
                 .then(response => {
-                    this.salesmans = response.data
+                    this.salespersons = response.data
                 })
                 .catch(e => {
                     this.errors.push(e)
                 });
 
-            axios.get(this.$store.state.endpoints.baseUrl + `api/clients`)
+            axios.get(this.$store.state.endpoints.baseUrl + `api/clients/`)
                 .then(response => {
                     this.clients = response.data
                 })

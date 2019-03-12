@@ -26,7 +26,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class ListQuote(APIView):
 
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get(self, request, format=None):
         quotes = Quote.objects.all()
@@ -45,7 +45,7 @@ class ListQuote(APIView):
 
 class DetailQuote(APIView):
 
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get_object(self, pk):
         try:

@@ -30,6 +30,7 @@
 </template>
 
 <script>
+     import axios from 'axios'
      import HorizontalStepper from 'vue-stepper';
      import Projet from './stepCreateQuote/Projet.vue';
      import Client from './stepCreateQuote/Client.vue';
@@ -44,22 +45,22 @@
         data: function () {
             return {
                 quoteSteps: [
-                    // {
-                    //     icon: 'assignment',
-                    //     name: 'Projet',
-                    //     title: 'Projet',
-                    //     subtitle: 'Nom du projet',
-                    //     component: Projet,
-                    //     completed: false
-                    // },
-                    // {
-                    //     icon: 'person',
-                    //     name: 'client',
-                    //     title: 'Client',
-                    //     subtitle: 'Affectation du client',
-                    //     component: Client,
-                    //     completed: false
-                    // },
+                    {
+                        icon: 'assignment',
+                        name: 'Projet',
+                        title: 'Projet',
+                        subtitle: 'Nom du projet',
+                        component: Projet,
+                        completed: false
+                    },
+                    {
+                        icon: 'person',
+                        name: 'client',
+                        title: 'Client',
+                        subtitle: 'Affectation du client',
+                        component: Client,
+                        completed: false
+                    },
                     {
                         icon: 'view_quilt',
                         name: 'création',
@@ -104,13 +105,61 @@
                     }
                 })
             },
+            createClient() {
+
+                let QuoteCreate = {
+                    'name': 'Devissime',
+                    'reference': 'TOPDEV2019',
+                    'price': 1500,
+                    'state': 'Brouillon',
+                    'attachment': 'quote.pdf',
+                    'client': {
+                        'id': 4,
+                        'email': 'teeuh@]tst.com',
+                        'first_name': 'okghgh',
+                        'last_name': 'kgghfo',
+                        'full_name': 'baptiste',
+                        'password': 't',
+                        'phone': '0102030405',
+                        'is_active': true,
+                        'is_staff': false,
+                        'is_pro': false,
+                        'company': '',
+                    },
+                    'salesperson': {
+                        'id': 3,
+                        'email': 'testh2@]tst.com',
+                        'first_name': 'ko',
+                        'last_name': 'ok',
+                        'full_name': 'martin',
+                        'password': 't',
+                        'phone': '0504030201',
+                        'is_active': true,
+                        'is_staff': false,
+                        'workplace': 'Bordeaux',
+                    },
+                };
+
+                axios.post(this.$store.state.endpoints.baseUrl + 'api/quotes/',
+                    QuoteCreate, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then((response) => {
+                        this.$router.push({name: 'ViewQuote'});
+
+                    }).catch(e => {
+
+                        console.log(e.response);
+
+                        this.errors.push(e);
+                    });
+            },
             // Executed when @stepper-finished event is triggered
             alert(payload) {
                 this.isLoading = true;
-                //alert('Création du devis en bdd et génération du PDF =)')
-                setTimeout(() => {
-                    this.isLoading = false
-                }, 10 * 1000)
+                this.createClient()
+                this.isLoading = false
             }
         }
     }
@@ -118,5 +167,3 @@
 
 <style>
 </style>
-
-<!--this.$store.state.endpoints.baseUrl +-->

@@ -41,7 +41,7 @@
                         <div>
                             <label for="selectModuleWallExt">Murs Extérieurs :</label>
                         </div>
-                        <v-select id="selectModuleWallExt" v-model="modulesWallExtSelected" multiple :options="modules.ext.perso" label="name">
+                        <v-select id="selectModuleWallExt" v-model="modulesWallExtSelected" multiple :options="modules.ext" label="name">
                             <template slot="option" slot-scope="option">
                                 {{option.name}}
                             </template>
@@ -217,7 +217,7 @@
                                     </span>
                                     </p>
                                 </div>
-                                <div class="field" v-if="currentGammeSelected.family !== 'CHA'" >
+                                <div class="field" v-if="currentModuleSelected.family !== 'CHA'" >
                                     <label class="label">Hauteur</label>
                                     <p class="control has-icons-left">
                                         <input class="input" type="text" v-model="currentModuleSelected.height" :placeholder="currentModuleSelected.height" @change="extHauteur(currentModuleSelected.height)">
@@ -226,21 +226,22 @@
                                     </span>
                                     </p>
                                 </div>
-                                <div class="field" v-if="currentGammeSelected.family === 'CHA'" >
-                                    <label class="label">Hauteur</label>
-                                    <p class="control has-icons-left">
-                                        <input class="input" type="text" v-model="currentModuleSelected.unit" :placeholder="currentModuleSelected.unit" @change="extHauteur(currentModuleSelected.unit)">
-                                        <span class="icon is-small is-left">
-                                      <i class="fas fa-ruler-vertical"></i>
-                                    </span>
-                                    </p>
-                                </div>
-                                <div class="field">
+                                <div class="field" v-if="currentModuleSelected.family !== 'CHA'">
                                     <label class="label">Longueur</label>
                                     <p class="control has-icons-left">
                                         <input class="input" type="text" :value="currentModuleSelected.length" :placeholder="currentModuleSelected.length" @change="prixModule(currentModuleSelected, currentModuleSelected.length, $event)">
                                         <span class="icon is-small is-left">
                                       <i class="fas fa-ruler-horizontal"></i>
+                                    </span>
+                                    </p>
+                                </div>
+                                <div class="field" v-if="currentModuleSelected.family === 'CHA'" >
+                                    <label class="label">Unité</label>
+                                    <p class="control has-icons-left">
+                                        <input class="input" type="number" min="1" v-if="currentModuleSelected.name === 'ferme_charpente1'" v-model="carpentersUnit" :placeholder="carpentersUnit" @change="prixCharpModule(currentModuleSelected, carpentersUnit, carpentersPrice1)">
+                                        <input class="input" type="number" min="1" v-if="currentModuleSelected.name === 'ferme_charpente2'" v-model="carpentersUnit" :placeholder="carpentersUnit" @change="prixCharpModule(currentModuleSelected, carpentersUnit, carpentersPrice2)">
+                                        <span class="icon is-small is-left">
+                                      <i class="fas fa-puzzle-piece"></i>
                                     </span>
                                     </p>
                                 </div>
@@ -321,9 +322,9 @@
         data() {
             return {
                 gammes: [
-                    {name: 'Excellence', finitionExterieure: 'Crépi', isolation: 'Laine de verre', couverture: 'Ardoise', img: '/static/img/house/gammes/excellence.jpeg'},
-                    {name: 'Luxe', finitionExterieure: 'Crépi', isolation: 'Laine de roche', couverture: 'Zinc', img: '/static/img/house/gammes/luxe.jpeg'},
-                    {name: 'Naturelle', finitionExterieure: 'Bois', isolation: 'Ouate de cellulose', couverture: 'Brande', img: '/static/img/house/gammes/naturelle.jpeg'},
+                    {name: 'Luxe', ratio: 2, finitionExterieure: 'Crépi', isolation: 'Laine de roche', couverture: 'Zinc', img: '/static/img/house/gammes/luxe.jpeg'},
+                    {name: 'Excellence', ratio: 1.5, finitionExterieure: 'Crépi', isolation: 'Laine de verre', couverture: 'Ardoise', img: '/static/img/house/gammes/excellence.jpeg'},
+                    {name: 'Naturelle', ratio: 1, finitionExterieure: 'Bois', isolation: 'Ouate de cellulose', couverture: 'Brande', img: '/static/img/house/gammes/naturelle.jpeg'},
                 ],
                 modules: {
                     ext: [],
@@ -347,6 +348,10 @@
                 currentGammeSelected: '',
                 modulesSelected : [],
                 currentModuleSelected: '',
+                carpentersUnit: 1,
+                carpentersPrice1: 0,
+                capentersPrice2: 0,
+                priceQuoteTotal: '',
                 isLoading: false,
                 isFullPage: true
             }
@@ -386,6 +391,26 @@
             prixModule(module, oldLength, length) {
                 let lenghtDiff = length.target.value - oldLength;
                 module.price = lenghtDiff * module.price + module.price;
+            },
+            prixCharpModule(module, quantite, prixU) {
+                module.price = prixU * quantite
+            },
+            prixModule(modules) {
+                modules.forEach(function (element) {
+                    let modulesPrice = 0;
+                    element.components.forEach(function (element) {
+                        modulesPrice = modulesPrice + parseFloat(element.price.replace(",", "."))
+                    });
+                    element.price = modulesPrice
+                });
+            },
+            prixTotal(modules) {
+                let prixTotal = 0;
+                modules.forEach( function (element) {
+                    prixTotal = prixTotal + parseFloat(element.price.replace(",", "."))
+                });
+
+                this.priceQuoteTotal = prixTotal;
             }
         },
         watch: {
@@ -419,11 +444,28 @@
                     this.modulesSelected = this.modulesSelected + 1
                 }
             },
+            gammeSelected: {
+                handler: function () {
+                    if (this.gammeSelected.name === 'Excellence') {
+
+                        this.priceQuoteTotal = this.priceQuoteTotal * parseFloat(this.gammeSelected.ratio.replace(",", "."))
+
+                    } else if (this.gammeSelected.name === 'Luxe') {
+
+                        this.priceQuoteTotal = this.priceQuoteTotal * parseFloat(this.gammeSelected.ratio.replace(",", "."))
+                    }
+                },
+            },
             modulesSelected: {
                 handler: function () {
                     if (this.modulesSelected !== '') {
-                        // console.log(this.modulesSelected);
-                        this.$store.commit("setQuoteModules", this.modulesSelected);
+
+                        // this.modulesSelected.push(this.modulesWallExtSelected);
+                        console.log(this.modulesSelected);
+                        // prixTotal(this.modulesSelected)
+
+
+                        // this.$store.commit("setQuoteModules", this.modulesSelected);
                         this.$emit('can-continue', {value: true});
                     } else {
                         this.$emit('can-continue', {value: true});
@@ -449,29 +491,76 @@
                 this.$emit('can-continue', {value: true});
             }
 
-            // axios.get(this.$store.state.endpoints.baseUrl + `api/gammes`)
-            //     .then(response => {
-            //         this.modules.ext.perso = response.data
-            //     })
-            //     .catch(e => {
-            //         this.errors.push(e)
-            //     });
+            axios.get(this.$store.state.endpoints.baseUrl + `api/modules/family/ext`)
+                .then(response => {
+                    this.modules.ext = response.data;
+                    this.prixModule(this.modules.ext);
 
-            // axios.get(this.$store.state.endpoints.baseUrl + `api/modules/family/ext`)
-            //     .then(response => {
-            //         this.modules.ext.perso = response.data
-            //     })
-            //     .catch(e => {
-            //         this.errors.push(e)
-            //     });
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                });
 
-            // axios.get(this.$store.state.endpoints.baseUrl + `api/modules/family/int`)
-            //     .then(response => {
-            //         this.modules.int = response.data
-            //     })
-            //     .catch(e => {
-            //         this.errors.push(e)
-            //     });
+            axios.get(this.$store.state.endpoints.baseUrl + `api/modules/family/int/`)
+                .then(response => {
+                    this.modules.int = response.data;
+                    this.prixModule(this.modules.int);
+
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                });
+
+            axios.get(this.$store.state.endpoints.baseUrl + `api/modules/family/dal/`)
+                .then(response => {
+                    this.modules.plancher.dalle = response.data;
+                    this.prixModule(this.modules.plancher.dalle);
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                });
+
+            axios.get(this.$store.state.endpoints.baseUrl + `api/modules/family/pla/`)
+                .then(response => {
+                    this.modules.plancher.porteur = response.data;
+                    this.prixModule(this.modules.plancher.porteur);
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                });
+
+            axios.get(this.$store.state.endpoints.baseUrl + `api/modules/family/toi/`)
+                .then(response => {
+                    this.modules.toit.couverture = response.data;
+                    this.prixModule(this.modules.toit.couverture);
+                })
+
+                .catch(e => {
+                    this.errors.push(e)
+                });
+
+            axios.get(this.$store.state.endpoints.baseUrl + `api/modules/family/cha/`)
+                .then(response => {
+                    this.modules.toit.charpente = response.data;
+                    this.prixModule(this.modules.toit.charpente);
+
+                    let valuePrice1 = 0;
+                    let valuePrice2 = 0;
+
+                    this.modules.toit.charpente.forEach( function (element) {
+                        if(element.name === 'ferme_charpente1') {
+                            valuePrice1 = element.price
+                        } else {
+                            valuePrice2 = element.price
+                        }
+                    });
+
+                    this.carpentersPrice1 = valuePrice1;
+                    this.carpentersPrice2 = valuePrice2;
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                });
 
             this.isLoading = false;
         }
