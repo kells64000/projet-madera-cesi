@@ -210,8 +210,6 @@
                 this.quotes = response.data
             } catch (e) {
                 this.errors.push(e)
-            } finally {
-                this.loading = false
             }
 
             this.pageSize = this.quotes.length;
@@ -336,10 +334,10 @@
                 let result = this.quotes.filter(function (quote) {
                     return  quote.reference.toLowerCase().indexOf(self.search) >= 0
                         || quote.name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
-                        || quote.salesperson.full_name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
-                        || quote.client.full_name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
-                        || quote.client.phone.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
-                        || quote.client.email.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                        // || salesperson.full_name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                        // || client.full_name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                        // || client.phone.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                        // || client.email.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
                         || quote.price.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
                         || quote.state.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
                         || quote.created_at.toLowerCase().indexOf(self.search.toLowerCase()) >= 0

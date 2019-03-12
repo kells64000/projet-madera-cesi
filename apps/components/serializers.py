@@ -104,8 +104,8 @@ class ModuleSerializer(serializers.ModelSerializer):
         allow_null=True)
     length2 = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
         allow_null=True)
-    height = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
-        allow_null=True)
+    # height = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
+    #     allow_null=True)
     unit = serializers.CharField(required=False, max_length=10, allow_null=True)
     surface = serializers.SerializerMethodField(required=False)
     designer = MaderaUserSerializer(required=False)
