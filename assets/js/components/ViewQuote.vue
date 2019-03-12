@@ -72,7 +72,7 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="10">
+                            <td colspan="12">
                                 <nav class="pagination is-right" role="navigation" aria-label="pagination">
                                     <ul class="pagination-list">
                                         <li>
@@ -173,6 +173,7 @@
                     </div>
                 </div>
             </section>
+            <b-loading :is-full-page="isFullPage" :active.sync="isLoading" :can-cancel="true"></b-loading>
         </div>
     </div>
 </template>
@@ -189,7 +190,8 @@
                 salespersons: [],
                 errors: [],
                 search: '',
-                loading: false,
+                isLoading: false,
+                isFullPage: true,
                 currentSort: 'created_at',
                 currentSortDir: 'desc',
                 pageSize: null,
@@ -364,6 +366,7 @@
             }
         },
         mounted() {
+            this.isLoading = true;
 
             axios.get(this.$store.state.endpoints.baseUrl + `api/salespersons/`)
                 .then(response => {
@@ -380,6 +383,8 @@
                 .catch(e => {
                     this.errors.push(e)
                 });
+
+            this.isLoading = false;
         }
     }
 </script>

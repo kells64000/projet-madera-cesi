@@ -80,7 +80,8 @@
                     }
                 ],
                 isLoading: false,
-                isFullPage: true
+                isFullPage: true,
+                pathPdf: 'quote.pdf'
             }
         },
         methods: {
@@ -105,14 +106,43 @@
                     }
                 })
             },
-            createClient() {
+            createPDF() {
+
+                let PDFcontext = {
+                    'date': this.quoteDate,
+                    'name': this.quoteProject,
+                    'ref': this.quoteProjectRef,
+                    'price': this.quotePrice,
+                    'client': this.quoteClient,
+                    'salesperson': this.quoteSalesperson,
+                    'modules': this.quoteModules
+                };
+
+                axios.post(this.$store.state.endpoints.baseUrl + 'api/quotes/pdf/',
+                    PDFcontext, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then((response) => {
+                        console.log(response.data)
+
+                        this.pathPdf = response.data.path
+
+                    }).catch(e => {
+
+                        console.log(e.response);
+
+                        this.errors.push(e);
+                    });
+            },
+            createQuote() {
 
                 let QuoteCreate = {
                     'name': this.quoteProject,
                     'reference': this.quoteProjectRef,
-                    'price': 1500,
+                    'price': this.quotePrice,
                     'state': 'Brouillon',
-                    'attachment': 'quote.pdf',
+                    'attachment': this.pathPdf,
                     'client': {
                         'id': this.quoteClient.id,
                         'full_name': this.quoteClient.full_name,
@@ -141,13 +171,17 @@
                     });
             },
             // Executed when @stepper-finished event is triggered
-            alert(payload) {
+            alert() {
                 this.isLoading = true;
-                this.createClient()
-                this.isLoading = false
+                // this.createPDF();
+                this.createQuote();
+                this.isLoading = false;
             }
         },
         computed: {
+            quoteDate() {
+                return this.$store.getters.getQuoteDate;
+            },
             quoteProject() {
                 return this.$store.getters.getQuoteProject;
             },
@@ -159,7 +193,13 @@
             },
             quoteSalesperson(){
                 return this.$store.getters.getUser;
-            }
+            },
+            quoteModules() {
+                return this.$store.getters.getQuoteModules;
+            },
+            quotePrice() {
+                return this.$store.getters.getQuotePrice;
+            },
         }
     }
 </script>

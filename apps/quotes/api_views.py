@@ -77,34 +77,65 @@ class DetailQuote(APIView):
         quote.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+def generate_pdf(request):
 
-def generate_pdf(request, pk):
-    quote = Quote.objects.get(pk=pk)
     template_path = 'quotes/quote.html'
 
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="Devis-{ref}.pdf"'.format(
-        ref=quote.reference)
+        ref=request.ref)
 
     context = {
-        'quote': quote,
-        'client': quote.client,
-        'house': quote.house,
-        'VAT': 0.2,
-        'today': datetime.today()
+        'project': request.name,
+        'ref': request.ref,
+        'client': request.client,
+        'salesperson': request.salesperson,
+        'modules': request.modules,
+        'TVA': 0.2,
+        'price': request.price,
+        'today': request.date
     }
     html = render_to_string(template_path, context)
 
     pisaStatus = pisa.CreatePDF(html, dest=response)
 
     # Envoi email
-    # subject, from_email, to = 'Madera', 'no-reply@madera.com', ''
-    # text_content = 'Veuillez trouver ci-joint le devis'
-    # msg = EmailMessage(subject, text_content, from_email, [to])
-    # msg.attach_file('')
-    # msg.send()
+    subject, from_email, to = 'Madera', 'no-reply@madera.com', request.client.email
+    text_content = 'Veuillez trouver ci-joint le devis'
+    msg = EmailMessage(subject, text_content, from_email, [to])
+    msg.attach_file(response)
+    msg.send()
 
     return response
+
+
+# def generate_pdf(request, pk):
+#     quote = Quote.objects.get(pk=pk)
+#     template_path = 'quotes/quote.html'
+#
+#     response = HttpResponse(content_type='application/pdf')
+#     response['Content-Disposition'] = 'attachment; filename="Devis-{ref}.pdf"'.format(
+#         ref=quote.reference)
+#
+#     context = {
+#         'quote': quote,
+#         'client': quote.client,
+#         'house': quote.house,
+#         'VAT': 0.2,
+#         'today': datetime.today()
+#     }
+#     html = render_to_string(template_path, context)
+#
+#     pisaStatus = pisa.CreatePDF(html, dest=response)
+#
+#     # Envoi email
+#     # subject, from_email, to = 'Madera', 'no-reply@madera.com', ''
+#     # text_content = 'Veuillez trouver ci-joint le devis'
+#     # msg = EmailMessage(subject, text_content, from_email, [to])
+#     # msg.attach_file('')
+#     # msg.send()
+#
+#     return response
 
 # def generate_pdf(request, pk):
 #     import ipdb; ipdb.set_trace()

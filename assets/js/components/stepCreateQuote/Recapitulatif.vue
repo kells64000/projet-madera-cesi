@@ -15,23 +15,22 @@
                     <div>{{quoteClient.phone}}</div>
             </div>
         </header>
-        <div class="card-content">
+        <div class="card-content mt-2">
             <div class="content">
 
                 <div v-for="module in quoteModules">
                     <div class="title is-4 mb-1" v-for="element in module">
                         <p>{{element.name}} {{element.price}}€</p>
 
-                        <div class="subtitle is-size-6" v-for="components in element.components">
-                            {{components.name}} {{components.price}}€
+                        <div class="subtitle is-size-6 has-text-grey" v-for="components in element.components">
+                            {{components.name}} -- {{components.nature}} -- {{components.unit}} -- {{components.price}}€
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
         <footer class="card-footer justify-content-end pr-1-5">
-            €
+            {{quotePrice}}€
         </footer>
     </div>
 </template>
@@ -78,7 +77,6 @@
                 },
                 deep: true
             },
-
             clickedNext() {
                 if (this.nom !== 0) {
                     this.$emit('can-continue', {value: true});

@@ -264,7 +264,7 @@
                                             </div>
 
                                             <div id="selectAngle" class="select">
-                                                <select v-model="currentModuleSelected.angle">
+                                                <select v-model="currentModuleSelected.angle_type">
                                                     <option value="">Aucun</option>
                                                     <option>Entrant</option>
                                                     <option>Sortant</option>
@@ -274,11 +274,11 @@
                                     </div>
 
                                     <div class="field"
-                                         v-if="currentModuleSelected.angle !== '' && currentModuleSelected.angle !== 'Aucun'">
+                                         v-if="currentModuleSelected.angle_type !== '' && currentModuleSelected.angle_type !== 'Aucun'">
                                         <label class="label">Degré de l'angle</label>
                                         <p class="control has-icons-left">
-                                            <input class="input" type="text" v-model="currentModuleSelected.angle_type"
-                                                   :placeholder="currentModuleSelected.angle_type">
+                                            <input class="input" type="text" v-model="currentModuleSelected.angle"
+                                                   :placeholder="currentModuleSelected.angle">
                                             <span class="icon is-small is-left">
                                               <i class="fas fa-drafting-compass"></i>
                                             </span>
@@ -293,7 +293,6 @@
                                             </span>
                                         </p>
                                     </div>
-
                                 </div>
 
                                 <div class="field">
@@ -408,14 +407,26 @@
             },
             prixTotal(modules) {
                 let prixTotal = 0;
-                modules.forEach( function (element, i) {
+                modules.forEach( function (element) {
 
-                    // console.log(element[i].price);
-
-                    // element.forEach( function (element) {
-                    //     prixTotal = prixTotal + element.price
-                    // });
+                    for (let i = 0; i < element.length; i++) {
+                      prixTotal = prixTotal + element[i].price
+                    }
                 });
+
+                return prixTotal;
+            },
+            totalWithgamme(prixTotal) {
+                if (this.gammeSelected.name === 'Excellence') {
+
+                    prixTotal = prixTotal * parseFloat(this.gammeSelected.ratio.replace(",", "."))
+
+                } else if (this.gammeSelected.name === 'Luxe') {
+
+                    prixTotal = prixTotal * parseFloat(this.gammeSelected.ratio.replace(",", "."))
+                } else {
+                    prixTotal
+                }
 
                 return prixTotal;
             },
@@ -451,18 +462,6 @@
                     this.counter = this.counter + 1
                 }
             },
-            gammeSelected: {
-                handler: function () {
-                    if (this.gammeSelected.name === 'Excellence') {
-
-                        this.priceQuoteTotal = this.priceQuoteTotal * parseFloat(this.gammeSelected.ratio.replace(",", "."))
-
-                    } else if (this.gammeSelected.name === 'Luxe') {
-
-                        this.priceQuoteTotal = this.priceQuoteTotal * parseFloat(this.gammeSelected.ratio.replace(",", "."))
-                    }
-                },
-            },
             counter: {
                 handler: function () {
                     if (this.counter !== 0) {
@@ -471,10 +470,10 @@
 
                         let montantTotal = this.prixTotal(this.modulesSelected);
 
-                        // console.log(montantTotal);
+                        let montantGammeTotal = this.totalWithgamme(montantTotal);
 
                         this.$store.commit("setQuoteModules", this.modulesSelected);
-                        // this.$store.commit("setQuotePrice", montantTotal);
+                        this.$store.commit("setQuotePrice", montantGammeTotal);
 
                         this.$emit('can-continue', {value: true});
                     } else {
