@@ -390,7 +390,9 @@
             },
             prixModuleLenght(module, oldLength, length) {
                 let lenghtDiff = length.target.value - oldLength;
-                module.price = lenghtDiff * module.price + module.price;
+                module.price = module.price / oldLength;
+                module.price = module.price * length.target.value;
+                //module.price = lenghtDiff * module.price + module.price;
                 module.length = length.target.value
             },
             prixCharpModule(module, quantite, prixU) {
