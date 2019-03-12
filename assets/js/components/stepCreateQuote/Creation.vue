@@ -229,7 +229,7 @@
                                 <div class="field" v-if="currentModuleSelected.family !== 'CHA'">
                                     <label class="label">Longueur</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" type="text" :value="currentModuleSelected.length" :placeholder="currentModuleSelected.length" @change="prixModule(currentModuleSelected, currentModuleSelected.length, $event)">
+                                        <input class="input" type="text" :value="currentModuleSelected.length" :placeholder="currentModuleSelected.length" @change="prixModuleLenght(currentModuleSelected, currentModuleSelected.length, $event)">
                                         <span class="icon is-small is-left">
                                       <i class="fas fa-ruler-horizontal"></i>
                                     </span>
@@ -352,6 +352,7 @@
                 carpentersPrice1: 0,
                 capentersPrice2: 0,
                 priceQuoteTotal: '',
+                counter: 0,
                 isLoading: false,
                 isFullPage: true
             }
@@ -388,9 +389,10 @@
                     module.height = height;
                 });
             },
-            prixModule(module, oldLength, length) {
+            prixModuleLenght(module, oldLength, length) {
                 let lenghtDiff = length.target.value - oldLength;
                 module.price = lenghtDiff * module.price + module.price;
+                module.length = length.target.value
             },
             prixCharpModule(module, quantite, prixU) {
                 module.price = prixU * quantite
@@ -406,42 +408,47 @@
             },
             prixTotal(modules) {
                 let prixTotal = 0;
-                modules.forEach( function (element) {
-                    prixTotal = prixTotal + parseFloat(element.price.replace(",", "."))
+                modules.forEach( function (element, i) {
+
+                    console.log(element[i].price);
+
+                    // element.forEach( function (element) {
+                    //     prixTotal = prixTotal + element.price
+                    // });
                 });
 
-                this.priceQuoteTotal = prixTotal;
-            }
+                return prixTotal;
+            },
         },
         watch: {
             modulesWallExtSelected: {
                handler: function () {
-                    this.modulesSelected = this.modulesSelected + 1
+                    this.counter = this.counter + 1
                 }
             },
             modulesWallIntSelected: {
                handler: function () {
-                    this.modulesSelected = this.modulesSelected + 1
+                    this.counter = this.counter + 1
                 }
             },
             modulesFloorSlabSelected: {
                handler: function () {
-                    this.modulesSelected = this.modulesSelected + 1
+                    this.counter = this.counter + 1
                 }
             },
             modulesFloorStructuralSelected: {
                handler: function () {
-                    this.modulesSelected = this.modulesSelected + 1
+                    this.counter = this.counter + 1
                 }
             },
             modulesRoofCarpentersSelected: {
                handler: function () {
-                    this.modulesSelected = this.modulesSelected + 1
+                    this.counter = this.counter + 1
                 }
             },
             modulesRoofCoverSelected: {
                handler: function () {
-                    this.modulesSelected = this.modulesSelected + 1
+                    this.counter = this.counter + 1
                 }
             },
             gammeSelected: {
@@ -456,16 +463,18 @@
                     }
                 },
             },
-            modulesSelected: {
+            counter: {
                 handler: function () {
-                    if (this.modulesSelected !== '') {
+                    if (this.counter !== 0) {
 
-                        // this.modulesSelected.push(this.modulesWallExtSelected);
-                        console.log(this.modulesSelected);
-                        // prixTotal(this.modulesSelected)
+                        this.modulesSelected = [this.modulesWallExtSelected, this.modulesWallIntSelected, this.modulesFloorSlabSelected, this.modulesFloorStructuralSelected, this.modulesRoofCarpentersSelected, this.modulesRoofCoverSelected];
 
+                        let montantTotal = this.prixTotal(this.modulesSelected);
 
-                        // this.$store.commit("setQuoteModules", this.modulesSelected);
+                        console.log(montantTotal);
+
+                        this.$store.commit("setQuoteModules", this.modulesSelected);
+
                         this.$emit('can-continue', {value: true});
                     } else {
                         this.$emit('can-continue', {value: true});
