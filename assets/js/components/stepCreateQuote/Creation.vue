@@ -238,8 +238,8 @@
                                 <div class="field" v-if="currentModuleSelected.family === 'CHA'" >
                                     <label class="label">Unité</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" type="number" min="1" v-if="currentModuleSelected.name === 'ferme_charpente1'" v-model="carpentersUnit" :placeholder="carpentersUnit" @change="prixCharpModule(currentModuleSelected, carpentersUnit, carpentersPrice1)">
-                                        <input class="input" type="number" min="1" v-if="currentModuleSelected.name === 'ferme_charpente2'" v-model="carpentersUnit" :placeholder="carpentersUnit" @change="prixCharpModule(currentModuleSelected, carpentersUnit, carpentersPrice2)">
+                                        <input class="input" type="text" v-if="currentModuleSelected.name === 'ferme_charpente1'" v-model="carpentersUnit" :placeholder="carpentersUnit" @change="prixCharpModule(currentModuleSelected, carpentersUnit, carpentersPrice1)">
+                                        <input class="input" type="text" v-if="currentModuleSelected.name === 'ferme_charpente2'" v-model="carpentersUnit" :placeholder="carpentersUnit" @change="prixCharpModule(currentModuleSelected, carpentersUnit, carpentersPrice2)">
                                         <span class="icon is-small is-left">
                                       <i class="fas fa-puzzle-piece"></i>
                                     </span>
@@ -389,11 +389,10 @@
                 });
             },
             prixModuleLenght(module, oldLength, length) {
-                let lenghtDiff = length.target.value - oldLength;
-                module.price = module.price / oldLength;
-                module.price = module.price * length.target.value;
-                //module.price = lenghtDiff * module.price + module.price;
-                module.length = length.target.value
+               // let lenghtDiff = length.target.value - oldLength;
+               module.price = module.price / oldLength;
+               module.price = module.price * length.target.value;
+               module.length = length.target.value
             },
             prixCharpModule(module, quantite, prixU) {
                 module.price = prixU * quantite
