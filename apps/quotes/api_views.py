@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 import os
+import json
 from datetime import datetime
-from django.template.loader import render_to_string
 from django.conf import settings
-from django.http import HttpResponse
-from django.template.loader import get_template
 from django.core.mail import EmailMessage
-from xhtml2pdf import pisa
-from django.http import Http404
+from django.http import Http404, JsonResponse, HttpResponse
+from django.template.loader import get_template
+from django.template.loader import render_to_string
+from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from xhtml2pdf import pisa
 
 from .models import Quote
 from .serializers import QuoteSerializer
@@ -77,36 +78,31 @@ class DetailQuote(APIView):
         quote.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-def generate_pdf(request):
 
+@csrf_exempt
+def generate_pdf(request):
     template_path = 'quotes/quote.html'
+    context = json.loads(request.body.decode('utf-8'))
+    context.update({'today': datetime})
 
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="Devis-{ref}.pdf"'.format(
-        ref=request.ref)
+        ref=context['ref'])
 
-    context = {
-        'project': request.name,
-        'ref': request.ref,
-        'client': request.client,
-        'salesperson': request.salesperson,
-        'modules': request.modules,
-        'TVA': 0.2,
-        'price': request.price,
-        'today': request.date
-    }
     html = render_to_string(template_path, context)
-
+    filename = 'quote_{}.pdf'.format(context.get('ref'))
     pisaStatus = pisa.CreatePDF(html, dest=response)
+    with open(settings.STATIC_ROOT + '/pdf/' + filename, 'wb') as f:
+        f.write(response.content)
 
     # Envoi email
-    subject, from_email, to = 'Madera', 'no-reply@madera.com', request.client.email
+    subject, from_email, to = 'Madera', 'no-reply@madera.com', context.get('client').get('email')
     text_content = 'Veuillez trouver ci-joint le devis'
     msg = EmailMessage(subject, text_content, from_email, [to])
-    msg.attach_file(response)
+    msg.attach_file(settings.STATIC_ROOT + '/pdf/' + filename)
     msg.send()
 
-    return response
+    return JsonResponse({"filename": filename})
 
 
 # def generate_pdf(request, pk):
@@ -137,29 +133,26 @@ def generate_pdf(request):
 #
 #     return response
 
-# def generate_pdf(request, pk):
+# def generate_pdf(request):
 #     import ipdb; ipdb.set_trace()
-#     quote = Quote.objects.get(pk=pk)
 #     template_path = 'quotes/quote.html'
-#     context = {
-#         'quote': quote
-#     }
+
 #     # Create a Django response object, and specify content_type as pdf
 #     response = HttpResponse(content_type='application/pdf')
 #     response['Content-Disposition'] = 'attachment; filename="report.pdf"'
 #     # find the template and render it.
 #     template = get_template(template_path)
-#     html = template.render(context=context)
+#     html = template.render(context=request.body)
 
 #     # create a pdf
 #     pisaStatus = pisa.CreatePDF(
-#        html, dest=response, link_callback=quote.link_callback())
+#        html, dest=response, link_callback=self.link_callback())
 #     # if error then show some funy view
 #     if pisaStatus.err:
 #         return HttpResponse('We had some errors <pre>' + html + '</pre>')
 
 #     # Envoi email
-#     subject, from_email, to = 'Madera', 'no-reply@madera.com', quote.client__email
+#     subject, from_email, to = 'Madera', 'no-reply@madera.com', self.client__email
 #     text_content = 'Veuillez trouver ci-joint le devis'
 #     msg = EmailMessage(subject, text_content, from_email, [to])
 #     msg.attach_file('/assets/pdf/client1-facture_exemple.pdf')
@@ -168,28 +161,28 @@ def generate_pdf(request):
 #     return response
 
 
-# def link_callback(self, uri, rel):
-#     """
-#     Convert HTML URIs to absolute system paths so xhtml2pdf can access those
-#     resources
-#     """
-#     # use short variable names
-#     sUrl = settings.STATIC_URL      # Typically /static/
-#     sRoot = settings.STATIC_ROOT    # Typically /home/userX/project_static/
-#     mUrl = settings.MEDIA_URL       # Typically /static/media/
-#     mRoot = settings.MEDIA_ROOT     # Typically /home/userX/project_static/media/
+def link_callback(self, uri, rel):
+    """
+    Convert HTML URIs to absolute system paths so xhtml2pdf can access those
+    resources
+    """
+    # use short variable names
+    sUrl = settings.STATIC_URL      # Typically /static/
+    sRoot = settings.STATIC_ROOT    # Typically /home/userX/project_static/
+    mUrl = settings.MEDIA_URL       # Typically /static/media/
+    mRoot = settings.MEDIA_ROOT     # Typically /home/userX/project_static/media/
 
-#     # convert URIs to absolute system paths
-#     if uri.startswith(mUrl):
-#         path = os.path.join(mRoot, uri.replace(mUrl, ""))
-#     elif uri.startswith(sUrl):
-#         path = os.path.join(sRoot, uri.replace(sUrl, ""))
-#     else:
-#         return uri  # handle absolute uri (ie: http://some.tld/foo.png)
+    # convert URIs to absolute system paths
+    if uri.startswith(mUrl):
+        path = os.path.join(mRoot, uri.replace(mUrl, ""))
+    elif uri.startswith(sUrl):
+        path = os.path.join(sRoot, uri.replace(sUrl, ""))
+    else:
+        return uri  # handle absolute uri (ie: http://some.tld/foo.png)
 
-#     # make sure that file exists
-#     if not os.path.isfile(path):
-#             raise Exception(
-#                 'media URI must start with %s or %s' % (sUrl, mUrl)
-#             )
-#     return path
+    # make sure that file exists
+    if not os.path.isfile(path):
+            raise Exception(
+                'media URI must start with %s or %s' % (sUrl, mUrl)
+            )
+    return path

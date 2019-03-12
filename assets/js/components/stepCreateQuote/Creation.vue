@@ -203,6 +203,15 @@
                                     </span>
                                     </p>
                                 </div>
+                                <div class="field">
+                                    <label class="label">Ratio</label>
+                                    <p class="control has-icons-left">
+                                        <input class="input" type="text" :value="currentGammeSelected.ratio" readonly>
+                                        <span class="icon is-small is-left">
+                                      <i class="fas fa-times"></i>
+                                    </span>
+                                    </p>
+                                </div>
                             </div>
 
                             <div class="content" v-if="currentModuleSelected !== ''">
@@ -238,8 +247,8 @@
                                 <div class="field" v-if="currentModuleSelected.family === 'CHA'" >
                                     <label class="label">Unité</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" type="number" min="1" v-if="currentModuleSelected.name === 'ferme_charpente1'" v-model="carpentersUnit" :placeholder="carpentersUnit" @change="prixCharpModule(currentModuleSelected, carpentersUnit, carpentersPrice1)">
-                                        <input class="input" type="number" min="1" v-if="currentModuleSelected.name === 'ferme_charpente2'" v-model="carpentersUnit" :placeholder="carpentersUnit" @change="prixCharpModule(currentModuleSelected, carpentersUnit, carpentersPrice2)">
+                                        <input class="input" type="text" v-if="currentModuleSelected.name === 'ferme_charpente1'" v-model="carpentersUnit" :placeholder="carpentersUnit" @change="prixCharpModule(currentModuleSelected, carpentersUnit, carpentersPrice1)">
+                                        <input class="input" type="text" v-if="currentModuleSelected.name === 'ferme_charpente2'" v-model="carpentersUnit" :placeholder="carpentersUnit" @change="prixCharpModule(currentModuleSelected, carpentersUnit, carpentersPrice2)">
                                         <span class="icon is-small is-left">
                                       <i class="fas fa-puzzle-piece"></i>
                                     </span>
@@ -321,8 +330,8 @@
         data() {
             return {
                 gammes: [
-                    {name: 'Luxe', ratio: 2, finitionExterieure: 'Crépi', isolation: 'Laine de roche', couverture: 'Zinc', img: '/static/img/house/gammes/luxe.jpeg'},
-                    {name: 'Excellence', ratio: 1.5, finitionExterieure: 'Crépi', isolation: 'Laine de verre', couverture: 'Ardoise', img: '/static/img/house/gammes/excellence.jpeg'},
+                    {name: 'Luxe', ratio: 3, finitionExterieure: 'Crépi', isolation: 'Laine de roche', couverture: 'Zinc', img: '/static/img/house/gammes/luxe.jpeg'},
+                    {name: 'Excellence', ratio: 2, finitionExterieure: 'Crépi', isolation: 'Laine de verre', couverture: 'Ardoise', img: '/static/img/house/gammes/excellence.jpeg'},
                     {name: 'Naturelle', ratio: 1, finitionExterieure: 'Bois', isolation: 'Ouate de cellulose', couverture: 'Brande', img: '/static/img/house/gammes/naturelle.jpeg'},
                 ],
                 modules: {
@@ -389,9 +398,10 @@
                 });
             },
             prixModuleLenght(module, oldLength, length) {
-                let lenghtDiff = length.target.value - oldLength;
-                module.price = lenghtDiff * module.price + module.price;
-                module.length = length.target.value
+               // let lenghtDiff = length.target.value - oldLength;
+               module.price = module.price / oldLength;
+               module.price = module.price * length.target.value;
+               module.length = length.target.value
             },
             prixCharpModule(module, quantite, prixU) {
                 module.price = prixU * quantite
@@ -417,15 +427,14 @@
                 return prixTotal;
             },
             totalWithgamme(prixTotal) {
-                if (this.gammeSelected.name === 'Excellence') {
 
-                    prixTotal = prixTotal * parseFloat(this.gammeSelected.ratio.replace(",", "."))
+                if (this.currentGammeSelected.name === 'Excellence') {
 
-                } else if (this.gammeSelected.name === 'Luxe') {
+                    prixTotal = prixTotal * this.currentGammeSelected.ratio
 
-                    prixTotal = prixTotal * parseFloat(this.gammeSelected.ratio.replace(",", "."))
-                } else {
-                    prixTotal
+                } else if (this.currentGammeSelected.name === 'Luxe') {
+
+                    prixTotal = prixTotal * this.currentGammeSelected.ratio
                 }
 
                 return prixTotal;
@@ -484,6 +493,22 @@
                     }
                 },
                 deep: true
+            },
+            currentGammeSelected: {
+                handler: function () {
+
+                    if(this.currentGammeSelected.name === "Luxe") {
+                        this.$store.commit("setQuoteGamme", this.currentGammeSelected);
+                    }
+
+                    if(this.currentGammeSelected.name === "Excellence") {
+                       this.$store.commit("setQuoteGamme", this.currentGammeSelected);
+                    }
+
+                    if(this.currentGammeSelected.name === "Naturelle") {
+                       this.$store.commit("setQuoteGamme", this.currentGammeSelected);
+                    }
+                }
             },
             clickedNext() {
                 if (this.modulesSelected !== '') {
