@@ -91,7 +91,6 @@ class Module(models.Model):
             return self.designer.get_full_name
         return None
 
-    @property
     def surface(self):
         return ((self.length * self.height).quantize(Decimal(10) ** -2) if
                 self.length and self.height else None)
@@ -119,13 +118,12 @@ class Module(models.Model):
     def qty_comp(self):
         return Counter(self.components.all())
 
-    # @property
-    # def total_price(self):
-    #     price = 0
-    #     for component in self.components.all():
-    #         if component.price:
-    #             price += component.price
-    #     return price
+    def total_price(self):
+        price = 0
+        for component in self.components.all():
+            if component.price:
+                price += component.price
+        return str(price)
 
 
 class House(models.Model):
@@ -154,10 +152,10 @@ class House(models.Model):
             setattr(self, "gammes", gammes)
         return gammes
 
-    # @property
-    # def total_price(self):
-    #     price = 0
-    #     for module in self.modules.all():
-    #         if module.total_price:
-    #             price += module.total_price
-    #     return price
+    @property
+    def total_price(self):
+        price = 0
+        for module in self.modules.all():
+            if module.total_price:
+                price += module.total_price
+        return str(price)
