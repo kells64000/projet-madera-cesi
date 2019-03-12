@@ -214,7 +214,7 @@
                 this.loading = false
             }
 
-            this.pageSize = Math.ceil(this.quotes.length / 2);
+            this.pageSize = this.quotes.length;
         },
         methods: {
             returnDashboard() {
