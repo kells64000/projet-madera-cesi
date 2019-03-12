@@ -224,13 +224,17 @@ USE_L10N = True
 USE_TZ = True
 
 # EMAIL
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 465
-EMAIL_HOST_USER = 'madera.societe@gmail.com'
-EMAIL_HOST_PASSWORD = 'maderacesi'
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = True
-EMAIL_SUBJECT_PREFIX = '[Devis]'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 465
+# EMAIL_HOST_USER = 'madera.societe@gmail.com'
+# EMAIL_HOST_PASSWORD = 'maderacesi'
+# EMAIL_USE_TLS = False
+# EMAIL_USE_SSL = True
+# EMAIL_SUBJECT_PREFIX = '[Devis]'
+
+# EMAIL DEV
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
