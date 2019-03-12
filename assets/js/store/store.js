@@ -16,7 +16,7 @@ export default new Vuex.Store({
     isAuthenticated: false,
     jwt: localStorage.getItem('token'),
     endpoints: {
-      // TODO: Remove hardcoding of dev endpoints
+
       obtainJWT: 'http://127.0.0.1:8000/auth/obtain_token/',
       refreshJWT: 'http://127.0.0.1:8000/auth/refresh_token/',
       baseUrl: 'http://127.0.0.1:8000/'
@@ -25,6 +25,7 @@ export default new Vuex.Store({
       // refreshJWT: 'https://madera-dev.herokuapp.com/auth/refresh_token/',
       // baseUrl: 'https://madera-dev.herokuapp.com/'
     },
+    quoteDate: '',
     quoteProject: '',
     quoteProjectRef: '',
     quoteClient: {},
@@ -35,6 +36,9 @@ export default new Vuex.Store({
     getUser: state => {
       if(state.isAuthenticated === true)
         return state.authUser;
+    },
+    getQuoteDate: state => {
+      return state.quoteDate;
     },
     getQuoteProject: state => {
       return state.quoteProject;
@@ -61,14 +65,15 @@ export default new Vuex.Store({
       Vue.set(state, 'isAuthenticated', isAuthenticated)
     },
     updateToken(state, newToken) {
-      // TODO: For security purposes, take localStorage out of the project.
       localStorage.setItem('token', newToken);
       state.jwt = newToken;
     },
     removeToken(state) {
-      // TODO: For security purposes, take localStorage out of the project.
       localStorage.removeItem('token');
       state.jwt = null;
+    },
+    setQuoteDate(state, date) {
+       Vue.set(state, 'quoteDate', date);
     },
     setQuoteProject(state, project) {
        Vue.set(state, 'quoteProject', project);

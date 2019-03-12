@@ -108,35 +108,20 @@
             createClient() {
 
                 let QuoteCreate = {
-                    'name': 'Devissime',
-                    'reference': 'TOPDEV2019',
+                    'name': this.quoteProject,
+                    'reference': this.quoteProjectRef,
                     'price': 1500,
                     'state': 'Brouillon',
                     'attachment': 'quote.pdf',
                     'client': {
-                        'id': 4,
-                        'email': 'teeuh@]tst.com',
-                        'first_name': 'okghgh',
-                        'last_name': 'kgghfo',
-                        'full_name': 'baptiste',
-                        'password': 't',
-                        'phone': '0102030405',
-                        'is_active': true,
-                        'is_staff': false,
-                        'is_pro': false,
-                        'company': '',
+                        'id': this.quoteClient.id,
+                        'full_name': this.quoteClient.full_name,
+                        'phone': this.quoteClient.phone,
+                        'email': this.quoteClient.email,
                     },
                     'salesperson': {
-                        'id': 3,
-                        'email': 'testh2@]tst.com',
-                        'first_name': 'ko',
-                        'last_name': 'ok',
-                        'full_name': 'martin',
-                        'password': 't',
-                        'phone': '0504030201',
-                        'is_active': true,
-                        'is_staff': false,
-                        'workplace': 'Bordeaux',
+                        'id': this.quoteSalesperson.id,
+                        'full_name': this.quoteSalesperson.full_name,
                     },
                 };
 
@@ -160,6 +145,20 @@
                 this.isLoading = true;
                 this.createClient()
                 this.isLoading = false
+            }
+        },
+        computed: {
+            quoteProject() {
+                return this.$store.getters.getQuoteProject;
+            },
+            quoteProjectRef() {
+                return this.$store.getters.getQuoteProjectRef;
+            },
+            quoteClient() {
+                return this.$store.getters.getQuoteClient;
+            },
+            quoteSalesperson(){
+                return this.$store.getters.getUser;
             }
         }
     }

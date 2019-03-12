@@ -49,10 +49,10 @@
 
                             <td class="has-text-centered">{{quote.reference}}</td>
                             <td class="has-text-centered">{{quote.name}}</td>
-                            <td class="has-text-centered">{{quote.salesperson.full_name}}</td>
-                            <td class="has-text-centered">{{quote.client.full_name}}</td>
-                            <td class="has-text-centered">{{quote.client.phone}}</td>
-                            <td class="has-text-centered">{{quote.client.email}}</td>
+                            <td class="has-text-centered" v-for="salesperson in salespersons" v-if="quote.salesperson === salesperson.id">{{salesperson.full_name}}</td>
+                            <td class="has-text-centered" v-for="client in clients" v-if="quote.client === client.id">{{client.full_name}}</td>
+                            <td class="has-text-centered" v-for="client in clients" v-if="quote.client === client.id">{{client.phone}}</td>
+                            <td class="has-text-centered" v-for="client in clients" v-if="quote.client === client.id">{{client.email}}</td>
                             <td class="has-text-centered">{{quote.price}}€</td>
                             <td class="has-text-centered">
                                 <div v-if="quote.attachment !== null">
@@ -78,7 +78,7 @@
                                         <li>
                                             <div class="select">
                                                 <select v-model="pageSize">
-                                                    <option :value="Math.ceil(totalQuotes / 3)">{{Math.ceil(totalQuotes / 3)}}</option>
+                                                    <option :value="Math.ceil(totalQuotes / 4)">{{Math.ceil(totalQuotes / 4)}}</option>
                                                     <option :value="Math.ceil(totalQuotes / 2)">{{Math.ceil(totalQuotes / 2)}}</option>
                                                     <option :value="totalQuotes">all</option>
                                                 </select>
@@ -105,51 +105,24 @@
                     <div class="modal-background"></div>
                     <div class="modal-card">
                         <header class="modal-card-head has-background-link">
-                            <p class="modal-card-title has-text-centered has-text-white">Edition du devis Ref {{this.reference}}</p>
+                            <p class="modal-card-title has-text-centered has-text-white">Edition du devis Ref : {{this.reference}}</p>
                             <button @click="hideModalUpdate" class="delete" aria-label="close"></button>
                         </header>
                         <section class="modal-card-body">
 
                             <form action="#">
                                 <div class="field">
-                                    <label class="label">Client</label>
+                                    <label class="label">Projet</label>
 
-                                    <v-select v-model="clientId" :options="clients" label="fullName" @focus="clientId = ''">
-                                        <template slot="option" slot-scope="option">
-                                            {{option.firstName}}  {{option.lastName}}
-                                        </template>
-                                    </v-select>
+                                    <input type="text" v-model="quotePrj" :placeholder="this.name" >
                                 </div>
+
 
                                 <div class="field">
-                                    <label class="label">Client</label>
+                                    <label class="label">Reference</label>
 
-                                    <v-select v-model="salespersonId" :options="salespersons" label="fullName" @focus="salespersonId = ''">
-                                        <template slot="option" slot-scope="option">
-                                            {{option.firstName}}  {{option.lastName}}
-                                        </template>
-                                    </v-select>
+                                    <input type="text" v-model="quoteRef" :placeholder="this.reference" >
                                 </div>
-
-                                <!--<div class="field">-->
-                                    <!--<label class="label">Téléphone</label>-->
-                                    <!--<p class="control has-icons-left">-->
-                                        <!--<input class="input" type="text" v-model="clientPhone" :placeholder="this.phone">-->
-                                        <!--<span class="icon is-small is-left">-->
-                                          <!--<i class="fas fa-mobile-alt"></i>-->
-                                        <!--</span>-->
-                                    <!--</p>-->
-                                <!--</div>-->
-
-                                <!--<div class="field">-->
-                                    <!--<label class="label">Adresse Mail</label>-->
-                                    <!--<p class="control has-icons-left">-->
-                                        <!--<input class="input" type="email" v-model="clientEmail" :placeholder="this.email">-->
-                                        <!--<span class="icon is-small is-left">-->
-                                          <!--<i class="fas fa-envelope"></i>-->
-                                        <!--</span>-->
-                                    <!--</p>-->
-                                <!--</div>-->
 
                                 <div class="field">
                                     <label class="label">Etat Devis</label>
@@ -185,7 +158,7 @@
                     <div class="modal-background"></div>
                     <div class="modal-card">
                         <header class="modal-card-head has-background-danger">
-                            <p class="modal-card-title has-text-centered has-text-white">Suppression du devis Ref {{this.reference}}</p>
+                            <p class="modal-card-title has-text-centered has-text-white">Suppression du devis Ref : {{this.reference}}</p>
                             <button @click="hideModalDelete" class="delete" aria-label="close"></button>
                         </header>
                         <section class="modal-card-body d-flex justify-content-center">
@@ -225,9 +198,8 @@
                 showModalUpdate: false,
                 showModalDelete: false,
                 selectedQuote: null,
-                clientId: 0,
-                salespersonId: 0,
-                quotePrice: '',
+                quotePrj: '',
+                quoteRef: '',
                 quoteState: '',
                 selectFocus: '',
             }
@@ -269,9 +241,8 @@
             setModalUpdateQuote(quote) {
                 this.showModalUpdate = true;
                 this.selectedQuote = quote;
+                this.name = quote.name;
                 this.reference = quote.reference;
-                this.clientId = quote.client.full_name;
-                this.salespersonId = quote.salesperson.full_name;
                 this.state = quote.state;
             },
             setModalDeleteQuote(quote) {
@@ -281,8 +252,8 @@
             },
             hideModalUpdate: function () {
                 this.showModalUpdate = false;
-                this.clientId = '';
-                this.salespersonId = '';
+                this.customer = '';
+                this.salesperson = '';
                 this.quoteState = '';
             },
             hideModalDelete: function () {
@@ -302,31 +273,26 @@
                 let date = new Date();
                 let now = date.getFullYear() + '-' + (date.getMonth() +1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + (date.getMinutes()<10?'0':'') + date.getMinutes();
 
-                if (this.clientId === '') {
-                    this.clientId = this.selectedQuote.clientId
+                if (this.quotePrj === '') {
+                    this.quotePrj = this.selectedQuote.name
                 }
-                if (this.salespersonId === '') {
-                    this.salespersonId = this.selectedQuote.salespersonId
+
+                if (this.quoteRef === '') {
+                    this.quoteRef = this.selectedQuote.reference
                 }
-                // if (this.clientPhone === '') {
-                //     this.clientPhone = this.selectedQuote.phone
-                // }
-                // if (this.clientEmail === '') {
-                //     this.clientEmail = this.selectedQuote.email
-                // }
-                if (this.quotePrice === '') {
-                    this.quotePrice = this.selectedQuote.price
-                }
+
                 if (this.quoteState === '') {
                     this.quoteState = this.selectedQuote.state
                 }
 
                 let quoteUpdate = {
-                    'customer_id': this.clientId,
-                    'salesperson_id': this.salespersonId,
-                    'price': this.quotePrice,
-                    'state': this.quoteState,
+                    'name': this.quotePrj,
+                    'reference': this.quoteRef,
+                    'price': this.selectedQuote.price,
                     'attachment': this.selectedQuote.attachment,
+                    'state': this.quoteState,
+                    'client_id': this.selectedQuote.client,
+                    'salesperson_id': this.selectedQuote.salesperson,
                     'created_at': this.selectedQuote.created_at,
                     'updated_at': now
                 };
@@ -337,9 +303,10 @@
                             'Content-Type': 'application/json'
                         }
                     }).then((response) => {
-                        this.clientId = 0;
-                        this.salespersonId = 0;
-                        this.quotePrice = '';
+                        this.name = '';
+                        this.reference = '';
+                        this.customer = '';
+                        this.salesperson = '';
                         this.quoteState = '';
                         this.selectedQuote = null;
                         this.showModalUpdate = false;
@@ -367,7 +334,7 @@
                 let self = this;
 
                 let result = this.quotes.filter(function (quote) {
-                    return  quote.reference.indexOf(self.search) >= 0
+                    return  quote.reference.toLowerCase().indexOf(self.search) >= 0
                         || quote.name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
                         || quote.salesperson.full_name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
                         || quote.client.full_name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0

@@ -41,6 +41,9 @@
             }
         },
         computed: {
+            quoteDate() {
+                return this.$store.getters.getQuoteDate;
+            },
             quoteProject() {
                 return this.$store.getters.getQuoteProject;
             },

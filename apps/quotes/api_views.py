@@ -60,8 +60,8 @@ class DetailQuote(APIView):
 
     def put(self, request, pk, format=None):
         quote = self.get_object(pk)
-        client_data = request.data.pop('client', None)
-        salesperson_data = request.data.pop('salesperson', None)
+        client_data = request.data.get('client', None)
+        salesperson_data = request.data.get('salesperson', None)
         serializer = QuoteSerializer(quote, data=request.data)
         if serializer.is_valid():
             serializer.save(client=client_data, salesperson=salesperson_data)
