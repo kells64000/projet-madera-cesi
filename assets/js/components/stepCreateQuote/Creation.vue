@@ -1,5 +1,5 @@
 <template>
-    <div id="content-modules" style="padding-left: 3rem; padding-right: 3rem; text-align: left; height: 90%; position: relative">
+    <div id="content-modules" style="padding-left: 3rem; padding-right: 3rem; text-align: left; height: 100%; position: relative">
 
         <div class="columns">
             <div class="column">
@@ -28,96 +28,34 @@
                          <figure class="image is-128x128 mt-2" v-show="gammeSelected === gamme.name" @click="currentGammeSelected = gamme, currentModuleSelected = ''" v-for="gamme in gammes">
                             <img :src="gamme.img" >
                         </figure>
-
                     </div>
 
                 </div>
 
-                <!-- Forme -->
-                <div class="field" v-if="gammeSelected !== ''">
-                    <div class="control">
+                <div v-if="gammeSelected !== ''">
+                    <figure class="mt-2 mb-1">
+                        <img :src="'/static/img/house/forms/Maison_perso.jpg'">
+                    </figure>
+                    <!-- Mur ext -->
+                    <div class="field">
                         <div>
-                            <label for="selectForme">Forme :</label>
+                            <label for="selectModuleWallExt">Murs Extérieurs :</label>
                         </div>
+                        <v-select id="selectModuleWallExt" v-model="modulesWallExtSelected" multiple :options="modules.ext" label="name">
+                            <template slot="option" slot-scope="option">
+                                {{option.name}}
+                            </template>
+                        </v-select>
+                    </div>
 
-                        <div id="selectForme" class="select">
-                            <select v-model="formeSelected">
-                                <option :value="forme.name" v-for="forme in formes">{{forme.name}}</option>
-                            </select>
+                    <div class="box" v-if="modulesWallExtSelected !== ''">
+                        <div class="tags">
+                            <span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"
+                                  @click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesWallExtSelected">
+                                {{module.name}}
+                            </span>
                         </div>
                     </div>
-                </div>
-
-                <figure class="mt-2" v-show="formeSelected === forme.name"
-                        v-for="forme in formes">
-                    <img :src="forme.img">
-                </figure>
-
-
-                <!-- Mur ext carré -->
-                <div class="field" v-if="formeSelected === 'Carré'">
-                    <div>
-                        <label for="selectModuleWallExtSquare">Murs Extérieur :</label>
-                    </div>
-                    <v-select id="selectModuleWallExtSquare" v-model="modulesWallExtSquareSelected" multiple :options="modules.ext.carre" label="name" :disabled="modulesWallExtSquareSelected === '' ? false : true">
-                        <template slot="option" slot-scope="option">
-                            {{option.name}}
-                        </template>
-                    </v-select>
-                </div>
-
-                <div class="box" v-if="modulesWallExtSquareSelected !== ''">
-                    <div class="tags">
-                        <span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"
-                              @click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesWallExtSquareSelected">
-                            {{module.name}}
-                        </span>
-                    </div>
-                </div>
-                
-                <!-- Mur ext rectangle -->
-                <div class="field" v-if="formeSelected === 'Rectangle'">
-                    <div>
-                        <label for="selectModuleWallExtRect">Murs Extérieur :</label>
-                    </div>
-                    <v-select id="selectModuleWallExtRect" v-model="modulesWallExtRectSelected" multiple :options="modules.ext.rectangle" label="name" :disabled="modulesWallExtRectSelected === '' ? false : true">
-                        <template slot="option" slot-scope="option">
-                            {{option.name}}
-                        </template>
-                    </v-select>
-                </div>
-
-                <div class="box" v-if="modulesWallExtRectSelected !== ''">
-                    <div class="tags">
-                        <span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"
-                              @click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesWallExtRectSelected">
-                            {{module.name}}
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Mur ext perso -->
-                <div class="field" v-if="formeSelected === 'Personnaliser'">
-                    <div>
-                        <label for="selectModuleWallExt">Murs Extérieur :</label>
-                    </div>
-                    <v-select id="selectModuleWallExt" v-model="modulesWallExtSelected" multiple :options="modules.ext.perso" label="name">
-                        <template slot="option" slot-scope="option">
-                            {{option.name}}
-                        </template>
-                    </v-select>
-                </div>
-
-                <div class="box" v-if="modulesWallExtSelected !== ''">
-                    <div class="tags">
-                        <span class="tag is-link is-small" :class="currentModuleSelected === module ? 'tag-selected': ''"
-                              @click="currentModuleSelected = module, currentGammeSelected = ''" v-for="module in modulesWallExtSelected">
-                            {{module.name}}
-                        </span>
-                    </div>
-                </div>
-                
-                <div v-if="formeSelected !== ''">
                     <!-- mur int -->
                     <div class="field">
                         <div>
@@ -250,8 +188,7 @@
                                 <div class="field">
                                     <label class="label">Isolation</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" type="text" :value="currentGammeSelected.isolation"
-                                               readonly>
+                                        <input class="input" type="text" :value="currentGammeSelected.isolation" readonly>
                                         <span class="icon is-small is-left">
                                       <i class="fas fa-igloo"></i>
                                     </span>
@@ -260,8 +197,7 @@
                                 <div class="field">
                                     <label class="label">Couverture</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" type="text" :value="currentGammeSelected.couverture"
-                                               readonly>
+                                        <input class="input" type="text" :value="currentGammeSelected.couverture" readonly>
                                         <span class="icon is-small is-left">
                                       <i class="fas fa-home"></i>
                                     </span>
@@ -281,40 +217,45 @@
                                     </span>
                                     </p>
                                 </div>
-                                <div class="field">
+                                <div class="field" v-if="currentModuleSelected.family !== 'CHA'" >
                                     <label class="label">Hauteur</label>
                                     <p class="control has-icons-left">
-                                        <input v-if="formeSelected === 'Carré'" class="input" type="text" v-model="currentModuleSelected.height" :placeholder="currentModuleSelected.height" @change="carreHauteur(currentModuleSelected.height)">
-                                        <input v-if="formeSelected === 'Rectangle'" class="input" type="text" v-model="currentModuleSelected.height" :placeholder="currentModuleSelected.height" @change="rectangleHauteur(currentModuleSelected.height)">
-                                        <input v-if="formeSelected === 'Personnaliser'" class="input" type="text" v-model="currentModuleSelected.height" :placeholder="currentModuleSelected.height" @change="extHauteur(currentModuleSelected.height)">
+                                        <input class="input" type="text" v-model="currentModuleSelected.height" :placeholder="currentModuleSelected.height" @change="extHauteur(currentModuleSelected.height)">
                                         <span class="icon is-small is-left">
                                       <i class="fas fa-ruler-vertical"></i>
                                     </span>
                                     </p>
                                 </div>
-                                <div class="field">
+                                <div class="field" v-if="currentModuleSelected.family !== 'CHA'">
                                     <label class="label">Longueur</label>
                                     <p class="control has-icons-left">
-                                        <input v-if="formeSelected === 'Carré'" class="input" type="text" :value="currentModuleSelected.length" :placeholder="currentModuleSelected.length" @change="prixModuleCarre(currentModuleSelected, currentModuleSelected.length, $event); carreLongueur($event)">
-                                        <input v-if="formeSelected === 'Rectangle'" class="input" type="text" :value="currentModuleSelected.length" :placeholder="currentModuleSelected.length" @change="prixModuleRect(currentModuleSelected, currentModuleSelected.length, $event); rectangleLongueur(currentModuleSelected.length, $event)">
-                                        <input v-if="formeSelected === 'Personnaliser'" class="input" type="text" :value="currentModuleSelected.length" :placeholder="currentModuleSelected.length" @change="prixModule(currentModuleSelected, currentModuleSelected.length, $event)">
+                                        <input class="input" type="text" :value="currentModuleSelected.length" :placeholder="currentModuleSelected.length" @change="prixModuleLenght(currentModuleSelected, currentModuleSelected.length, $event)">
                                         <span class="icon is-small is-left">
                                       <i class="fas fa-ruler-horizontal"></i>
+                                    </span>
+                                    </p>
+                                </div>
+                                <div class="field" v-if="currentModuleSelected.family === 'CHA'" >
+                                    <label class="label">Unité</label>
+                                    <p class="control has-icons-left">
+                                        <input class="input" type="number" min="1" v-if="currentModuleSelected.name === 'ferme_charpente1'" v-model="carpentersUnit" :placeholder="carpentersUnit" @change="prixCharpModule(currentModuleSelected, carpentersUnit, carpentersPrice1)">
+                                        <input class="input" type="number" min="1" v-if="currentModuleSelected.name === 'ferme_charpente2'" v-model="carpentersUnit" :placeholder="carpentersUnit" @change="prixCharpModule(currentModuleSelected, carpentersUnit, carpentersPrice2)">
+                                        <span class="icon is-small is-left">
+                                      <i class="fas fa-puzzle-piece"></i>
                                     </span>
                                     </p>
                                 </div>
                                 <div class="field">
                                     <label class="label">Unite d'usage</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" type="text"
-                                               :placeholder="currentModuleSelected.unit" readonly>
+                                        <input class="input" type="text" :placeholder="currentModuleSelected.unit" readonly>
                                         <span class="icon is-small is-left">
                                       <i class="fas fa-balance-scale"></i>
                                     </span>
                                     </p>
                                 </div>
 
-                                <div v-if="currentModuleSelected.family === 'ext' || currentModuleSelected.family === 'int'">
+                                <div v-if="currentModuleSelected.family === 'EXT' || currentModuleSelected.family === 'INT'">
 
                                     <div class="field">
                                         <div class="control">
@@ -323,7 +264,7 @@
                                             </div>
 
                                             <div id="selectAngle" class="select">
-                                                <select v-model="currentModuleSelected.angle">
+                                                <select v-model="currentModuleSelected.angle_type">
                                                     <option value="">Aucun</option>
                                                     <option>Entrant</option>
                                                     <option>Sortant</option>
@@ -333,11 +274,11 @@
                                     </div>
 
                                     <div class="field"
-                                         v-if="currentModuleSelected.angle !== '' && currentModuleSelected.angle !== 'Aucun'">
+                                         v-if="currentModuleSelected.angle_type !== '' && currentModuleSelected.angle_type !== 'Aucun'">
                                         <label class="label">Degré de l'angle</label>
                                         <p class="control has-icons-left">
-                                            <input class="input" type="text" v-model="currentModuleSelected.angle_type"
-                                                   :placeholder="currentModuleSelected.angle_type">
+                                            <input class="input" type="text" v-model="currentModuleSelected.angle"
+                                                   :placeholder="currentModuleSelected.angle">
                                             <span class="icon is-small is-left">
                                               <i class="fas fa-drafting-compass"></i>
                                             </span>
@@ -352,14 +293,12 @@
                                             </span>
                                         </p>
                                     </div>
-
                                 </div>
 
                                 <div class="field">
                                     <label class="label">Prix</label>
                                     <p class="control has-icons-left">
-                                        <input class="input" type="text" :placeholder="currentModuleSelected.price"
-                                               readonly>
+                                        <input class="input" type="text" :placeholder="currentModuleSelected.price" readonly>
                                         <span class="icon is-small is-left">
                                       <i class="fas fa-euro-sign"></i>
                                     </span>
@@ -371,6 +310,7 @@
                 </affix>
             </div>
         </div>
+        <b-loading :is-full-page="isFullPage" :active.sync="isLoading" :can-cancel="true"></b-loading>
     </div>
 </template>
 
@@ -381,31 +321,12 @@
         data() {
             return {
                 gammes: [
-                    {name: 'Excellence', finitionExterieure: 'Crépi', isolation: 'Laine de verre', couverture: 'Ardoise', img: '/static/img/house/gammes/excellence.jpeg'},
-                    {name: 'Luxe', finitionExterieure: 'Crépi', isolation: 'Laine de roche', couverture: 'Zinc', img: '/static/img/house/gammes/luxe.jpeg'},
-                    {name: 'Naturelle', finitionExterieure: 'Bois', isolation: 'Ouate de cellulose', couverture: 'Brande', img: '/static/img/house/gammes/naturelle.jpeg'},
-                ],
-                formes: [
-                    {name: 'Carré', img: '/static/img/house/forms/Maison_carree.jpg'},
-                    {name: 'Rectangle', img: '/static/img/house/forms/Maison_rectangle.jpg'},
-                    {name: 'Personnaliser', img: '/static/img/house/forms/Maison_perso.jpg'},
+                    {name: 'Luxe', ratio: 2, finitionExterieure: 'Crépi', isolation: 'Laine de roche', couverture: 'Zinc', img: '/static/img/house/gammes/luxe.jpeg'},
+                    {name: 'Excellence', ratio: 1.5, finitionExterieure: 'Crépi', isolation: 'Laine de verre', couverture: 'Ardoise', img: '/static/img/house/gammes/excellence.jpeg'},
+                    {name: 'Naturelle', ratio: 1, finitionExterieure: 'Bois', isolation: 'Ouate de cellulose', couverture: 'Brande', img: '/static/img/house/gammes/naturelle.jpeg'},
                 ],
                 modules: {
-                    ext: {
-                        carre: [
-                            {name: 'Mur-nord', family: "ext", height: '2.5', length: '1.0', unit: 'm²', angle: '', angle_type: '', length2: '', price: 1000},
-                            {name: 'Mur_sud', family: "ext", height: '2.5', length: '1.0', unit: 'm linéaire', angle: '', angle_type: '', length2: '', price: 1000},
-                            {name: 'Mur_ouest', family: "ext", height: '2.5', length: '1.0', unit: 'unite', angle: '', angle_type: '', length2: '', price: 1000},
-                            {name: 'Mur_est', family: "ext", height: '2.5', length: '1.0', unit: 'unite', angle: '', angle_type: '', length2: '', price: 1000},
-                        ],
-                        rectangle: [
-                            {name: 'Mur-nord', family: "ext", height: '2.0', length: '1.5', unit: 'm²', angle: '', angle_type: '', length2: '', price: 1500},
-                            {name: 'Mur_sud', family: "ext", height: '2.0', length: '1.5', unit: 'm linéaire', angle: '', angle_type: '', length2: '', price: 1500},
-                            {name: 'Mur_ouest', family: "ext", height: '2.0', length: '1.0', unit: 'unite', angle: '', angle_type: '', length2: '', price: 1000},
-                            {name: 'Mur_est', family: "ext", height: '2.0', length: '1.0', unit: 'unite', angle: '', angle_type: '', length2: '', price: 1000},
-                        ],
-                        perso: [],
-                    },
+                    ext: [],
                     int: [],
                     plancher: {
                         dalle: [],
@@ -416,19 +337,23 @@
                         couverture: [],
                     },
                 },
-                gammeSelected: '',
-                formeSelected: '',
-                modulesWallExtSquareSelected: '',
-                modulesWallExtRectSelected: '',
                 modulesWallExtSelected: '',
                 modulesWallIntSelected: '',
                 modulesFloorSlabSelected: '',
                 modulesFloorStructuralSelected: '',
                 modulesRoofCarpentersSelected: '',
                 modulesRoofCoverSelected: '',
-                modulesSelected : [],
+                gammeSelected: '',
                 currentGammeSelected: '',
+                modulesSelected : [],
                 currentModuleSelected: '',
+                carpentersUnit: 1,
+                carpentersPrice1: 0,
+                capentersPrice2: 0,
+                priceQuoteTotal: '',
+                counter: 0,
+                isLoading: false,
+                isFullPage: true
             }
         },
         computed: {
@@ -446,7 +371,7 @@
             },
             checkModuleSelected() {
 
-                if(this.modulesWallExtSquareSelected === '' && this.modulesWallExtRectSelected === '' && this.modulesWallExtSelected === '' && this.modulesWallIntSelected === '' && this.modulesFloorSlabSelected === '' && this.modulesFloorStructuralSelected === '' && this.modulesRoofCarpentersSelected === '' && this.modulesRoofCoverSelected === ''){
+                if(this.modulesWallExtSelected === '' && this.modulesWallIntSelected === '' && this.modulesFloorSlabSelected === '' && this.modulesFloorStructuralSelected === '' && this.modulesRoofCarpentersSelected === '' && this.modulesRoofCoverSelected === ''){
                     this.currentModuleSelected = ''
                 }
 
@@ -458,135 +383,98 @@
             },
         },
         methods: {
-            carreLongueur(length) {
-                this.modulesWallExtSquareSelected.forEach(function (module) {
-                    module.length = length.target.value;
-                });
-            },
-            rectangleLongueur(oldLength, length) {
-
-                this.modulesWallExtRectSelected.forEach(function (module) {
-                    if(module.length === oldLength) {
-                        module.length = length.target.value;
-                    }
-                });
-            },
-            carreHauteur(height) {
-                this.modulesWallExtSquareSelected.forEach(function (module) {
-                    module.height = height;
-                });
-            },
-            rectangleHauteur(height) {
-                this.modulesWallExtRectSelected.forEach(function (module) {
-                    module.height = height;
-                });
-            },
             extHauteur(height) {
                 this.modulesWallExtSelected.forEach(function (module) {
                     module.height = height;
                 });
             },
-            prixModuleCarre(module, oldLength, length) {
-                let lenghtDiff = length.target.value - oldLength;
-                let newPrice = lenghtDiff * module.price + module.price;
-                this.modulesWallExtSquareSelected.forEach(function (module) {
-                    module.price = newPrice;
-                });
-            },
-            prixModuleRect(module, oldLength, length) {
-                let lenghtDiff = length.target.value - oldLength;
-                let newPrice = module.price = lenghtDiff * module.price + module.price;
-                this.modulesWallExtRectSelected.forEach(function (module) {
-                    if(module.length === oldLength) {
-                        module.price = newPrice;
-                    }
-                });
-            },
-            prixModule(module, oldLength, length) {
+            prixModuleLenght(module, oldLength, length) {
                 let lenghtDiff = length.target.value - oldLength;
                 module.price = lenghtDiff * module.price + module.price;
-            }
+                module.length = length.target.value
+            },
+            prixCharpModule(module, quantite, prixU) {
+                module.price = prixU * quantite
+            },
+            prixModule(modules) {
+                modules.forEach(function (element) {
+                    let modulesPrice = 0;
+                    element.components.forEach(function (element) {
+                        modulesPrice = modulesPrice + parseFloat(element.price.replace(",", "."))
+                    });
+                    element.price = modulesPrice
+                });
+            },
+            prixTotal(modules) {
+                let prixTotal = 0;
+                modules.forEach( function (element) {
+
+                    for (let i = 0; i < element.length; i++) {
+                      prixTotal = prixTotal + element[i].price
+                    }
+                });
+
+                return prixTotal;
+            },
+            totalWithgamme(prixTotal) {
+                if (this.gammeSelected.name === 'Excellence') {
+
+                    prixTotal = prixTotal * parseFloat(this.gammeSelected.ratio.replace(",", "."))
+
+                } else if (this.gammeSelected.name === 'Luxe') {
+
+                    prixTotal = prixTotal * parseFloat(this.gammeSelected.ratio.replace(",", "."))
+                } else {
+                    prixTotal
+                }
+
+                return prixTotal;
+            },
         },
         watch: {
-            formeSelected: {
-                handler: function () {
-                    if(this.formeSelected === 'Carré') {
-                        this.currentModuleSelected = '';
-                        this.modulesWallExtRectSelected = '';
-                        this.modulesWallExtSelected = '';
-
-                        let modulesCarre = [];
-                        this.modules.ext.carre.forEach( function (module) {
-                            modulesCarre.push(module)
-                        });
-                        this.modulesWallExtSquareSelected = modulesCarre;
-
-                    }
-
-                    if(this.formeSelected === 'Rectangle') {
-                        this.currentModuleSelected = '';
-                        this.modulesWallExtSquareSelected = '';
-                        this.modulesWallExtSelected = '';
-
-                        let modulesRect = [];
-                        this.modules.ext.rectangle.forEach( function (module) {
-                            modulesRect.push(module)
-                        });
-                        this.modulesWallExtRectSelected = modulesRect;
-                    }
-
-                    if(this.formeSelected === 'Personnaliser') {
-                        this.currentModuleSelected = '';
-                        this.modulesWallExtSquareSelected = '';
-                        this.modulesWallExtRectSelected = '';
-                    }
-                },
-            },
-            modulesWallExtSquareSelected: {
-               handler: function () {
-                    this.modulesSelected = this.modulesSelected + 1
-                }
-            },
-            modulesWallExtRectSelected: {
-               handler: function () {
-                    this.modulesSelected = this.modulesSelected + 1
-                }
-            },
             modulesWallExtSelected: {
                handler: function () {
-                    this.modulesSelected = this.modulesSelected + 1
+                    this.counter = this.counter + 1
                 }
             },
             modulesWallIntSelected: {
                handler: function () {
-                    this.modulesSelected = this.modulesSelected + 1
+                    this.counter = this.counter + 1
                 }
             },
             modulesFloorSlabSelected: {
                handler: function () {
-                    this.modulesSelected = this.modulesSelected + 1
+                    this.counter = this.counter + 1
                 }
             },
             modulesFloorStructuralSelected: {
                handler: function () {
-                    this.modulesSelected = this.modulesSelected + 1
+                    this.counter = this.counter + 1
                 }
             },
             modulesRoofCarpentersSelected: {
                handler: function () {
-                    this.modulesSelected = this.modulesSelected + 1
+                    this.counter = this.counter + 1
                 }
             },
             modulesRoofCoverSelected: {
                handler: function () {
-                    this.modulesSelected = this.modulesSelected + 1
+                    this.counter = this.counter + 1
                 }
             },
-            modulesSelected: {
+            counter: {
                 handler: function () {
-                    if (this.modulesSelected !== '') {
-                        // console.log(this.modulesSelected);
+                    if (this.counter !== 0) {
+
+                        this.modulesSelected = [this.modulesWallExtSelected, this.modulesWallIntSelected, this.modulesFloorSlabSelected, this.modulesFloorStructuralSelected, this.modulesRoofCarpentersSelected, this.modulesRoofCoverSelected];
+
+                        let montantTotal = this.prixTotal(this.modulesSelected);
+
+                        let montantGammeTotal = this.totalWithgamme(montantTotal);
+
                         this.$store.commit("setQuoteModules", this.modulesSelected);
+                        this.$store.commit("setQuotePrice", montantGammeTotal);
+
                         this.$emit('can-continue', {value: true});
                     } else {
                         this.$emit('can-continue', {value: true});
@@ -604,37 +492,86 @@
             }
         },
         mounted() {
+            this.isLoading = true;
+
             if (this.modulesSelected === '') {
                 this.$emit('can-continue', {value: false});
             } else {
                 this.$emit('can-continue', {value: true});
             }
 
-            axios.get(`http://127.0.0.1:8000/api/gammes`)
+            axios.get(this.$store.state.endpoints.baseUrl + `api/modules/family/ext`)
                 .then(response => {
-                    this.modules.ext.perso = response.data
+                    this.modules.ext = response.data;
+                    this.prixModule(this.modules.ext);
+
                 })
                 .catch(e => {
                     this.errors.push(e)
                 });
 
-            // axios.get(`http://127.0.0.1:8000/api/modules/family/ext`)
-            //     .then(response => {
-            //         this.modules.ext.perso = response.data
-            //     })
-            //     .catch(e => {
-            //         this.errors.push(e)
-            //     });
+            axios.get(this.$store.state.endpoints.baseUrl + `api/modules/family/int/`)
+                .then(response => {
+                    this.modules.int = response.data;
+                    this.prixModule(this.modules.int);
 
-            // axios.get(`http://127.0.0.1:8000/api/modules/family/int`)
-            //     .then(response => {
-            //         this.modules.int = response.data
-            //     })
-            //     .catch(e => {
-            //         this.errors.push(e)
-            //     })
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                });
 
+            axios.get(this.$store.state.endpoints.baseUrl + `api/modules/family/dal/`)
+                .then(response => {
+                    this.modules.plancher.dalle = response.data;
+                    this.prixModule(this.modules.plancher.dalle);
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                });
 
+            axios.get(this.$store.state.endpoints.baseUrl + `api/modules/family/pla/`)
+                .then(response => {
+                    this.modules.plancher.porteur = response.data;
+                    this.prixModule(this.modules.plancher.porteur);
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                });
+
+            axios.get(this.$store.state.endpoints.baseUrl + `api/modules/family/toi/`)
+                .then(response => {
+                    this.modules.toit.couverture = response.data;
+                    this.prixModule(this.modules.toit.couverture);
+                })
+
+                .catch(e => {
+                    this.errors.push(e)
+                });
+
+            axios.get(this.$store.state.endpoints.baseUrl + `api/modules/family/cha/`)
+                .then(response => {
+                    this.modules.toit.charpente = response.data;
+                    this.prixModule(this.modules.toit.charpente);
+
+                    let valuePrice1 = 0;
+                    let valuePrice2 = 0;
+
+                    this.modules.toit.charpente.forEach( function (element) {
+                        if(element.name === 'ferme_charpente1') {
+                            valuePrice1 = element.price
+                        } else {
+                            valuePrice2 = element.price
+                        }
+                    });
+
+                    this.carpentersPrice1 = valuePrice1;
+                    this.carpentersPrice2 = valuePrice2;
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                });
+
+            this.isLoading = false;
         }
     }
 </script>

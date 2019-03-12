@@ -307,7 +307,7 @@
         },
         async created() {
             try {
-                const response = await axios.get(`http://127.0.0.1:8000/api/clients`)
+                const response = await axios.get(this.$store.state.endpoints.baseUrl + `api/clients`)
                 this.clients = response.data
             } catch (e) {
                 this.errors.push(e)
@@ -320,7 +320,7 @@
         },
         methods: {
             getClients() {
-                axios.get(`http://127.0.0.1:8000/api/clients`)
+                axios.get(this.$store.state.endpoints.baseUrl + `api/clients`)
                 .then(response => {
                     this.clients = response.data
                 })
@@ -350,7 +350,7 @@
                     'company': this.form.company
                 };
 
-                axios.post('http://127.0.0.1:8000/api/clients/',
+                axios.post(this.$store.state.endpoints.baseUrl + 'api/clients/',
                     clientCreate, {
                         headers: {
                             'Content-Type': 'application/json'

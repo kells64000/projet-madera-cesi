@@ -3,14 +3,13 @@ from rest_framework import serializers
 
 from users.models import MaderaUser, Provider
 from users.serializers import MaderaUserSerializer
-from .constants import FAMILY_CHOICES, NATURE_CHOICES, GAMME_CHOICES, SHAPE_CHOICES
-from .models import Component, Module, Gamme, House
+from .models import Component, Module, Gamme, House, FAMILY_CHOICES
 
 
 class GammeSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(read_only=True)
-    name = serializers.ChoiceField(choices=GAMME_CHOICES, required=False, allow_blank=True)
+    name = serializers.CharField(required=False, max_length=30, allow_null=True)
     ratio = serializers.DecimalField(required=False, max_digits=4, decimal_places=2)
 
     class Meta:
@@ -25,7 +24,6 @@ class GammeSerializer(serializers.ModelSerializer):
         instance.name = validated_data.get('name', instance.name)
         instance.ratio = validated_data.get('ratio', instance.ratio)
         instance.save()
-
         return instance
 
     def to_representation(self, obj):
@@ -36,17 +34,16 @@ class GammeSerializer(serializers.ModelSerializer):
 class ComponentSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(required=False, max_length=30)
-    component_type = serializers.CharField(required=False, max_length=30)
-    nature = serializers.ChoiceField(choices=NATURE_CHOICES, required=False, allow_blank=True)
-    length = serializers.DecimalField(required=False, max_digits=8, decimal_places=2)
-    width = serializers.DecimalField(required=False, max_digits=8, decimal_places=2)
-    unit = serializers.CharField(required=False, max_length=10)
+    name = serializers.CharField(required=False, max_length=30, allow_null=True)
+    component_type = serializers.CharField(required=False, max_length=30, allow_null=True)
+    nature = serializers.CharField(required=False, max_length=30, allow_null=True)
+    length = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
+        allow_null=True)
+    height = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
+        allow_null=True)
+    unit = serializers.CharField(required=False, max_length=10, allow_null=True)
     surface = serializers.SerializerMethodField(required=False)
     price = serializers.DecimalField(required=False, max_digits=8, decimal_places=2)
-    total_price = serializers.SerializerMethodField(required=False)
-    quantity = serializers.IntegerField(required=False)
-    gammes = serializers.SerializerMethodField()
 
     class Meta:
         model = Component
@@ -69,11 +66,10 @@ class ComponentSerializer(serializers.ModelSerializer):
         instance.component_type = validated_data.get('component_type', instance.component_type)
         instance.nature = validated_data.get('nature', instance.nature)
         instance.length = validated_data.get('length', instance.length)
-        instance.width = validated_data.get('width', instance.width)
+        instance.height = validated_data.get('height', instance.height)
         instance.unit = validated_data.get('unit', instance.unit)
         instance.price = validated_data.get('price', instance.price)
-        instance.quantity = validated_data.get('quantity', instance.quantity)
-        gammes_data = validated_data.get('gammes')
+        gammes_data = validated_data.get('gammes', None)
         gammes_list = list()
         if gammes_data:
             for gamme_id in gammes_data:
@@ -83,9 +79,6 @@ class ComponentSerializer(serializers.ModelSerializer):
         instance.save()
 
         return instance
-
-    def get_total_price(self, obj):
-        return obj.total_price
 
     def get_surface(self, obj):
         return obj.surface
@@ -105,29 +98,34 @@ class ComponentSerializer(serializers.ModelSerializer):
 class ModuleSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(required=False, max_length=30)
-    nature = serializers.CharField(required=False, max_length=20)
-    family = serializers.CharField(required=False, max_length=3)
-    length = serializers.DecimalField(required=False, max_digits=8, decimal_places=2)
-    height = serializers.DecimalField(required=False, max_digits=8, decimal_places=2)
-    unit = serializers.CharField(required=False, max_length=10)
+    name = serializers.CharField(required=False, max_length=30, allow_null=True)
+    family = serializers.ChoiceField(required=False, choices=FAMILY_CHOICES)
+    length = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
+        allow_null=True)
+    length2 = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
+        allow_null=True)
+    # height = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
+    #     allow_null=True)
+    unit = serializers.CharField(required=False, max_length=10, allow_null=True)
     surface = serializers.SerializerMethodField(required=False)
-    family = serializers.ChoiceField(choices=FAMILY_CHOICES, required=False, allow_blank=True)
     designer = MaderaUserSerializer(required=False)
     designed_by = serializers.SerializerMethodField()
     components = serializers.SerializerMethodField()
     gammes = serializers.SerializerMethodField()
     price = serializers.SerializerMethodField()
+    # quantity_components = serializers.SerializerMethodField()
 
     class Meta:
         model = Module
         fields = ('__all__')
+        # fields = ('id', 'name', 'family', 'length', 'length2', 'height', 'unit', 'surface',
+        #     'designer', 'designed_by', 'components', 'gammes', 'price', 'quantity_components')
 
     def create(self, validated_data):
         designer = component = None
         designer_data = validated_data.pop('designer', None)
         component_data = validated_data.pop('components', None)
-        gamme_data = validated_data.get('gammes', None)
+        gamme_data = validated_data.pop('gammes', None)
         if designer_data:
             designer = Provider.objects.get_or_create(**designer_data)[0]
         module = Module.objects.create(designer=designer, **validated_data)
@@ -147,23 +145,24 @@ class ModuleSerializer(serializers.ModelSerializer):
         return module
 
     def update(self, instance, validated_data):
+        components_data = validated_data.pop('components', None)
+        gammes_data = validated_data.pop('gammes', None)
         instance.name = validated_data.get('name', instance.name)
-        instance.nature = validated_data.get('nature', instance.nature)
         instance.length = validated_data.get('length', instance.length)
         instance.height = validated_data.get('height', instance.height)
         instance.family = validated_data.get('family', instance.family)
-        components_data = validated_data.get('components')
-        gammes_data = validated_data.get('gammes')
 
-        if instance.designer:
-            for k, v in validated_data.get('designer').items():
-                instance.designer.__dict__[k] = v
-            instance.designer.save(update_fields=validated_data.get('designer').keys())
-        else:
-            designer_data = validated_data.get('designer')
-            if designer_data:
-                instance.designer = MaderaUser.objects.create(**designer_data)
-                instance.designer.save()
+        designer_data = validated_data.get('designer', None)
+        if designer_data:
+            if instance.desinger:
+                if designer_data.get('id'):
+                    designer = MaderaUser.objects.get(id=designer_data.get('id'))[0]
+                    if designer:
+                        instance.designer = designer
+                        instance.save()
+                else:
+                    designer = MaderaUser.objects.create(**designer_data)
+                    instance.designer = designer
         components_list = list()
         if components_data:
             for component_id in components_data:
@@ -175,16 +174,13 @@ class ModuleSerializer(serializers.ModelSerializer):
             for gamme_id in gammes_data:
                 gamme = Gamme.objects.get_or_create(id=gamme_id)[0]
                 gammes_list.append(gamme)
-            instance.components.set(gammes_list)
-        instance.save()
-
-        return instance
+            instance.gammes.set(gammes_list)
         instance.save()
 
         return instance
 
     def get_surface(self, obj):
-        return obj.surface
+        return obj.surface()
 
     def get_designed_by(self, obj):
         return obj.designed_by
@@ -201,20 +197,25 @@ class ModuleSerializer(serializers.ModelSerializer):
         ret = super(ModuleSerializer, self).to_representation(obj)
         return ret
 
+    def get_quantity_components(self, obj):
+        return obj.qty_comp()
+
     def get_price(self, obj):
-        return obj.calculated_price
+        return ''
+        # obj.calculated_price
 
 
 class HouseSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(read_only=True)
-    shape = serializers.ChoiceField(choices=SHAPE_CHOICES, required=False, allow_blank=True)
+    shape = serializers.CharField(required=False, max_length=20, allow_null=True)
     modules = serializers.SerializerMethodField(read_only=True)
     price = serializers.SerializerMethodField()
+    gammes = serializers.SerializerMethodField()
 
     class Meta:
         model = House
-        fields = ('id', 'shape', 'modules', 'price')
+        fields = ('id', 'shape', 'modules', 'price', 'gammes')
 
     def create(self, validated_data):
         module_data = validated_data.pop('modules', None)
@@ -230,7 +231,7 @@ class HouseSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.shape = validated_data.get('shape', instance.shape)
-        modules_data = validated_data.get('modules')
+        modules_data = validated_data.pop('modules')
 
         modules_list = list()
         if modules_data:
@@ -246,5 +247,9 @@ class HouseSerializer(serializers.ModelSerializer):
         serializer = ModuleSerializer(obj.get_modules(), many=True, context=self.context)
         return serializer.data
 
-    def get_price(self, obj):
-        return obj.total_price
+    def get_gammes(self, obj):
+        serializer = GammeSerializer(obj.get_gammes(), many=True, context=self.context)
+        return serializer.data
+
+    # def get_price(self, obj):
+    #     return obj.total_price

@@ -11,7 +11,7 @@ from .serializers import MaderaUserSerializer, SalesPersonSerializer, ClientSeri
 
 class ListUser(APIView):
 
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get(self, request, format=None):
         users = MaderaUser.objects.all()
@@ -19,16 +19,17 @@ class ListUser(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        address_data = request.data.get('address', None)
         serializer = MaderaUserSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(address=address_data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class DetailUser(APIView):
 
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get_object(self, pk):
         try:
@@ -43,10 +44,11 @@ class DetailUser(APIView):
 
     def put(self, request, pk, format=None):
         user = self.get_object(pk)
+        address_data = request.data.get('address', None)
         serializer = MaderaUserSerializer(user, data=request.data)
         serializer.fields['email'].required = False
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(address=address_data)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -58,7 +60,7 @@ class DetailUser(APIView):
 
 class ListSalesPerson(APIView):
 
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get(self, request, format=None):
         salespersons = SalesPerson.objects.all()
@@ -66,16 +68,17 @@ class ListSalesPerson(APIView):
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        address_data = request.data.get('address', None)
         serializer = SalesPersonSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(address=address_data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class DetailSalesPerson(APIView):
 
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get_object(self, pk):
         try:
@@ -89,12 +92,13 @@ class DetailSalesPerson(APIView):
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
+        address_data = request.data.get('address', None)
         salesperson = self.get_object(pk)
         serializer = SalesPersonSerializer(salesperson, data=request.data)
         for field in ['email', 'workplace']:
             serializer.fields[field].required = False
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(address=address_data)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -106,22 +110,25 @@ class DetailSalesPerson(APIView):
 
 class ListClient(APIView):
 
+    # permission_classes = (IsAuthenticated,)
+
     def get(self, request, format=None):
         clients = Client.objects.all()
         serializer = ClientSerializer(clients, many=True)
         return Response(serializer.data)
 
     def post(self, request, format=None):
+        address_data = request.data.get('address', None)
         serializer = ClientSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(address=address_data)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class DetailClient(APIView):
 
-    permission_classes = (IsAuthenticated,)
+    # permission_classes = (IsAuthenticated,)
 
     def get_object(self, pk):
         try:
@@ -135,12 +142,13 @@ class DetailClient(APIView):
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
+        address_data = request.data.get('address', None)
         client = self.get_object(pk)
         serializer = ClientSerializer(client, data=request.data)
         for field in ['email', 'is_pro']:
             serializer.fields[field].required = False
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(address=address_data)
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

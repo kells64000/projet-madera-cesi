@@ -33,11 +33,6 @@ user :    postgres
 passwd :  postgres
 </pre>
 
-La base de donnée en local pour les commerciaux est : **mysqli**
-
-La base mysqli permet de stocker les devis sur le device si aucune connexion à la base principale n'est possible
-Lorsque une connexion internet est de nouveau disponible les données de la base mysqli sont intégrées à la base postgre
-
 Le dossier **db** contient un dump récent de postgresql
 
 Pour faire un dump de la base postgresql, exécuter :
@@ -51,6 +46,14 @@ Pour l'importer dans le client postgresql, exécuter :
 >Créer la base si elle n'existe pas encore
 `createdb -U postgres -E UTF-8 madera`.
 >Puis lancer `pg_restore` pour importer
+
+Des données de base sont créé via des fixtures django
+
+Dans le dossier fixtures d'une application on peux retrouver un fichier json contenant des données prêtes à être injectées dans la BDD
+
+Ex : créer les users de base
+
+`python manage.py loaddata users`
 
 ## Donnée de l'application
 
@@ -131,3 +134,10 @@ const app = new Vue({
     }
 });
 ```
+
+## Environnement de prod
+
+Nous avons choisi [Heroku](https://madera-dev.herokuapp.com/)
+
+Les dossiers d'assets sont mis dans le dossier static via la commande `python manage.py collectstatic`
+

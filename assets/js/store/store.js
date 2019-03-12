@@ -30,6 +30,7 @@ export default new Vuex.Store({
     quoteProjectRef: '',
     quoteClient: {},
     quoteModules: {},
+    quotePrice: '',
   },
   getters: {
     getUser: state => {
@@ -50,6 +51,9 @@ export default new Vuex.Store({
     },
     getQuoteModules: state => {
       return state.quoteModules;
+    },
+    getQuotePrice: state => {
+      return state.quotePrice;
     }
   },
   mutations: {
@@ -61,12 +65,10 @@ export default new Vuex.Store({
       Vue.set(state, 'isAuthenticated', isAuthenticated)
     },
     updateToken(state, newToken) {
-      // TODO: For security purposes, take localStorage out of the project.
       localStorage.setItem('token', newToken);
       state.jwt = newToken;
     },
     removeToken(state) {
-      // TODO: For security purposes, take localStorage out of the project.
       localStorage.removeItem('token');
       state.jwt = null;
     },
@@ -84,6 +86,9 @@ export default new Vuex.Store({
     },
     setQuoteModules(state, modules) {
        Vue.set(state, 'quoteModules', modules);
+    },
+    setQuotePrice(state, price) {
+       Vue.set(state, 'quotePrice', price);
     }
   }
 })

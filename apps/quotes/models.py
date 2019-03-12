@@ -2,6 +2,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from users.models import SalesPerson, Client
+from components.models import House
 
 
 class Quote(models.Model):
@@ -19,12 +20,19 @@ class Quote(models.Model):
     client = models.ForeignKey(Client,
                                blank=False,
                                default=None,
-                               null=False,
+                               null=True,
                                on_delete=models.DO_NOTHING,
                                related_name=_('client'))
     salesperson = models.ForeignKey(SalesPerson,
                                     blank=False,
                                     default=None,
-                                    null=False,
+                                    null=True,
                                     on_delete=models.DO_NOTHING,
                                     related_name=_('salesperson'))
+
+    house = models.ForeignKey(House,
+                              blank=False,
+                              default=None,
+                              null=True,
+                              on_delete=models.DO_NOTHING,
+                              related_name=_('house'))

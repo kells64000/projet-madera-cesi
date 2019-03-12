@@ -14,7 +14,7 @@ from .managers import UserManager
 
 class MaderaUser(AbstractBaseUser, PermissionsMixin):
 
-    email = models.EmailField(_('email address'), unique=True)
+    email = models.EmailField(_('email address'), unique=True, null=True)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
     phone = models.CharField(_('phone'), max_length=12, null=True)

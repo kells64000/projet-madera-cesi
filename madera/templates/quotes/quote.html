@@ -72,20 +72,23 @@
         <div class="list-group">
             <img src="{% static "img/quote/logo.jpg" %}">
             <h1>Devis MADERA</h1>
-            <p>N°123456789</p>
-            <div>Date : 28/02/2019</div>
+            <p>REF : {{ref}}</p>
+            <div>Date : {{today}}</div>
         </div>
 
 
         <div align="right" class="list-group">
             <div class="client">Client :</div>
 
-            <div>Mr Jean Bon</div>
-            <div>Herta</div>
-            <div>12 avenue du pont</div>
-            <div>33000 Bordeaux</div>
-            <div>05.56.47.84.25</div>
-            <div>jean-bon@herta.fr</div>
+            <div>Projet : {{quote.name}}</div>
+            <div>{{client.get_full_name}}</div>
+            {%if client.company %}
+                <div>{{client.company}}</div>
+            {%endif%}
+            <div>{{client.address.street}}</div>
+            <div>{{client.address.zicode}} {{client.address.city}}</div>
+            <div>{{client.phone}}</div>
+            <div>{{client.email}}</div>
         </div>
     </div>
 
@@ -107,37 +110,39 @@
             </tr>
             </thead>
             <tbody>
+                {% for module in house.modules.all %}
                 <tr>
-                    <td>Module-test</td>
-                    <td>Composant-test</td>
+                    <td>{{module.name}}</td>
+                    <td>
+                        {%for component in module.components.all %}
+                            {{component}}
+                        {%endfor%}
+                    </td>
                     <td>1</td>
-                    <td>15.00€</td>
-                    <td>20%</td>
-                    <td>18.00€</td>
+                    <td>{{module.priceHT}}</td>
+                    <td>20 %</td>
+                    <td>{{module.price}}</td>
                 </tr>
+                {%endfor%}
             </tbody>
             <tfoot>
                 <tr>
                     <td colspan="4" class="bg-darkgrey"></td>
                     <th>Total TTC</th>
-                    <td>18.00€</td>
+                    <td>{{quote.price}}</td>
                 </tr>
             </tfoot>
     </table>
 
+    <div style="text-align: justify; font-size: 8px; margin-top: 550px">
+        Les informations recueillies vous concernant font l'objet d'un traitement qui a pour finalité : la relance client, la gestion des prospects, les statistiques de ventes, la fidélisation client.
+        Le destinataire de ces données sont : l'entreprise Madera.
+        La durée de conservation des données est de 5 ans.
+        Vous bénéficiez d’un droit d’accès, de rectification, de portabilité, d’effacement de celles-ci ou une limitation du traitement.
+        Vous pouvez vous opposer au traitement des données vous concernant et disposez du droit de retirer votre consentement à tout moment en vous adressant à : reclamations@madera.com
+        Vous avez la possibilité d’introduire une réclamation auprès d’une autorité de contrôle
+    </div>
 
 </body>
 </html>
-
-
-<!--<table>
-    <tr>
-        <th>ID</th><th>Title</th>
-    </tr>
-{#    {% for book in books %}#}
-        <tr>
-{#            <td>{{ book.id }}</td><td>{{ book.title }}</td>#}
-        </tr>
-{#    {% endfor %}#}
-</table>-->
 

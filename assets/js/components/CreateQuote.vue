@@ -24,11 +24,13 @@
                     </div>
                 </div>
             </section>
+            <b-loading :is-full-page="isFullPage" :active.sync="isLoading" :can-cancel="true"></b-loading>
         </div>
    </div>
 </template>
 
 <script>
+     import axios from 'axios'
      import HorizontalStepper from 'vue-stepper';
      import Projet from './stepCreateQuote/Projet.vue';
      import Client from './stepCreateQuote/Client.vue';
@@ -43,22 +45,22 @@
         data: function () {
             return {
                 quoteSteps: [
-                    // {
-                    //     icon: 'assignment',
-                    //     name: 'Projet',
-                    //     title: 'Projet',
-                    //     subtitle: 'Nom du projet',
-                    //     component: Projet,
-                    //     completed: false
-                    // },
-                    // {
-                    //     icon: 'person',
-                    //     name: 'client',
-                    //     title: 'Client',
-                    //     subtitle: 'Affectation du client',
-                    //     component: Client,
-                    //     completed: false
-                    // },
+                    {
+                        icon: 'assignment',
+                        name: 'Projet',
+                        title: 'Projet',
+                        subtitle: 'Nom du projet',
+                        component: Projet,
+                        completed: false
+                    },
+                    {
+                        icon: 'person',
+                        name: 'client',
+                        title: 'Client',
+                        subtitle: 'Affectation du client',
+                        component: Client,
+                        completed: false
+                    },
                     {
                         icon: 'view_quilt',
                         name: 'création',
@@ -76,7 +78,10 @@
                         component: Recapitulatif,
                         completed: false
                     }
-                ]
+                ],
+                isLoading: false,
+                isFullPage: true,
+                pathPdf: 'quote.pdf'
             }
         },
         methods: {
@@ -101,10 +106,100 @@
                     }
                 })
             },
+            createPDF() {
+
+                let PDFcontext = {
+                    'date': this.quoteDate,
+                    'name': this.quoteProject,
+                    'ref': this.quoteProjectRef,
+                    'price': this.quotePrice,
+                    'client': this.quoteClient,
+                    'salesperson': this.quoteSalesperson,
+                    'modules': this.quoteModules
+                };
+
+                axios.post(this.$store.state.endpoints.baseUrl + 'api/quotes/pdf/',
+                    PDFcontext, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then((response) => {
+                        console.log(response.data)
+
+                        this.pathPdf = response.data.path
+
+                    }).catch(e => {
+
+                        console.log(e.response);
+
+                        this.errors.push(e);
+                    });
+            },
+            createQuote() {
+
+                let QuoteCreate = {
+                    'name': this.quoteProject,
+                    'reference': this.quoteProjectRef,
+                    'price': this.quotePrice,
+                    'state': 'Brouillon',
+                    'attachment': this.pathPdf,
+                    'client': {
+                        'id': this.quoteClient.id,
+                        'full_name': this.quoteClient.full_name,
+                        'phone': this.quoteClient.phone,
+                        'email': this.quoteClient.email,
+                    },
+                    'salesperson': {
+                        'id': this.quoteSalesperson.id,
+                        'full_name': this.quoteSalesperson.full_name,
+                    },
+                };
+
+                axios.post(this.$store.state.endpoints.baseUrl + 'api/quotes/',
+                    QuoteCreate, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }).then((response) => {
+                        this.$router.push({name: 'ViewQuote'});
+
+                    }).catch(e => {
+
+                        console.log(e.response);
+
+                        this.errors.push(e);
+                    });
+            },
             // Executed when @stepper-finished event is triggered
-            alert(payload) {
-                alert('Création du devis en bdd et génération du PDF =)')
+            alert() {
+                this.isLoading = true;
+                // this.createPDF();
+                this.createQuote();
+                this.isLoading = false;
             }
+        },
+        computed: {
+            quoteDate() {
+                return this.$store.getters.getQuoteDate;
+            },
+            quoteProject() {
+                return this.$store.getters.getQuoteProject;
+            },
+            quoteProjectRef() {
+                return this.$store.getters.getQuoteProjectRef;
+            },
+            quoteClient() {
+                return this.$store.getters.getQuoteClient;
+            },
+            quoteSalesperson(){
+                return this.$store.getters.getUser;
+            },
+            quoteModules() {
+                return this.$store.getters.getQuoteModules;
+            },
+            quotePrice() {
+                return this.$store.getters.getQuotePrice;
+            },
         }
     }
 </script>
