@@ -200,6 +200,9 @@
             quotePrice() {
                 return this.$store.getters.getQuotePrice;
             },
+            quoteGamme() {
+                return this.$store.getters.getQuoteGamme;
+            },
         }
     }
 </script>

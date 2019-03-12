@@ -29,8 +29,9 @@
                 </div>
             </div>
         </div>
-        <footer class="card-footer justify-content-end pr-1-5">
-            {{quotePrice}}€
+        <footer class="card-footer justify-content-space-beetween pr-1-5">
+            <div class="pl-1-5">Gamme {{quoteGamme.name}} : multiplication du prix par {{quoteGamme.ratio}}</div>
+            <div>{{quotePrice}}€</div>
         </footer>
     </div>
 </template>
@@ -61,6 +62,9 @@
             },
             quotePrice() {
                 return this.$store.getters.getQuotePrice;
+            },
+            quoteGamme() {
+                return this.$store.getters.getQuoteGamme;
             },
         },
         watch: {
