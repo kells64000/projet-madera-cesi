@@ -13,7 +13,7 @@ class Quote(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     state = models.TextField()
     attachment = models.FileField(_('attachment'), max_length=100, null=True, blank=True,
-        default=None)
+        default=None, upload_to='static/pdf/')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     # ForeignKeys

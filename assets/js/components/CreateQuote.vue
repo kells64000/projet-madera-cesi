@@ -81,7 +81,7 @@
                 ],
                 isLoading: false,
                 isFullPage: true,
-                pathPdf: 'quote.pdf'
+                pathPdf: ''
             }
         },
         methods: {
@@ -124,9 +124,7 @@
                             'Content-Type': 'application/json'
                         }
                     }).then((response) => {
-                        console.log(response.data)
-
-                        this.pathPdf = response.data.path
+                        this.pathPdf = response.data.filename
 
                     }).catch(e => {
 
@@ -148,6 +146,9 @@
                         'full_name': this.quoteClient.full_name,
                         'phone': this.quoteClient.phone,
                         'email': this.quoteClient.email,
+                        'street': this.quoteClient.street,
+                        'city': this.quoteClient.city,
+                        'zipcode': this.quoteClient.zipcode,
                     },
                     'salesperson': {
                         'id': this.quoteSalesperson.id,
@@ -173,7 +174,7 @@
             // Executed when @stepper-finished event is triggered
             alert() {
                 this.isLoading = true;
-                // this.createPDF();
+                this.createPDF();
                 this.createQuote();
                 this.isLoading = false;
             }
