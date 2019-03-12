@@ -113,12 +113,13 @@ class ModuleSerializer(serializers.ModelSerializer):
     components = serializers.SerializerMethodField()
     gammes = serializers.SerializerMethodField()
     price = serializers.SerializerMethodField()
-    quantity_components = serializers.SerializerMethodField()
+    # quantity_components = serializers.SerializerMethodField()
 
     class Meta:
         model = Module
-        fields = ('id', 'name', 'family', 'length', 'length2', 'height', 'unit', 'surface',
-            'designer', 'designed_by', 'components', 'gammes', 'price', 'quantity_components')
+        fields = ('__all__')
+        # fields = ('id', 'name', 'family', 'length', 'length2', 'height', 'unit', 'surface',
+        #     'designer', 'designed_by', 'components', 'gammes', 'price', 'quantity_components')
 
     def create(self, validated_data):
         designer = component = None
@@ -153,7 +154,7 @@ class ModuleSerializer(serializers.ModelSerializer):
 
         designer_data = validated_data.get('designer', None)
         if designer_data:
-            if instance.deisnger:
+            if instance.desinger:
                 if designer_data.get('id'):
                     designer = MaderaUser.objects.get(id=designer_data.get('id'))[0]
                     if designer:
