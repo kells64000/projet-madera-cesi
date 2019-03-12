@@ -41,8 +41,9 @@ class MaderaUserSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = MaderaUser
         fields = ('id', 'email', 'first_name', 'last_name', 'full_name', 'phone',
-                  'address', 'password', 'date_joined', 'is_active', 'is_staff')
+                  'address', 'date_joined', 'is_active', 'is_staff')
         write_only_fields = ('password',)
+        depth = 1
 
     def validate_email(self, value):
         if MaderaUser.objects.filter(email=value).exists():
@@ -58,13 +59,14 @@ class MaderaUserSerializer(DynamicFieldsModelSerializer):
         address_data = validated_data.pop('address', None)
         user = MaderaUser.objects.create(**validated_data)
         if address_data:
-            address = Address.objects.get_or_create(id=address_data.get('id', None))[0]
-            if address:
-                user.address = address
+            if address_data.get('id'):
+                address = Address.objects.get(id=address_data.get('id'))[0]
+                if address:
+                    user.address = address
+                    user.save()
             else:
                 address = Address.objects.create(**address_data)
-                address.save
-        user.save(update_fields=['address'])
+                user.address = address
         return user
 
     def update(self, instance, validated_data):
@@ -75,8 +77,15 @@ class MaderaUserSerializer(DynamicFieldsModelSerializer):
         instance.password = validated_data.get('password', instance.password)
         address_data = validated_data.get('address', None)
         if address_data:
-            address = Address.objects.get_or_create(id=address_data.get('id'))[0]
-            instance.address = address
+            if instance.address:
+                if address_data.get('id'):
+                    address = Address.objects.get(id=address_data.get('id'))[0]
+                    if address:
+                        instance.address = address
+                        instance.save()
+                else:
+                    address = Address.objects.create(**address_data)
+                    instance.address = address
         instance.save()
         return instance
 
@@ -99,8 +108,37 @@ class SalesPersonSerializer(MaderaUserSerializer):
         fields = MaderaUserSerializer.Meta.fields + ('workplace',)
 
     def create(self, validated_data, address=None):
+        address_data = validated_data.pop('address', None)
         salesperson = SalesPerson.objects.create(**validated_data)
+        if address_data:
+            if address_data.get('id'):
+                address = Address.objects.get(id=address_data.get('id'))[0]
+                if address:
+                    salesperson.address = address
+                    salesperson.save()
+            else:
+                address = Address.objects.create(**address_data)
+                salesperson.address = address
         return salesperson
+
+    def update(self, instance, validated_data, address=None):
+        instance.email = validated_data.get('email', instance.email)
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.phone = validated_data.get('phone', instance.phone)
+        address_data = validated_data.get('address', None)
+        if address_data:
+            if instance.address:
+                if address_data.get('id'):
+                    address = Address.objects.get(id=address_data.get('id'))[0]
+                    if address:
+                        instance.address = address
+                        instance.save()
+                else:
+                    address = Address.objects.create(**address_data)
+                    instance.address = address
+        instance.save()
+        return instance
 
 
 class ClientSerializer(MaderaUserSerializer):
@@ -113,8 +151,37 @@ class ClientSerializer(MaderaUserSerializer):
         fields = MaderaUserSerializer.Meta.fields + ('is_pro', 'company')
 
     def create(self, validated_data, address=None):
+        address_data = validated_data.pop('address', None)
         client = Client.objects.create(**validated_data)
+        if address_data:
+            if address_data.get('id'):
+                address = Address.objects.get(id=address_data.get('id'))[0]
+                if address:
+                    client.address = address
+                    client.save()
+            else:
+                address = Address.objects.create(**address_data)
+                client.address = address
         return client
+
+    def update(self, instance, validated_data, address=None):
+        instance.email = validated_data.get('email', instance.email)
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.phone = validated_data.get('phone', instance.phone)
+        address_data = validated_data.get('address', None)
+        if address_data:
+            if instance.address:
+                if address_data.get('id'):
+                    address = Address.objects.get(id=address_data.get('id'))[0]
+                    if address:
+                        instance.address = address
+                        instance.save()
+                else:
+                    address = Address.objects.create(**address_data)
+                    instance.address = address
+        instance.save()
+        return instance
 
 
 class ProviderSerializer(serializers.ModelSerializer):
@@ -127,14 +194,17 @@ class ProviderSerializer(serializers.ModelSerializer):
     address = AddressSerializer(required=False)
 
     def create(self, validated_data, address=None):
-        try:
-            address_data = validated_data.pop('address')
-            address = Address.objects.create(**address_data)
-            address.save()
-        except KeyError as e:
-            print(e)
-        finally:
-            provider = Provider.objects.create(address=address, **validated_data)
+        address_data = validated_data.pop('address', None)
+        provider = Provider.objects.create(**validated_data)
+        if address_data:
+            if address_data.get('id'):
+                address = Address.objects.get(id=address_data.get('id'))[0]
+                if address:
+                    provider.address = address
+                    provider.save()
+            else:
+                address = Address.objects.create(**address_data)
+                provider.address = address
         return provider
 
     def update(self, instance, validated_data):
@@ -144,14 +214,16 @@ class ProviderSerializer(serializers.ModelSerializer):
         instance.phone = validated_data.get('phone', instance.phone)
         address_data = validated_data.get('address', None)
 
-        if instance.address:
-            for k, v in validated_data.get('address').items():
-                instance.address.__dict__[k] = v
-            instance.address.save(update_fields=validated_data.get('address').keys())
-        else:
-            if address_data:
-                instance.address = Address.objects.create(**address_data)
-                instance.address.save()
+        if address_data:
+            if instance.address:
+                if address_data.get('id'):
+                    address = Address.objects.get(id=address_data.get('id'))[0]
+                    if address:
+                        instance.address = address
+                        instance.save()
+                else:
+                    address = Address.objects.create(**address_data)
+                    instance.address = address
         instance.save()
         return instance
 
