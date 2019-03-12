@@ -110,19 +110,21 @@
             </tr>
             </thead>
             <tbody>
-                {% for module in house.modules.all %}
-                <tr>
-                    <td>{{module.name}}</td>
-                    <td>
-                        {%for component in module.components.all %}
-                            {{component}}
-                        {%endfor%}
-                    </td>
-                    <td>1</td>
-                    <td>{{module.priceHT}}</td>
-                    <td>20 %</td>
-                    <td>{{module.price}}</td>
-                </tr>
+                {% for module in modules %}
+                    {%for m in module %}
+                    <tr>
+                        <td>{{module.name}}</td>
+                        <td>
+                            {%for component in module.components.all %}
+                                {{component}}
+                            {%endfor%}
+                        </td>
+                        <td>1</td>
+                        <td>{{module.priceHT}}</td>
+                        <td>20 %</td>
+                        <td>{{module.price}}</td>
+                    </tr>
+                    {%endfor%}
                 {%endfor%}
             </tbody>
             <tfoot>
