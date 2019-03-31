@@ -138,6 +138,15 @@ const app = new Vue({
 });
 ```
 
+**Mail**
+
+Pour tester l'affichage des mails et des pièce-jointe en dev
+
+```bash
+maildev -s 1035
+```
+regarder dans le fichier settings.py que les config de mail sont en mode dev
+
 ## Environnement de prod
 
 Nous avons choisi [Heroku](https://madera-dev.herokuapp.com/)
