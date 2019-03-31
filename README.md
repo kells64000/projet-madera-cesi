@@ -12,6 +12,9 @@ Windows
 <pre>pip install -r requirements.txt</pre>
 
 ## Virtual Env
+Lancement du virtual env (unix) :
+<pre>source bin/activate</pre>
+
 Lancement du virtual env (windows) :
 <pre>Scripts\activate</pre>
 
@@ -61,7 +64,7 @@ L'utilisateur pour la démo est :
 
 <pre>
 email : staff@madera.com
-password : madera
+password : maderamadera
 </pre>
 
 ## Environnement de dév
@@ -139,5 +142,8 @@ const app = new Vue({
 
 Nous avons choisi [Heroku](https://madera-dev.herokuapp.com/)
 
-Les dossiers d'assets sont mis dans le dossier static via la commande `python manage.py collectstatic`
+Les dossiers d'assets sont mis dans le dossier static via la commande 
+```bash
+python manage.py collectstatic
+```
 
