@@ -49,7 +49,7 @@
             dateToday() {
                 let date = new Date();
 
-                return date.getFullYear() + '-' + (date.getMonth() +1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + (date.getMinutes()<10?'0':'') + date.getMinutes();
+                return date.getDate() + '/' + (date.getMonth() +1) + '/' + date.getFullYear() + ' ' + date.getHours() + ':' + (date.getMinutes()<10?'0':'') + date.getMinutes();
             }
         },
         mounted() {

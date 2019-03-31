@@ -17,13 +17,13 @@ export default new Vuex.Store({
     jwt: localStorage.getItem('token'),
     endpoints: {
 
-      // obtainJWT: 'http://127.0.0.1:8000/auth/obtain_token/',
-      // refreshJWT: 'http://127.0.0.1:8000/auth/refresh_token/',
-      // baseUrl: 'http://127.0.0.1:8000/'
+      obtainJWT: 'http://127.0.0.1:8000/auth/obtain_token/',
+      refreshJWT: 'http://127.0.0.1:8000/auth/refresh_token/',
+      baseUrl: 'http://127.0.0.1:8000/'
      // Prod env for API
-      obtainJWT: 'https://madera-dev.herokuapp.com/auth/obtain_token/',
-      refreshJWT: 'https://madera-dev.herokuapp.com/auth/refresh_token/',
-      baseUrl: 'https://madera-dev.herokuapp.com/'
+     //  obtainJWT: 'https://madera-dev.herokuapp.com/auth/obtain_token/',
+     //  refreshJWT: 'https://madera-dev.herokuapp.com/auth/refresh_token/',
+     //  baseUrl: 'https://madera-dev.herokuapp.com/'
     },
     quoteDate: '',
     quoteProject: '',
@@ -31,6 +31,7 @@ export default new Vuex.Store({
     quoteClient: {},
     quoteModules: {},
     quotePrice: '',
+    quotePriceHt: '',
     quoteGamme: '',
   },
   getters: {
@@ -58,6 +59,9 @@ export default new Vuex.Store({
     },
     getQuotePrice: state => {
       return state.quotePrice;
+    },
+    getQuotePriceHt: state => {
+      return state.quotePriceHt;
     }
   },
   mutations: {
@@ -93,6 +97,9 @@ export default new Vuex.Store({
     },
     setQuotePrice(state, price) {
        Vue.set(state, 'quotePrice', price);
+    },
+    setQuotePriceHt(state, priceHt) {
+       Vue.set(state, 'quotePriceHt', priceHt);
     },
     setQuoteGamme(state, gamme) {
        Vue.set(state, 'quoteGamme', gamme);
