@@ -5,7 +5,7 @@
                 <div>Devis MADERA</div>
                 <div>Projet : {{quoteProject}}</div>
                 <div>Ref : {{quoteProjectRef}}</div>
-                <div>Date : {{quoteDate | formatDate}}</div>
+                <div>Date : {{quoteDate}}</div>
             </div>
             <div class="card-header-title d-flex flex-column align-end">
                     <div>{{quoteClient.full_name}}</div>

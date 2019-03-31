@@ -83,7 +83,6 @@ class DetailQuote(APIView):
 def generate_pdf(request):
     template_path = 'quotes/quote.html'
     context = json.loads(request.body.decode('utf-8'))
-    context.update({'today': datetime})
 
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="Devis-{ref}.pdf"'.format(
@@ -91,13 +90,13 @@ def generate_pdf(request):
 
     html = render_to_string(template_path, context)
     filename = 'quote_{}.pdf'.format(context.get('ref'))
-    pisaStatus = pisa.CreatePDF(html, dest=response)
+    pisaStatus = pisa.CreatePDF(html, dest=response, link_callback=link_callback)
     with open('assets/pdf/' + filename, 'wb') as f:
         f.write(response.content)
 
     # Envoi email
     subject, from_email, to = 'Madera', 'no-reply@madera.com', context.get('client').get('email')
-    text_content = 'Veuillez trouver ci-joint le devis'
+    text_content = 'Bonjour ' + context.get("client").get("full_name") + ',<p>Veuillez trouver ci-joint le devis.</p><p>Ceci est un email automatique merci de ne pas y repondre.</p><p>Entreprise Madera</p>'
     msg = EmailMessage(subject, text_content, from_email, [to])
     msg.attach_file('assets/pdf/' + filename)
     msg.send()
@@ -105,63 +104,7 @@ def generate_pdf(request):
     return JsonResponse({"filename": filename})
 
 
-# def generate_pdf(request, pk):
-#     quote = Quote.objects.get(pk=pk)
-#     template_path = 'quotes/quote.html'
-#
-#     response = HttpResponse(content_type='application/pdf')
-#     response['Content-Disposition'] = 'attachment; filename="Devis-{ref}.pdf"'.format(
-#         ref=quote.reference)
-#
-#     context = {
-#         'quote': quote,
-#         'client': quote.client,
-#         'house': quote.house,
-#         'VAT': 0.2,
-#         'today': datetime.today()
-#     }
-#     html = render_to_string(template_path, context)
-#
-#     pisaStatus = pisa.CreatePDF(html, dest=response)
-#
-#     # Envoi email
-#     # subject, from_email, to = 'Madera', 'no-reply@madera.com', ''
-#     # text_content = 'Veuillez trouver ci-joint le devis'
-#     # msg = EmailMessage(subject, text_content, from_email, [to])
-#     # msg.attach_file('')
-#     # msg.send()
-#
-#     return response
-
-# def generate_pdf(request):
-#     import ipdb; ipdb.set_trace()
-#     template_path = 'quotes/quote.html'
-
-#     # Create a Django response object, and specify content_type as pdf
-#     response = HttpResponse(content_type='application/pdf')
-#     response['Content-Disposition'] = 'attachment; filename="report.pdf"'
-#     # find the template and render it.
-#     template = get_template(template_path)
-#     html = template.render(context=request.body)
-
-#     # create a pdf
-#     pisaStatus = pisa.CreatePDF(
-#        html, dest=response, link_callback=self.link_callback())
-#     # if error then show some funy view
-#     if pisaStatus.err:
-#         return HttpResponse('We had some errors <pre>' + html + '</pre>')
-
-#     # Envoi email
-#     subject, from_email, to = 'Madera', 'no-reply@madera.com', self.client__email
-#     text_content = 'Veuillez trouver ci-joint le devis'
-#     msg = EmailMessage(subject, text_content, from_email, [to])
-#     msg.attach_file('/assets/pdf/client1-facture_exemple.pdf')
-#     msg.send()
-
-#     return response
-
-
-def link_callback(self, uri, rel):
+def link_callback(uri, rel):
     """
     Convert HTML URIs to absolute system paths so xhtml2pdf can access those
     resources
@@ -169,20 +112,16 @@ def link_callback(self, uri, rel):
     # use short variable names
     sUrl = settings.STATIC_URL      # Typically /static/
     sRoot = settings.STATIC_ROOT    # Typically /home/userX/project_static/
-    mUrl = settings.MEDIA_URL       # Typically /static/media/
-    mRoot = settings.MEDIA_ROOT     # Typically /home/userX/project_static/media/
 
     # convert URIs to absolute system paths
-    if uri.startswith(mUrl):
-        path = os.path.join(mRoot, uri.replace(mUrl, ""))
-    elif uri.startswith(sUrl):
+    if uri.startswith(sUrl):
         path = os.path.join(sRoot, uri.replace(sUrl, ""))
     else:
-        return uri  # handle absolute uri (ie: http://some.tld/foo.png)
+        return uri
 
     # make sure that file exists
     if not os.path.isfile(path):
             raise Exception(
-                'media URI must start with %s or %s' % (sUrl, mUrl)
+                'media URI must start with %s or %s' % (sUrl)
             )
     return path

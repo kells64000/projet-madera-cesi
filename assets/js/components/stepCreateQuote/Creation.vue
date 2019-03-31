@@ -412,15 +412,28 @@
                     element.components.forEach(function (element) {
                         modulesPrice = modulesPrice + parseFloat(element.price.replace(",", "."))
                     });
-                    element.price = modulesPrice
+                    element.price_ht = modulesPrice.toFixed(2);
+                    element.price = modulesPrice * 1.2;
+                    element.price = element.price.toFixed(2);
                 });
+            },
+            prixTotalHt(modules) {
+                let prixTotal = 0;
+                modules.forEach( function (element) {
+
+                    for (let i = 0; i < element.length; i++) {
+                      prixTotal = prixTotal + parseFloat(element[i].price_ht.replace(",", "."))
+                    }
+                });
+
+                return prixTotal;
             },
             prixTotal(modules) {
                 let prixTotal = 0;
                 modules.forEach( function (element) {
 
                     for (let i = 0; i < element.length; i++) {
-                      prixTotal = prixTotal + element[i].price
+                      prixTotal = prixTotal + parseFloat(element[i].price.replace(",", "."))
                     }
                 });
 
@@ -436,6 +449,8 @@
 
                     prixTotal = prixTotal * this.currentGammeSelected.ratio
                 }
+
+                prixTotal = prixTotal.toFixed(2);
 
                 return prixTotal;
             },
@@ -477,11 +492,14 @@
 
                         this.modulesSelected = [this.modulesWallExtSelected, this.modulesWallIntSelected, this.modulesFloorSlabSelected, this.modulesFloorStructuralSelected, this.modulesRoofCarpentersSelected, this.modulesRoofCoverSelected];
 
+                        let montantTotalHt = this.prixTotalHt(this.modulesSelected);
                         let montantTotal = this.prixTotal(this.modulesSelected);
 
+                        let montantGammeTotalHt = this.totalWithgamme(montantTotalHt);
                         let montantGammeTotal = this.totalWithgamme(montantTotal);
 
                         this.$store.commit("setQuoteModules", this.modulesSelected);
+                        this.$store.commit("setQuotePriceHt", montantGammeTotalHt);
                         this.$store.commit("setQuotePrice", montantGammeTotal);
 
                         this.$emit('can-continue', {value: true});

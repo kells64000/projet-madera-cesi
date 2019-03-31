@@ -12,6 +12,9 @@ Windows
 <pre>pip install -r requirements.txt</pre>
 
 ## Virtual Env
+Lancement du virtual env (unix) :
+<pre>source bin/activate</pre>
+
 Lancement du virtual env (windows) :
 <pre>Scripts\activate</pre>
 
@@ -61,7 +64,7 @@ L'utilisateur pour la démo est :
 
 <pre>
 email : staff@madera.com
-password : madera
+password : maderamadera
 </pre>
 
 ## Environnement de dév
@@ -135,9 +138,21 @@ const app = new Vue({
 });
 ```
 
+**Mail**
+
+Pour tester l'affichage des mails et des pièce-jointe en dev
+
+```bash
+maildev -s 1035
+```
+regarder dans le fichier settings.py que les config de mail sont en mode dev
+
 ## Environnement de prod
 
 Nous avons choisi [Heroku](https://madera-dev.herokuapp.com/)
 
-Les dossiers d'assets sont mis dans le dossier static via la commande `python manage.py collectstatic`
+Les dossiers d'assets sont mis dans le dossier static via la commande 
+```bash
+python manage.py collectstatic
+```
 

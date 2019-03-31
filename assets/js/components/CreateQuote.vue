@@ -112,7 +112,9 @@
                     'date': this.quoteDate,
                     'name': this.quoteProject,
                     'ref': this.quoteProjectRef,
+                    'price_ht': this.quotePriceHt,
                     'price': this.quotePrice,
+                    'gamme': this.quoteGamme,
                     'client': this.quoteClient,
                     'salesperson': this.quoteSalesperson,
                     'modules': this.quoteModules
@@ -155,7 +157,6 @@
                         'full_name': this.quoteSalesperson.full_name,
                     },
                 };
-                console.log(QuoteCreate);
                 axios.post(this.$store.state.endpoints.baseUrl + 'api/quotes/',
                     QuoteCreate, {
                         headers: {
@@ -173,10 +174,7 @@
             },
             // Executed when @stepper-finished event is triggered
             alert() {
-                this.isLoading = true;
                 this.createPDF();
-                // this.createQuote();
-                this.isLoading = false;
             }
         },
         computed: {
@@ -200,6 +198,9 @@
             },
             quotePrice() {
                 return this.$store.getters.getQuotePrice;
+            },
+            quotePriceHt() {
+                return this.$store.getters.getQuotePriceHt;
             },
             quoteGamme() {
                 return this.$store.getters.getQuoteGamme;
