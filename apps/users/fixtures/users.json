@@ -1,0 +1,125 @@
+[
+  {
+    "model": "addresses.Address",
+    "pk": 1,
+    "fields": {
+      "street": "22 boulevard du haut-livrac",
+      "zipcode": 33600,
+      "city": "Pessac",
+      "country": "FR"
+    }
+  },
+  {
+    "model": "users.MaderaUser",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$120000$RW8xxsNB2pFr$oTtRjH6eDFuzmgbzcGMMMMf293FwEOKZgJgLXRHYFYI=",
+      "is_superuser": "True",
+      "email": "admin@madera.com",
+      "first_name": "admin",
+      "last_name": "admin",
+      "is_active": "True",
+      "is_staff": "True",
+      "avatar": "",
+      "address_id": 1,
+      "phone": "0631995850"
+    }
+  },
+  {
+    "model": "addresses.Address",
+    "pk": 2,
+    "fields": {
+      "street": "45 Rue Fleury",
+      "zipcode": 33500,
+      "city": "Bordeaux",
+      "country": "FR"
+    }
+  },
+  {
+    "model": "users.MaderaUser",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$120000$RW8xxsNB2pFr$oTtRjH6eDFuzmgbzcGMMMMf293FwEOKZgJgLXRHYFYI=",
+      "is_superuser": "False",
+      "email": "staff@madera.com",
+      "first_name": "Julien",
+      "last_name": "Dubois",
+      "is_staff": "False",
+      "address_id": 2,
+      "phone": "0647845941"
+    }
+  },
+  {
+    "model": "users.SalesPerson",
+    "pk": 1,
+    "fields": {
+      "maderauser_ptr_id": 2,
+      "workplace": "Bordeaux"
+    }
+  },
+  {
+    "model": "addresses.Address",
+    "pk": 3,
+    "fields": {
+      "street": "45 Rue Neuve",
+      "zipcode": 33000,
+      "city": "Bordeaux",
+      "country": "FR"
+    }
+  },
+  {
+    "model": "users.MaderaUser",
+    "pk": 3,
+    "fields": {
+      "password": "",
+      "is_superuser": "False",
+      "email": "aime.cesaire@gmail.com",
+      "first_name": "Aime",
+      "last_name": "Cesaire",
+      "is_staff": "False",
+      "address_id": 3,
+      "phone": "0631995850"
+    }
+  },
+  {
+    "model": "users.Client",
+    "pk": 1,
+    "fields": {
+      "maderauser_ptr_id": 3,
+      "is_pro": "True",
+      "company": "La compagnie du livre"
+    }
+  },
+  {
+    "model": "addresses.Address",
+    "pk": 4,
+    "fields": {
+      "street": "160 Rue des coquelicots",
+      "zipcode": 75016,
+      "city": "Paris",
+      "country": "FR"
+    }
+  },
+  {
+    "model": "users.MaderaUser",
+    "pk": 4,
+    "fields": {
+      "password": "",
+      "is_superuser": "False",
+      "email": "Mona.chollet@gmail.com",
+      "first_name": "Mona",
+      "last_name": "Chollet",
+      "is_staff": "False",
+      "address_id": 4,
+      "phone": "0631995850"
+    }
+  },
+  {
+    "model": "users.Client",
+    "pk": 2,
+    "fields": {
+      "maderauser_ptr_id": 4,
+      "is_pro": "False"
+    }
+  }
+]

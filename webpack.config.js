@@ -9,12 +9,11 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     context: __dirname,
-    entry: './assets/js/index',
+    entry: devMode ? './assets/js/index' : './staticfiles/js/index',
     output: {
-        path: path.resolve('./assets/dist/'),
+        path: devMode ? path.resolve('./assets/dist/') : path.resolve('./staticfiles/dist/'),
         filename: 'js/app.js'
     },
-
     plugins: [
         new BundleTracker({filename: './webpack-stats.json'}),
         new VueLoaderPlugin(),
@@ -43,6 +42,7 @@ module.exports = {
                 use: [
                  devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
                  "css-loader",
+                 // 'postcss-loader',
                  "sass-loader"
                 ]
             }

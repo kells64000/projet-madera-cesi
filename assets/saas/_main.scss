@@ -6,6 +6,10 @@
   height: 100vh;
 }
 
+.h-200 {
+  height: 200px;
+}
+
 .button {
   min-width: 0 !important;
 }
@@ -34,6 +38,14 @@
   justify-content: space-between;
 }
 
+.align-start {
+  align-items: flex-start;
+}
+
+.align-center {
+  align-items: center;
+}
+
 .align-end {
   align-items: flex-end;
 }
@@ -46,8 +58,15 @@
   margin-bottom: 1em;
 }
 
+.mt-2 {
+  margin-top: 2em;
+}
+
 .pr-1-5 {
   padding-right: 1.5rem;
+}
+.pl-1-5 {
+  padding-left: 1.5rem;
 }
 
 .input::placeholder, .textarea::placeholder {
@@ -64,4 +83,9 @@
 
 .v-select input[type=search], .v-select input[type=search]:focus {
   width: 0% !important;
+}
+
+.subtitle {
+  line-height: 0.8;
+  margin-bottom: 1rem !important;
 }

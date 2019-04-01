@@ -68,7 +68,7 @@
                 <div class="field-body">
                     <div class="field">
                         <p class="control is-expanded has-icons-left">
-                            <input class="input" type="number" placeholder="Code Postal" v-model="form.zipCode">
+                            <input class="input" type="text" placeholder="Code Postal" v-model="form.zipCode">
                             <span class="icon is-small is-left">
                               <i class="fas fa-map-marker-alt"></i>
                             </span>
@@ -96,15 +96,16 @@
 
             <div class="field">
                 <p class="control is-expanded has-icons-left">
-                    <input class="input" type="email" placeholder="Email" v-model="form.email">
+                    <input :class="['input', (form_email_error !== '') ? 'is-danger' : '']" type="email" placeholder="Email" v-model="form.email" @keydown="form_email_error = ''">
                     <span class="icon is-small is-left">
                       <i class="fas fa-envelope"></i>
                     </span>
                 </p>
+                <p v-if="form_email_error !== ''" class="help is-danger">{{form_email_error}}</p>
             </div>
 
             <div class="has-text-centered">
-                <button class="button is-link" type="button" @click="createClient">Créer nouveau client</button>
+                <button class="button is-link" type="button" @click="createClient" :disabled="canCreateClient ? false : true">Créer nouveau client</button>
             </div>
         </div>
 
@@ -153,7 +154,7 @@
 
                 <div class="field">
                     <p class="control is-expanded has-icons-left">
-                        <input class="input" type="text" placeholder="Adresse" :value="clientSelected.address" readonly>
+                        <input class="input" type="text" placeholder="Adresse" :value="clientSelected.address.street" readonly>
                         <span class="icon is-small is-left">
                           <i class="fas fa-address-card"></i>
                         </span>
@@ -164,7 +165,7 @@
                     <div class="field-body">
                         <div class="field">
                             <p class="control is-expanded has-icons-left">
-                                <input class="input" type="number" placeholder="Code Postal" :value="clientSelected.zipCode" readonly>
+                                <input class="input" type="number" placeholder="Code Postal" :value="clientSelected.address.zipcode" readonly>
                                 <span class="icon is-small is-left">
                                   <i class="fas fa-map-marker-alt"></i>
                                 </span>
@@ -172,7 +173,7 @@
                         </div>
                         <div class="field">
                             <p class="control is-expanded has-icons-left">
-                                <input class="input" type="text" placeholder="Ville" :value="clientSelected.city" readonly>
+                                <input class="input" type="text" placeholder="Ville" :value="clientSelected.address.city" readonly>
                                 <span class="icon is-small is-left">
                                   <i class="fas fa-city"></i>
                                 </span>
@@ -206,6 +207,7 @@
 <script>
     import axios from 'axios'
     import {validationMixin} from 'vuelidate'
+    import {required, minLength, email, requiredIf} from 'vuelidate/lib/validators'
 
     export default {
         props: ['clickedNext', 'currentStep'],
@@ -215,6 +217,7 @@
                 clients: [],
                 clientType: 'new',
                 clientSelected: '',
+                errors: [],
                 form: {
                     firstName: '',
                     lastName: '',
@@ -225,14 +228,65 @@
                     phone: '',
                     is_pro: 'Particulier',
                     company: '',
+                },
+                form_email_error: '',
+                canCreateClient: false
+            }
+        },
+        validations: {
+            form: {
+                firstName: {
+                    required
+                },
+                lastName: {
+                    required
+                },
+                address: {
+                    required
+                },
+                zipCode: {
+                    required,
+                    min: minLength(5)
+                },
+                city: {
+                    required
+                },
+                email: {
+                    required,
+                    email
+                },
+                phone: {
+                    required,
+                    min: minLength(10),
+                },
+                company: {
+                    requiredIf: requiredIf((vueInstance) => {
+                        return vueInstance.is_pro === 'Professionnel'
+                    })
                 }
             }
         },
         watch: {
+            $v: {
+                handler: function (val) {
+                    if (this.form_email_error === '') {
+                        if (!val.$invalid) {
+                            this.canCreateClient = true
+                        } else {
+                            this.canCreateClient = false
+                        }
+
+                    } else {
+                        this.canCreateClient = false
+                    }
+                },
+                deep: true
+            },
             clientSelected: {
                 handler: function () {
                     if (this.clientSelected !== '') {
                         this.$store.commit("setQuoteClient", this.clientSelected);
+                        this.$store.commit("setQuoteProjectRef", this.createRefProject(this.quoteProject, this.clientSelected.last_name));
                         this.$emit('can-continue', {value: true});
                     } else {
                         this.$emit('can-continue', {value: false});
@@ -248,19 +302,25 @@
                 if (this.clientSelected !== '') {
                     this.$emit('can-continue', {value: true});
                 }
-            }
+            },
+
         },
         async created() {
             try {
-                const response = await axios.get(`http://127.0.0.1:8000/api/clients`)
+                const response = await axios.get(this.$store.state.endpoints.baseUrl + `api/clients`)
                 this.clients = response.data
             } catch (e) {
                 this.errors.push(e)
             }
         },
+        computed: {
+            quoteProject() {
+                return this.$store.getters.getQuoteProject;
+            },
+        },
         methods: {
             getClients() {
-                axios.get(`http://127.0.0.1:8000/api/clients`)
+                axios.get(this.$store.state.endpoints.baseUrl + `api/clients`)
                 .then(response => {
                     this.clients = response.data
                 })
@@ -279,16 +339,18 @@
                 let clientCreate = {
                     'first_name': this.form.firstName,
                     'last_name': this.form.lastName,
-                    'street': this.form.address,
-                    'zipCode': this.form.zipCode,
-                    'city': this.form.city,
+                    'address': {
+                        'street': this.form.address,
+                        'zipcode': this.form.zipCode,
+                        'city': this.form.city,
+                    },
                     'email': this.form.email,
                     'phone': this.form.phone,
                     'is_pro': this.form.is_pro,
                     'company': this.form.company
                 };
 
-                axios.post('http://127.0.0.1:8000/api/clients/',
+                axios.post(this.$store.state.endpoints.baseUrl + 'api/clients/',
                     clientCreate, {
                         headers: {
                             'Content-Type': 'application/json'
@@ -299,6 +361,16 @@
                         this.getClients()
 
                     }).catch(e => {
+                        if(this.form.is_pro === true) {
+                            this.form.is_pro = 'Professionnel'
+                        } else {
+                            this.form.is_pro = 'Particulier'
+                        }
+
+                        if(e.response.data['email'] !== "") {
+                            this.form_email_error = e.response.data['email'];
+                        }
+
                         this.errors.push(e);
                     });
             },
@@ -312,7 +384,18 @@
                 this.form.email = '';
                 this.form.phone = '';
                 this.form.company = '';
-            }
+            },
+            createRefProject(project, customer) {
+              let prj = project.toString().substr(0, 3);
+              let client = customer.toString().substr(0, 3);
+              let num = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
+
+              prj = prj.toUpperCase();
+              client = client.toUpperCase();
+
+              return prj + client + num
+            },
+
         },
         mounted() {
             if (this.clientSelected === '') {

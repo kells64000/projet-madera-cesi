@@ -1,60 +1,107 @@
+# -*- coding: utf-8 -*-
 import os
+import json
+from datetime import datetime
 from django.conf import settings
-from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.parsers import JSONParser
-from django_xhtml2pdf.utils import generate_pdf
-from django.template import Context
+from django.core.mail import EmailMessage
+from django.http import Http404, JsonResponse, HttpResponse
 from django.template.loader import get_template
+from django.template.loader import render_to_string
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import status, viewsets
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from xhtml2pdf import pisa
+
 from .models import Quote
-from .serializers import QuoteListSerializer
+from .serializers import QuoteSerializer
 
 
-@csrf_exempt
-def quotes_list(request):
+class UserViewSet(viewsets.ModelViewSet):
     """
-    List all quotes, or create a new quote.
+    A viewset that provides the standard actions
     """
-    if request.method == 'GET':
+    queryset = Quote.objects.all()
+    serializer_class = QuoteSerializer
+
+
+class ListQuote(APIView):
+
+    # permission_classes = (IsAuthenticated,)
+
+    def get(self, request, format=None):
         quotes = Quote.objects.all()
-        serializer = QuoteListSerializer(quotes, many=True)
-        return JsonResponse(serializer.data, safe=False)
+        serializer = QuoteSerializer(quotes, many=True)
+        return Response(serializer.data)
 
-    elif request.method == 'POST':
-        data = JSONParser().parse(request)
-        serializer = QuoteListSerializer(data=data)
+    def post(self, request, format=None):
+        client_data = request.data.pop('client', None)
+        salesperson_data = request.data.pop('salesperson', None)
+        house_data = request.data.pop('house', None)
+        serializer = QuoteSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+            serializer.save(client=client_data, salesperson=salesperson_data, house=house_data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DetailQuote(APIView):
+
+    # permission_classes = (IsAuthenticated,)
+
+    def get_object(self, pk):
+        try:
+            return Quote.objects.get(pk=pk)
+        except Quote.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        quote = self.get_object(pk)
+        serializer = QuoteSerializer(quote)
+        return Response(serializer.data)
+
+    def put(self, request, pk, format=None):
+        quote = self.get_object(pk)
+        client_data = request.data.pop('client', None)
+        salesperson_data = request.data.pop('salesperson', None)
+        house_data = request.data.pop('house', None)
+
+        serializer = QuoteSerializer(quote, data=request.data)
+        if serializer.is_valid():
+            serializer.save(client=client_data, salesperson=salesperson_data, house=house_data)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None):
+        quote = self.get_object(pk)
+        quote.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @csrf_exempt
-def quotes_detail(request, pk):
-    """
-    Retrieve update or delete a quote.
-    """
-    try:
-        quote = Quote.objects.get(pk=pk)
-    except Quote.DoesNotExist:
-        return HttpResponse(status=404)
+def generate_pdf(request):
+    template_path = 'quotes/quote.html'
+    context = json.loads(request.body.decode('utf-8'))
 
-    if request.method == 'GET':
-        serializer = QuoteListSerializer(quote)
-        return JsonResponse(serializer.data)
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="Devis-{ref}.pdf"'.format(
+        ref=context['ref'])
 
-    elif request.method == 'PUT':
-        data = JSONParser().parse(request)
-        serializer = QuoteListSerializer(quote, data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data)
-        return JsonResponse(serializer.errors, status=400)
+    html = render_to_string(template_path, context)
+    filename = 'quote_{}.pdf'.format(context.get('ref'))
+    pisaStatus = pisa.CreatePDF(html, dest=response, link_callback=link_callback)
+    with open('assets/pdf/' + filename, 'wb') as f:
+        f.write(response.content)
 
-    elif request.method == 'DELETE':
-        quote.delete()
-        return HttpResponse(status=204)
+    # Envoi email
+    subject, from_email, to = 'Madera', 'no-reply@madera.com', context.get('client').get('email')
+    text_content = 'Bonjour ' + context.get("client").get("full_name") + ',<p>Veuillez trouver ci-joint le devis.</p><p>Ceci est un email automatique merci de ne pas y repondre.</p><p>Entreprise Madera</p>'
+    msg = EmailMessage(subject, text_content, from_email, [to])
+    msg.attach_file('assets/pdf/' + filename)
+    msg.send()
+
+    return JsonResponse({"filename": filename})
 
 
 def link_callback(uri, rel):
@@ -65,40 +112,16 @@ def link_callback(uri, rel):
     # use short variable names
     sUrl = settings.STATIC_URL      # Typically /static/
     sRoot = settings.STATIC_ROOT    # Typically /home/userX/project_static/
-    mUrl = settings.MEDIA_URL       # Typically /static/media/
-    mRoot = settings.MEDIA_ROOT     # Typically /home/userX/project_static/media/
 
     # convert URIs to absolute system paths
-    if uri.startswith(mUrl):
-        path = os.path.join(mRoot, uri.replace(mUrl, ""))
-    elif uri.startswith(sUrl):
+    if uri.startswith(sUrl):
         path = os.path.join(sRoot, uri.replace(sUrl, ""))
     else:
-        return uri  # handle absolute uri (ie: http://some.tld/foo.png)
+        return uri
 
     # make sure that file exists
     if not os.path.isfile(path):
             raise Exception(
-                'media URI must start with %s or %s' % (sUrl, mUrl)
+                'media URI must start with %s or %s' % (sUrl)
             )
     return path
-
-def quote_2_pdf(request):
-    template_path = 'quotes/quote.html'
-    context = {
-        'quote': 'Mes.super.params.VueJs'
-    }
-    # Create a Django response object, and specify content_type as pdf
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="report.pdf"'
-    # find the template and render it.
-    template = get_template(template_path)
-    html = template.render(Context(context))
-
-    # create a pdf
-    pisaStatus = pisa.CreatePDF(
-       html, dest=response, link_callback=link_callback)
-    # if error then show some funy view
-    if pisaStatus.err:
-      return HttpResponse('We had some errors <pre>' + html + '</pre>')
-    return response

@@ -30,9 +30,10 @@
                     <table class="table is-bordered is-striped is-narrow is-hoverable is-fullwidth">
                         <thead>
                         <tr class="table-quotes-head">
-                            <th class="has-text-centered" @click="sort('id')">N° Devis <span><i class="fas" v-if="currentSort === 'id'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
-                            <th class="has-text-centered" @click="sort('salesman')">Commercial <span><i class="fas" v-if="currentSort === 'salesman'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
-                            <th class="has-text-centered" @click="sort('customer')">Client <span><i class="fas" v-if="currentSort === 'customer'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
+                            <th class="has-text-centered" @click="sort('ref')">Ref Devis <span><i class="fas" v-if="currentSort === 'ref'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
+                            <th class="has-text-centered" @click="sort('project')">Nom Projet <span><i class="fas" v-if="currentSort === 'project'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
+                            <th class="has-text-centered" @click="sort('salesperson')">Commercial <span><i class="fas" v-if="currentSort === 'salesperson'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
+                            <th class="has-text-centered" @click="sort('client')">Client <span><i class="fas" v-if="currentSort === 'client'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
                             <th class="has-text-centered" @click="sort('phone')">N° Téléphone <span><i class="fas" v-if="currentSort === 'phone'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
                             <th class="has-text-centered" @click="sort('email')">Adresse Mail <span><i class="fas" v-if="currentSort === 'email'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
                             <th class="has-text-centered" @click="sort('price')">Prix <span><i class="fas" v-if="currentSort === 'price'" :class="currentSortDir === 'asc' ? 'fa-caret-up' : 'fa-caret-down'"></i></span></th>
@@ -46,15 +47,16 @@
                         <tbody>
                         <tr v-for="quote in filteredAndSortedQuotes" >
 
-                            <td class="has-text-centered">{{quote.id}}</td>
-                            <td class="has-text-centered">{{quote.salesman.name}}</td>
-                            <td class="has-text-centered">{{quote.client.name}}</td>
-                            <td class="has-text-centered">{{quote.client.phone}}</td>
-                            <td class="has-text-centered">{{quote.client.email}}</td>
+                            <td class="has-text-centered">{{quote.reference}}</td>
+                            <td class="has-text-centered">{{quote.name}}</td>
+                            <td class="has-text-centered" v-for="salesperson in salespersons" v-if="quote.salesperson === salesperson.id">{{salesperson.full_name}}</td>
+                            <td class="has-text-centered" v-for="client in clients" v-if="quote.client === client.id">{{client.full_name}}</td>
+                            <td class="has-text-centered" v-for="client in clients" v-if="quote.client === client.id">{{client.phone}}</td>
+                            <td class="has-text-centered" v-for="client in clients" v-if="quote.client === client.id">{{client.email}}</td>
                             <td class="has-text-centered">{{quote.price}}€</td>
                             <td class="has-text-centered">
                                 <div v-if="quote.attachment !== null">
-                                    <a :href="'/assets/pdf/' + quote.attachment" target="_blank">
+                                    <a :href="'/static/pdf/' + quote.attachment" target="_blank">
                                         <i class="fas fa-file-pdf"></i>
                                     </a>
                                 </div>
@@ -70,13 +72,13 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td colspan="10">
+                            <td colspan="12">
                                 <nav class="pagination is-right" role="navigation" aria-label="pagination">
                                     <ul class="pagination-list">
                                         <li>
                                             <div class="select">
                                                 <select v-model="pageSize">
-                                                    <option :value="Math.ceil(totalQuotes / 3)">{{Math.ceil(totalQuotes / 3)}}</option>
+                                                    <option :value="Math.ceil(totalQuotes / 4)">{{Math.ceil(totalQuotes / 4)}}</option>
                                                     <option :value="Math.ceil(totalQuotes / 2)">{{Math.ceil(totalQuotes / 2)}}</option>
                                                     <option :value="totalQuotes">all</option>
                                                 </select>
@@ -99,55 +101,28 @@
                     </table>
                 </div>
 
-                <div class="modal" :class="{'is-active': (showModalUpdate === true)}">
+                <div class="modal" :class="{'is-active': (showModalUpdate === true)}" v-if="showModalUpdate === true">
                     <div class="modal-background"></div>
                     <div class="modal-card">
                         <header class="modal-card-head has-background-link">
-                            <p class="modal-card-title has-text-centered has-text-white">Edition du devis N° {{this.id}}</p>
+                            <p class="modal-card-title has-text-centered has-text-white">Edition du devis Ref : {{this.reference}}</p>
                             <button @click="hideModalUpdate" class="delete" aria-label="close"></button>
                         </header>
                         <section class="modal-card-body">
 
                             <form action="#">
                                 <div class="field">
-                                    <label class="label">Client</label>
+                                    <label class="label">Projet</label>
 
-                                    <v-select v-model="clientId" :options="clients" label="fullName" @focus="clientId = ''">
-                                        <template slot="option" slot-scope="option">
-                                            {{option.firstName}}  {{option.lastName}}
-                                        </template>
-                                    </v-select>
+                                    <input type="text" v-model="quotePrj" :placeholder="this.name" >
                                 </div>
+
 
                                 <div class="field">
-                                    <label class="label">Client</label>
+                                    <label class="label">Reference</label>
 
-                                    <v-select v-model="salesmanId" :options="salesmans" label="fullName" @focus="salesmanId = ''">
-                                        <template slot="option" slot-scope="option">
-                                            {{option.firstName}}  {{option.lastName}}
-                                        </template>
-                                    </v-select>
+                                    <input type="text" v-model="quoteRef" :placeholder="this.reference" >
                                 </div>
-
-                                <!--<div class="field">-->
-                                    <!--<label class="label">Téléphone</label>-->
-                                    <!--<p class="control has-icons-left">-->
-                                        <!--<input class="input" type="text" v-model="clientPhone" :placeholder="this.phone">-->
-                                        <!--<span class="icon is-small is-left">-->
-                                          <!--<i class="fas fa-mobile-alt"></i>-->
-                                        <!--</span>-->
-                                    <!--</p>-->
-                                <!--</div>-->
-
-                                <!--<div class="field">-->
-                                    <!--<label class="label">Adresse Mail</label>-->
-                                    <!--<p class="control has-icons-left">-->
-                                        <!--<input class="input" type="email" v-model="clientEmail" :placeholder="this.email">-->
-                                        <!--<span class="icon is-small is-left">-->
-                                          <!--<i class="fas fa-envelope"></i>-->
-                                        <!--</span>-->
-                                    <!--</p>-->
-                                <!--</div>-->
 
                                 <div class="field">
                                     <label class="label">Etat Devis</label>
@@ -179,11 +154,11 @@
                     </div>
                 </div>
 
-                <div class="modal" :class="{'is-active': (showModalDelete === true)}">
+                <div class="modal" :class="{'is-active': (showModalDelete === true)}" v-if="showModalDelete === true">
                     <div class="modal-background"></div>
                     <div class="modal-card">
                         <header class="modal-card-head has-background-danger">
-                            <p class="modal-card-title has-text-centered has-text-white">Suppression du devis N° {{this.id}}</p>
+                            <p class="modal-card-title has-text-centered has-text-white">Suppression du devis Ref : {{this.reference}}</p>
                             <button @click="hideModalDelete" class="delete" aria-label="close"></button>
                         </header>
                         <section class="modal-card-body d-flex justify-content-center">
@@ -198,6 +173,7 @@
                     </div>
                 </div>
             </section>
+            <b-loading :is-full-page="isFullPage" :active.sync="isLoading" :can-cancel="true"></b-loading>
         </div>
     </div>
 </template>
@@ -211,36 +187,34 @@
             return {
                 quotes: [],
                 clients: [],
-                salesmans: [],
+                salespersons: [],
                 errors: [],
                 search: '',
-                loading: true,
-                currentSort: 'id',
-                currentSortDir: 'asc',
+                isLoading: false,
+                isFullPage: true,
+                currentSort: 'created_at',
+                currentSortDir: 'desc',
                 pageSize: null,
                 currentPage: 1,
                 initialPage: 1,
                 showModalUpdate: false,
                 showModalDelete: false,
                 selectedQuote: null,
-                clientId: 0,
-                salesmanId: 0,
-                quotePrice: '',
+                quotePrj: '',
+                quoteRef: '',
                 quoteState: '',
                 selectFocus: '',
             }
         },
         async created() {
             try {
-                const response = await axios.get(`http://127.0.0.1:8000/api/quotes`)
+                const response = await axios.get(this.$store.state.endpoints.baseUrl + 'api/quotes/')
                 this.quotes = response.data
             } catch (e) {
                 this.errors.push(e)
-            } finally {
-                this.loading = false
             }
 
-            this.pageSize = Math.ceil(this.quotes.length / 2);
+            this.pageSize = this.quotes.length;
         },
         methods: {
             returnDashboard() {
@@ -267,9 +241,8 @@
             setModalUpdateQuote(quote) {
                 this.showModalUpdate = true;
                 this.selectedQuote = quote;
-                this.id = quote.id;
-                this.clientId = quote.name;
-                this.salesmanId = quote.name;
+                this.name = quote.name;
+                this.reference = quote.reference;
                 this.state = quote.state;
             },
             setModalDeleteQuote(quote) {
@@ -279,15 +252,15 @@
             },
             hideModalUpdate: function () {
                 this.showModalUpdate = false;
-                this.clientId = '';
-                this.salesmanId = '';
+                this.customer = '';
+                this.salesperson = '';
                 this.quoteState = '';
             },
             hideModalDelete: function () {
                 this.showModalDelete = false
             },
             getQuotes() {
-                axios.get(`http://127.0.0.1:8000/api/quotes`)
+                axios.get(this.$store.state.endpoints.baseUrl + 'api/quotes/')
                 .then(response => {
                     this.quotes = response.data
                 })
@@ -300,44 +273,40 @@
                 let date = new Date();
                 let now = date.getFullYear() + '-' + (date.getMonth() +1) + '-' + date.getDate() + ' ' + date.getHours() + ':' + (date.getMinutes()<10?'0':'') + date.getMinutes();
 
-                if (this.clientId === '') {
-                    this.clientId = this.selectedQuote.clientId
+                if (this.quotePrj === '') {
+                    this.quotePrj = this.selectedQuote.name
                 }
-                if (this.salesmanId === '') {
-                    this.salesmanId = this.selectedQuote.salesmanId
+
+                if (this.quoteRef === '') {
+                    this.quoteRef = this.selectedQuote.reference
                 }
-                // if (this.clientPhone === '') {
-                //     this.clientPhone = this.selectedQuote.phone
-                // }
-                // if (this.clientEmail === '') {
-                //     this.clientEmail = this.selectedQuote.email
-                // }
-                if (this.quotePrice === '') {
-                    this.quotePrice = this.selectedQuote.price
-                }
+
                 if (this.quoteState === '') {
                     this.quoteState = this.selectedQuote.state
                 }
 
                 let quoteUpdate = {
-                    'customer_id': this.clientId,
-                    'salesman_id': this.salesmanId,
-                    'price': this.quotePrice,
-                    'state': this.quoteState,
+                    'name': this.quotePrj,
+                    'reference': this.quoteRef,
+                    'price': this.selectedQuote.price,
                     'attachment': this.selectedQuote.attachment,
+                    'state': this.quoteState,
+                    'client_id': this.selectedQuote.client,
+                    'salesperson_id': this.selectedQuote.salesperson,
                     'created_at': this.selectedQuote.created_at,
                     'updated_at': now
                 };
 
-                axios.put('http://127.0.0.1:8000/api/quotes/' + this.selectedQuote.id,
+                axios.put(this.$store.state.endpoints.baseUrl + 'api/quotes/' + this.selectedQuote.id,
                     quoteUpdate, {
                         headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
+                            'Content-Type': 'application/json'
                         }
                     }).then((response) => {
-                        this.clientId = 0;
-                        this.salesmanId = 0;
-                        this.quotePrice = '';
+                        this.name = '';
+                        this.reference = '';
+                        this.customer = '';
+                        this.salesperson = '';
                         this.quoteState = '';
                         this.selectedQuote = null;
                         this.showModalUpdate = false;
@@ -350,7 +319,7 @@
             deleteQuote() {
                 let index = this.quotes.indexOf(this.selectedQuote);
 
-                axios.delete('http://127.0.0.1:8000/api/quotes/' + this.selectedQuote.id)
+                axios.delete(this.$store.state.endpoints.baseUrl + 'api/quotes/' + this.selectedQuote.id)
                     .then(response => {
                         this.quotes.splice(index, 1);
                         this.selectedQuote = null;
@@ -365,10 +334,12 @@
                 let self = this;
 
                 let result = this.quotes.filter(function (quote) {
-                    return  quote.id.toString().indexOf(self.search) >= 0
-                        // || quote.name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
-                        // || quote.phone.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
-                        // || quote.email.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                    return  quote.reference.toLowerCase().indexOf(self.search) >= 0
+                        || quote.name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                        // || salesperson.full_name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                        // || client.full_name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                        // || client.phone.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
+                        // || client.email.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
                         || quote.price.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
                         || quote.state.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
                         || quote.created_at.toLowerCase().indexOf(self.search.toLowerCase()) >= 0
@@ -393,6 +364,27 @@
             totalQuotes: function () {
                 return this.quotes.length
             }
+        },
+        mounted() {
+            this.isLoading = true;
+
+            axios.get(this.$store.state.endpoints.baseUrl + `api/salespersons/`)
+                .then(response => {
+                    this.salespersons = response.data
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                });
+
+            axios.get(this.$store.state.endpoints.baseUrl + `api/clients/`)
+                .then(response => {
+                    this.clients = response.data
+                })
+                .catch(e => {
+                    this.errors.push(e)
+                });
+
+            this.isLoading = false;
         }
     }
 </script>

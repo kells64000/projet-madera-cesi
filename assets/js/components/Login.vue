@@ -3,7 +3,7 @@
         <div class="login column is-4">
             <section class="section">
                 <div class="has-text-centered">
-                    <img class="login-logo" src="assets/img/logo.png">
+                    <img class="login-logo" src="static/img/logo.png">
                 </div>
 
                 <form class="login form">
@@ -32,7 +32,11 @@
                             Connexion
                         </button>
                     </div>
-
+                    <section>
+                        <b-notification auto-close type="is-danger" :active.sync="isActive" icon-pack="fas fa-exclamation-triangle" has-icon>
+                            Email ou mot de passe incorrect !
+                        </b-notification>
+                    </section>
                 </form>
             </section>
         </div>
@@ -54,6 +58,7 @@
                        :clickEffect="true"
                        clickMode="grab">
         </vue-particles>
+
     </div>
 </template>
 
@@ -62,11 +67,15 @@
 
     export default {
         name: 'Login',
+        props: [
+            'position'
+        ],
         data() {
             return {
                 email: '',
                 password: '',
                 is_focus: '',
+                isActive: false,
             }
         },
         methods: {
@@ -89,11 +98,8 @@
                             xhrFields: {
                                 withCredentials: true
                             }
-                        }
-                        // Even though the authentication returned a user object that can be
-                        // decoded, we fetch it again. This way we aren't super dependant on
-                        // JWT and can plug in something else.
-                        const axiosInstance = axios.create(base)
+                        };
+                        const axiosInstance = axios.create(base);
                         axiosInstance({
                             url: "api/users/",
                             method: "get",
@@ -110,18 +116,24 @@
                                     }
                                 });
 
-                                this.$store.commit("setAuthUser",
-                                {authUser: userAuth, isAuthenticated: true})
+                                this.$store.commit("setAuthUser", {authUser: userAuth, isAuthenticated: true});
+                                this.success();
                                 this.$router.push({name: 'Dashboard'})
+
                             })
 
                     })
-                    .catch((error) => {
-                        console.log(error);
-                        console.debug(error);
-                        console.dir(error);
+                    .catch(() => {
+                        this.isActive = true;
                     })
-            }
+            },
+            success() {
+                this.$toast.open({
+                    message: 'Bienvenue sur votre espace Madera',
+                    type: 'is-success',
+                    position: 'is-bottom'
+                })
+            },
         }
     }
 </script>

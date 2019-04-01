@@ -16,24 +16,51 @@ export default new Vuex.Store({
     isAuthenticated: false,
     jwt: localStorage.getItem('token'),
     endpoints: {
-      // TODO: Remove hardcoding of dev endpoints
-      obtainJWT: 'http://127.0.0.1:8000/auth/obtain_token/',
-      refreshJWT: 'http://127.0.0.1:8000/auth/refresh_token/',
-      baseUrl: 'http://127.0.0.1:8000/'
+      // obtainJWT: 'http://127.0.0.1:8000/auth/obtain_token/',
+      // refreshJWT: 'http://127.0.0.1:8000/auth/refresh_token/',
+      // baseUrl: 'http://127.0.0.1:8000/'
+     // Prod env for API
+      obtainJWT: 'https://madera-dev.herokuapp.com/auth/obtain_token/',
+      refreshJWT: 'https://madera-dev.herokuapp.com/auth/refresh_token/',
+      baseUrl: 'https://madera-dev.herokuapp.com/'
     },
+    quoteDate: '',
+    quoteProject: '',
+    quoteProjectRef: '',
     quoteClient: {},
-    quoteModules: {}
+    quoteModules: {},
+    quotePrice: '',
+    quotePriceHt: '',
+    quoteGamme: '',
   },
   getters: {
     getUser: state => {
       if(state.isAuthenticated === true)
         return state.authUser;
     },
+    getQuoteDate: state => {
+      return state.quoteDate;
+    },
+    getQuoteProject: state => {
+      return state.quoteProject;
+    },
+    getQuoteProjectRef: state => {
+      return state.quoteProjectRef;
+    },
+    getQuoteGamme: state => {
+      return state.quoteGamme;
+    },
     getQuoteClient: state => {
       return state.quoteClient;
     },
     getQuoteModules: state => {
       return state.quoteModules;
+    },
+    getQuotePrice: state => {
+      return state.quotePrice;
+    },
+    getQuotePriceHt: state => {
+      return state.quotePriceHt;
     }
   },
   mutations: {
@@ -45,20 +72,36 @@ export default new Vuex.Store({
       Vue.set(state, 'isAuthenticated', isAuthenticated)
     },
     updateToken(state, newToken) {
-      // TODO: For security purposes, take localStorage out of the project.
       localStorage.setItem('token', newToken);
       state.jwt = newToken;
     },
     removeToken(state) {
-      // TODO: For security purposes, take localStorage out of the project.
       localStorage.removeItem('token');
       state.jwt = null;
+    },
+    setQuoteDate(state, date) {
+       Vue.set(state, 'quoteDate', date);
+    },
+    setQuoteProject(state, project) {
+       Vue.set(state, 'quoteProject', project);
+    },
+    setQuoteProjectRef(state, projectRef) {
+       Vue.set(state, 'quoteProjectRef', projectRef);
     },
     setQuoteClient(state, client) {
        Vue.set(state, 'quoteClient', client);
     },
     setQuoteModules(state, modules) {
        Vue.set(state, 'quoteModules', modules);
+    },
+    setQuotePrice(state, price) {
+       Vue.set(state, 'quotePrice', price);
+    },
+    setQuotePriceHt(state, priceHt) {
+       Vue.set(state, 'quotePriceHt', priceHt);
+    },
+    setQuoteGamme(state, gamme) {
+       Vue.set(state, 'quoteGamme', gamme);
     }
   }
 })

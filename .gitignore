@@ -4,6 +4,7 @@
 *.pyc
 __pycache__/
 local_settings.py
+staticfiles
 db.sqlite3
 media
 
@@ -307,4 +308,4 @@ test/
 
 package-lock.json
 webpack-stats.json
-assets/bundles/*
+assets/dist/**/*

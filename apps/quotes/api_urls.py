@@ -2,7 +2,7 @@ from django.urls import path
 from . import api_views
 
 urlpatterns = [
-    path('quotes/', api_views.quotes_list),
-    path('quotes/<int:pk>', api_views.quotes_detail),
-    path('quotes/pdf', api_views.quote_2_pdf)
+    path('quotes/', api_views.ListQuote.as_view(), name='quotes'),
+    path('quotes/<int:pk>', api_views.DetailQuote.as_view(), name='quote'),
+    path('quotes/pdf/', api_views.generate_pdf, name='quote2pdf')
 ]

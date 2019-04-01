@@ -14,10 +14,10 @@ from .managers import UserManager
 
 class MaderaUser(AbstractBaseUser, PermissionsMixin):
 
-    email = models.EmailField(_('email address'), unique=True)
+    email = models.EmailField(_('email address'), unique=True, null=True)
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
-    phone = models.CharField(_('phone'), max_length=12, blank=True)
+    phone = models.CharField(_('phone'), max_length=12, null=True)
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
     is_active = models.BooleanField(_('active'), default=True)
     is_staff = models.BooleanField(_('is_staff'), default=False)
@@ -28,8 +28,7 @@ class MaderaUser(AbstractBaseUser, PermissionsMixin):
                                 blank=True,
                                 default=None,
                                 null=True,
-                                on_delete=models.CASCADE,
-                                related_name=_('address'))
+                                on_delete=models.CASCADE)
 
     objects = UserManager()
 
@@ -39,6 +38,10 @@ class MaderaUser(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
+
+    @property
+    def username(self):
+        return getattr(self, self.USERNAME_FIELD)
 
     @cached_property
     def user(self):
@@ -67,6 +70,7 @@ class MaderaUser(AbstractBaseUser, PermissionsMixin):
 
 
 class SalesPerson(MaderaUser):
+
     workplace = models.CharField(_('workplace'), max_length=20, blank=True)
 
     def get_worplace(self):
@@ -77,6 +81,7 @@ class SalesPerson(MaderaUser):
 
 
 class Client(MaderaUser):
+
     is_pro = models.BooleanField(_('is pro'), default=False)
     company = models.CharField(_('company'), max_length=50, blank=True)
 
@@ -91,3 +96,26 @@ class Client(MaderaUser):
         Returns client's company if any
         '''
         return self.company
+
+
+class Provider(models.Model):
+
+    email = models.EmailField(_('email address'), unique=True)
+    first_name = models.CharField(_('first name'), max_length=30, blank=True)
+    last_name = models.CharField(_('last name'), max_length=30, blank=True)
+    phone = models.CharField(_('phone'), max_length=12, blank=True, unique=True)
+
+    # ForeignKeys
+    address = models.ForeignKey(Address,
+                                blank=True,
+                                default=None,
+                                null=True,
+                                on_delete=models.CASCADE)
+
+    @property
+    def get_full_name(self):
+        '''
+        Returns the first_name plus the last_name, with a space in between.
+        '''
+        full_name = '%s %s' % (self.first_name, self.last_name)
+        return full_name

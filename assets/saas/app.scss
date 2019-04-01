@@ -4,7 +4,7 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito:400,700');
 
 // Import Font Awesome Icons
-$fa-font-path: "/assets/dist/webfonts";
+$fa-font-path: "/static/dist/webfonts";
 @import "node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss";
 @import "node_modules/@fortawesome/fontawesome-free/scss/brands.scss";
 @import "node_modules/@fortawesome/fontawesome-free/scss/regular.scss";

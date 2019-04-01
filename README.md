@@ -12,6 +12,9 @@ Windows
 <pre>pip install -r requirements.txt</pre>
 
 ## Virtual Env
+Lancement du virtual env (unix) :
+<pre>source bin/activate</pre>
+
 Lancement du virtual env (windows) :
 <pre>Scripts\activate</pre>
 
@@ -33,11 +36,6 @@ user :    postgres
 passwd :  postgres
 </pre>
 
-La base de donnée en local pour les commerciaux est : **mysqli**
-
-La base mysqli permet de stocker les devis sur le device si aucune connexion à la base principale n'est possible
-Lorsque une connexion internet est de nouveau disponible les données de la base mysqli sont intégrées à la base postgre
-
 Le dossier **db** contient un dump récent de postgresql
 
 Pour faire un dump de la base postgresql, exécuter :
@@ -52,13 +50,21 @@ Pour l'importer dans le client postgresql, exécuter :
 `createdb -U postgres -E UTF-8 madera`.
 >Puis lancer `pg_restore` pour importer
 
+Des données de base sont créé via des fixtures django
+
+Dans le dossier fixtures d'une application on peux retrouver un fichier json contenant des données prêtes à être injectées dans la BDD
+
+Ex : créer les users de base
+
+`python manage.py loaddata users`
+
 ## Donnée de l'application
 
 L'utilisateur pour la démo est :
 
 <pre>
 email : staff@madera.com
-password : madera
+password : maderamadera
 </pre>
 
 ## Environnement de dév
@@ -131,3 +137,22 @@ const app = new Vue({
     }
 });
 ```
+
+**Mail**
+
+Pour tester l'affichage des mails et des pièce-jointe en dev
+
+```bash
+maildev -s 1035
+```
+regarder dans le fichier settings.py que les config de mail sont en mode dev
+
+## Environnement de prod
+
+Nous avons choisi [Heroku](https://madera-dev.herokuapp.com/)
+
+Les dossiers d'assets sont mis dans le dossier static via la commande 
+```bash
+python manage.py collectstatic
+```
+

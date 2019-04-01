@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
-from os.path import dirname, join
+from os.path import dirname, join, normpath
 import os
 import sys
 import datetime
@@ -43,6 +43,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
+    'madera-dev.herokuapp.com'
 ]
 
 
@@ -222,14 +223,28 @@ USE_L10N = True
 
 USE_TZ = True
 
+# EMAIL
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'madera.societe@gmail.com'
+EMAIL_HOST_PASSWORD = 'maderacesi'
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+EMAIL_SUBJECT_PREFIX = '[Devis]'
+
+# EMAIL-DEV
+# EMAIL_HOST = 'localhost'
+# EMAIL_PORT = 1035
+# EMAIL_SUBJECT_PREFIX = '[Devis]'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/assets/'
+STATIC_ROOT = normpath(join(BASE_DIR, 'assets'))
+STATIC_URL = '/staticfiles/'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'assets'),
+    normpath(join(BASE_DIR, 'assets')),
 )
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
