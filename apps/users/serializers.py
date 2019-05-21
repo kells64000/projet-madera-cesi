@@ -67,6 +67,7 @@ class MaderaUserSerializer(DynamicFieldsModelSerializer):
             else:
                 address = Address.objects.create(**address_data)
                 user.address = address
+                user.save()
         return user
 
     def update(self, instance, validated_data):
@@ -86,7 +87,7 @@ class MaderaUserSerializer(DynamicFieldsModelSerializer):
                 else:
                     address = Address.objects.create(**address_data)
                     instance.address = address
-        instance.save()
+                    instance.save()
         return instance
 
     def to_representation(self, obj):
@@ -119,6 +120,7 @@ class SalesPersonSerializer(MaderaUserSerializer):
             else:
                 address = Address.objects.create(**address_data)
                 salesperson.address = address
+                salesperson.save()
         return salesperson
 
     def update(self, instance, validated_data, address=None):
@@ -137,7 +139,7 @@ class SalesPersonSerializer(MaderaUserSerializer):
                 else:
                     address = Address.objects.create(**address_data)
                     instance.address = address
-        instance.save()
+                    instance.save()
         return instance
 
 
@@ -162,6 +164,7 @@ class ClientSerializer(MaderaUserSerializer):
             else:
                 address = Address.objects.create(**address_data)
                 client.address = address
+                client.save()
         return client
 
     def update(self, instance, validated_data, address=None):
@@ -180,7 +183,7 @@ class ClientSerializer(MaderaUserSerializer):
                 else:
                     address = Address.objects.create(**address_data)
                     instance.address = address
-        instance.save()
+                    instance.save()
         return instance
 
 
@@ -205,6 +208,7 @@ class ProviderSerializer(serializers.ModelSerializer):
             else:
                 address = Address.objects.create(**address_data)
                 provider.address = address
+                provider.save()
         return provider
 
     def update(self, instance, validated_data):
@@ -224,7 +228,7 @@ class ProviderSerializer(serializers.ModelSerializer):
                 else:
                     address = Address.objects.create(**address_data)
                     instance.address = address
-        instance.save()
+                    instance.save()
         return instance
 
     def get_full_name(self, obj):

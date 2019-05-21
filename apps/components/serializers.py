@@ -163,6 +163,7 @@ class ModuleSerializer(serializers.ModelSerializer):
                 else:
                     designer = MaderaUser.objects.create(**designer_data)
                     instance.designer = designer
+                    instance.save()
         components_list = list()
         if components_data:
             for component_id in components_data:
