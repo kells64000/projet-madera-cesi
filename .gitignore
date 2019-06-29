@@ -309,3 +309,4 @@ test/
 package-lock.json
 webpack-stats.json
 assets/dist/**/*
+assets/pdf/*
