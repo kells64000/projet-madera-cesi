@@ -43,7 +43,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'madera-dev.herokuapp.com'
+    '0.0.0.0'
 ]
 
 
@@ -177,16 +177,12 @@ CORS_ALLOW_HEADERS = (
 
 DATABASES = {
     'default': {
-        'NAME': 'madera',
+        'NAME': 'postgres',
         'ENGINE': 'django.db.backends.postgresql',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '5432',
-    },
-    'salesman': {
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        'ENGINE': 'django.db.backends.sqlite3',
     }
 }
 
@@ -231,11 +227,6 @@ EMAIL_HOST_PASSWORD = 'maderacesi'
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
 EMAIL_SUBJECT_PREFIX = '[Devis]'
-
-# EMAIL-DEV
-# EMAIL_HOST = 'localhost'
-# EMAIL_PORT = 1035
-# EMAIL_SUBJECT_PREFIX = '[Devis]'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
