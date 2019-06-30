@@ -8,7 +8,7 @@ from components.models import House
 class Quote(models.Model):
 
     id = models.AutoField(primary_key=True, editable=False)
-    name = models.CharField(max_length=20, null=True)
+    name = models.CharField(max_length=255, null=True)
     reference = models.CharField(max_length=10, null=False, default='0000000000')
     price = models.DecimalField(max_digits=10, decimal_places=2)
     state = models.TextField()
