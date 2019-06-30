@@ -7,7 +7,7 @@ from users.models import Client, SalesPerson
 class QuoteSerializer(serializers.ModelSerializer):
 
     id = serializers.IntegerField(read_only=True)
-    name = serializers.CharField(required=False, max_length=20)
+    name = serializers.CharField(required=False, max_length=255)
     reference = serializers.CharField(required=True)
     price = serializers.DecimalField(max_digits=10, decimal_places=2)
     state = serializers.CharField(required=False, default='Brouillon')

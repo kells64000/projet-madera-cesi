@@ -3,7 +3,8 @@ import os
 import json
 from datetime import datetime
 from django.conf import settings
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMultiAlternatives
+from django.utils.html import strip_tags
 from django.http import Http404, JsonResponse, HttpResponse
 from django.template.loader import get_template
 from django.template.loader import render_to_string
@@ -96,9 +97,11 @@ def generate_pdf(request):
 
     # Envoi email
     subject, from_email, to = 'Madera', 'no-reply@madera.com', context.get('client').get('email')
-    text_content = 'Bonjour ' + context.get("client").get("full_name") + ',<p>Veuillez trouver ci-joint le devis.</p><p>Ceci est un email automatique merci de ne pas y repondre.</p><p>Entreprise Madera</p>'
-    msg = EmailMessage(subject, text_content, from_email, [to])
+    html_content = 'Bonjour ' + context.get("client").get("full_name") + ',<p>Veuillez trouver ci-joint le devis.</p><p>Ceci est un email automatique merci de ne pas y repondre.</p><p>Entreprise Madera</p>'
+    text_content = strip_tags(html_content)
+    msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_file('assets/pdf/' + filename)
+    msg.attach_alternative(html_content, "text/html")
     msg.send()
 
     return JsonResponse({"filename": filename})
