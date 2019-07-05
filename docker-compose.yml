@@ -3,17 +3,27 @@ version: '3.3'
 services:
   db:
     image: postgres:10.1-alpine
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-  web:
+#    environment:
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: postgres
+#      POSTGRES_DB: madera
+    container_name: azure-postgres
+    ports:
+      - "5432:5432"
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data/
+  azure-madera:
     build: .
     command: python /var/www/html/madera/manage.py runserver 0.0.0.0:8000
+    container_name: azure-madera
     volumes:
       - .:/var/www/html/madera
+    environment:
+      POSTGRES: azure-postgres
     ports:
-      - 8000:8000
-    depends_on:
-      - db
+      - 80:8000
+#    depends_on:
+#      - db
 
-volumes:
-  postgres_data:
+#volumes:
+#  postgres_data:

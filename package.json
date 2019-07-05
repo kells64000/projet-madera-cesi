@@ -10,8 +10,7 @@
     "dev": "webpack --mode development",
     "prod": "webpack --mode production",
     "watch": "webpack --mode development --watch",
-    "start": "npm run watch",
-    "heroku-postbuild": "npm run prod"
+    "start": "npm run watch"
   },
   "repository": {
     "type": "git",
@@ -69,7 +68,6 @@
     "@fortawesome/fontawesome-free": "^5.6.3",
     "buefy": "^0.7.3",
     "jwt-decode": "^2.2.0",
-    "maildev": "^1.0.0-rc3",
     "moment": "^2.24.0",
     "select2": "^4.0.6-rc.1",
     "vue-affix": "^0.5.0",
