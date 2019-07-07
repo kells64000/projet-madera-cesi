@@ -48,7 +48,7 @@ spec:
         "beta.kubernetes.io/os": linux
       containers:
       - name: madera
-        image: maderaacr.azurecr.io/azure-madera:v1
+        image: maderaacr.azurecr.io/kells64000projetmaderacesi_azure-madera:latest
         ports:
         - containerPort: 8000
         resources:
