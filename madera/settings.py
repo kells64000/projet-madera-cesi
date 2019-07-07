@@ -177,7 +177,7 @@ CORS_ALLOW_HEADERS = (
 
 DATABASES = {
     'default': {
-        'NAME': 'madera',
+        'NAME': 'postgres',
         'ENGINE': 'django.db.backends.postgresql',
         'USER': 'postgres',
         'PASSWORD': 'postgres',

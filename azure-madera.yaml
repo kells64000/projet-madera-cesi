@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: azure-postgres
 spec:
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
@@ -27,48 +27,48 @@ spec:
   - port: 5432
   selector:
     app: azure-postgres
-#---
-#apiVersion: apps/v1beta1
-#kind: Deployment
-#metadata:
-#  name: azure-madera
-#spec:
-#  replicas: 1
-#  strategy:
-#    rollingUpdate:
-#      maxSurge: 1
-#      maxUnavailable: 1
-#  minReadySeconds: 5
-#  template:
-#    metadata:
-#      labels:
-#        app: azure-madera
-#    spec:
-#      nodeSelector:
-#        "beta.kubernetes.io/os": linux
-#      containers:
-#      - name: azure-madera
-#        image: maderaacr.azurecr.io/azure-madera:v1
-#        ports:
-#        - containerPort: 8000
-#        resources:
-#          requests:
-#            cpu: 250m
-#          limits:
-#            cpu: 500m
-#        env:
-#        - name: postgres
-#          value: "azure-postgres"
-#      imagePullSecrets:
-#        - name: acr-auth
-#---
-#apiVersion: v1
-#kind: Service
-#metadata:
-#  name: azure-madera
-#spec:
-#  type: LoadBalancer
-#  ports:
-#  - port: 80
-#  selector:
-#    app: azure-madera
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: madera
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5
+  template:
+    metadata:
+      labels:
+        app: madera
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: madera
+        image: maderaacr.azurecr.io/azure-madera:v1
+        ports:
+        - containerPort: 8000
+        resources:
+          requests:
+            cpu: 250m
+          limits:
+            cpu: 500m
+        env:
+        - name: postgres
+          value: "azure-postgres"
+      imagePullSecrets:
+        - name: acr-auth
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: madera
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: madera
