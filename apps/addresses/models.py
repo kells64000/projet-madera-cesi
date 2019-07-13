@@ -26,12 +26,6 @@ class Address(models.Model):
 
     def should_display_department(self):
         return False
-        # the following code should work but all the address have country as
-        # FR so it failed, fix the google post form first and correct the
-        # address of every vehicules
-        if self.country.code.upper() in ('FR', ):
-            return True
-        return False
 
     def __unicode__(self):
         return '%s\n%s %s\n%s' % (

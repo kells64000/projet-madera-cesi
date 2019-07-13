@@ -1,32 +1,84 @@
-apiVersion: apps/v1beta1
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  labels:
+    app: postgres
+data:
+  POSTGRES_DB: postgres
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: postgres-pv-volume
+  labels:
+    type: local
+    app: postgres
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/mnt/data"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: postgres-pv-claim
+  labels:
+    app: postgres
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: azure-postgres
+  name: postgres
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: azure-postgres
+        app: postgres
     spec:
-      nodeSelector:
-        "beta.kubernetes.io/os": linux
       containers:
-      - name: azure-postgres
-        image: postgres
-        ports:
-        - containerPort: 5432
-          name: postgres
+        - name: postgres
+          image: postgres:10.4
+          imagePullPolicy: "IfNotPresent"
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: postgres-config
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgredb
+      volumes:
+        - name: postgredb
+          persistentVolumeClaim:
+            claimName: postgres-pv-claim
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: azure-postgres
+  name: postgres
+  labels:
+    app: postgres
 spec:
+  type: NodePort
   ports:
-  - port: 5432
+   - port: 5432
   selector:
-    app: azure-postgres
+   app: postgres
 ---
 apiVersion: apps/v1beta1
 kind: Deployment
@@ -43,12 +95,15 @@ spec:
     metadata:
       labels:
         app: madera
+        type: web
     spec:
       nodeSelector:
         "beta.kubernetes.io/os": linux
       containers:
       - name: madera
-        image: maderaacr.azurecr.io/kells64000projetmaderacesi_azure-madera:latest
+        image: maderaacr.azurecr.io/azure-madera:v1
+        command: ["gunicorn", "--workers", "1", "--bind", ":8000",
+                  "--log-level", "INFO", "madera.wsgi:application"]
         ports:
         - containerPort: 8000
         resources:
@@ -56,9 +111,6 @@ spec:
             cpu: 250m
           limits:
             cpu: 500m
-        env:
-        - name: postgres
-          value: "azure-postgres"
       imagePullSecrets:
         - name: acr-auth
 ---
@@ -70,5 +122,6 @@ spec:
   type: LoadBalancer
   ports:
   - port: 80
+    targetPort: 8000
   selector:
     app: madera

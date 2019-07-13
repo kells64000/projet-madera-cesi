@@ -104,8 +104,7 @@ class ModuleSerializer(serializers.ModelSerializer):
         allow_null=True)
     length2 = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
         allow_null=True)
-    # height = serializers.DecimalField(required=False, max_digits=8, decimal_places=2,
-    #     allow_null=True)
+
     unit = serializers.CharField(required=False, max_length=10, allow_null=True)
     surface = serializers.SerializerMethodField(required=False)
     designer = MaderaUserSerializer(required=False)
@@ -113,13 +112,10 @@ class ModuleSerializer(serializers.ModelSerializer):
     components = serializers.SerializerMethodField()
     gammes = serializers.SerializerMethodField()
     price = serializers.SerializerMethodField()
-    # quantity_components = serializers.SerializerMethodField()
 
     class Meta:
         model = Module
         fields = ('__all__')
-        # fields = ('id', 'name', 'family', 'length', 'length2', 'height', 'unit', 'surface',
-        #     'designer', 'designed_by', 'components', 'gammes', 'price', 'quantity_components')
 
     def create(self, validated_data):
         designer = component = None
@@ -203,7 +199,6 @@ class ModuleSerializer(serializers.ModelSerializer):
 
     def get_price(self, obj):
         return ''
-        # obj.calculated_price
 
 
 class HouseSerializer(serializers.ModelSerializer):
@@ -251,6 +246,3 @@ class HouseSerializer(serializers.ModelSerializer):
     def get_gammes(self, obj):
         serializer = GammeSerializer(obj.get_gammes(), many=True, context=self.context)
         return serializer.data
-
-    # def get_price(self, obj):
-    #     return obj.total_price
