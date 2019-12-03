@@ -18,7 +18,7 @@ django-webpack-loader==0.6.0
 django-xhtml2pdf==0.0.4
 djangorestframework==3.9.1
 djangorestframework-jwt==1.11.0
-ecdsa==0.13
+ecdsa==0.13.3
 future==0.17.1
 gunicorn==19.9.0
 html5lib==1.0.1
